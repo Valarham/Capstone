@@ -26,6 +26,14 @@
 
 node.modules, yarn.lock지운채로 업로드 예정
 
+vscode 에서 새터미널 -> cd Capstone\front\mkrm -> npm run start
+
+Local: http://localhost:3000
+On Your Network: http://172.30.1.14:3000
+
+다음과 같이 터미널에서 생성됨 vscode에서 라이브 브라우저 같은 확장 프로그램 설치 안했을 경우 링크
+긁어서 본인 브라우저에 넣기
+
 - Recommended `node js ^16.14.x` and `npm ^8.5.x` and `yarn ^1.22.18`
 - Install dependencies: `npm install` or `yarn install`
 - Start the project: `npm run start` or `yarn start`
