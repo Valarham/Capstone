@@ -3,7 +3,7 @@ import { sample } from 'lodash';
 // myshop 더미데이터
 // ----------------------------------------------------------------------
 
-const users = [...Array(24)].map(() => ({
+const users = [...Array(100)].map(() => ({
   company: faker.company.companyName(), // 매장이름
   name: faker.company.companyName(), // 대표자이름
   id: faker.datatype.uuid(), // 매장 고유번호
