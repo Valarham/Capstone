@@ -152,8 +152,8 @@ export default function User() {
             <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
               New Shop
             </Button>
-            <Button variant="contained">삭제</Button>
-            <Button variant="contained">확인</Button>
+            {/* <Button variant="contained">삭제</Button> */}
+            <Button variant="contained">진행상황 저장</Button>
             <Button variant="contained" color="success">
               Excel 다운로드
             </Button>
