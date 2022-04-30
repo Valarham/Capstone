@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { sample } from 'lodash';
-// myshop 매장 더미데이터
+// myshop 매장 더미데이터 Array(더미데이터 개수)
 // ----------------------------------------------------------------------
 
 const users = [...Array(100)].map(() => ({
