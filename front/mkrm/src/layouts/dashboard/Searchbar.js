@@ -55,10 +55,12 @@ export default function Searchbar() {
         <Slide direction="down" in={isOpen} mountOnEnter unmountOnExit>
           <SearchbarStyle>
             <Input
+              lang="ko"
               autoFocus
               fullWidth
               disableUnderline
-              placeholder="Search…"
+              placeholder="검색하기..."
+              // placeholder="Search…"
               startAdornment={
                 <InputAdornment position="start">
                   <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
@@ -67,7 +69,8 @@ export default function Searchbar() {
               sx={{ mr: 1, fontWeight: 'fontWeightBold' }}
             />
             <Button lang="ko" variant="contained" onClick={handleClose}>
-              Search
+              검색
+              {/* Search */}
             </Button>
           </SearchbarStyle>
         </Slide>
