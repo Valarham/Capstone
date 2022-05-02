@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 import { useTheme } from '@mui/material/styles';
 
 import { filter } from 'lodash';
-import { sentenceCase } from 'change-case';
+// import { sentenceCase } from 'change-case';
 import { useState } from 'react';
 
 import { Icon } from '@iconify/react';
@@ -42,11 +42,12 @@ import {
 
 // components
 // import Page from '../components/Page';
-import Label from '../components/Label';
+// import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
 // import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
+// eslint-disable-next-line import/named
+import { UserListHead, DashUserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
 import USERLIST from '../_mock/user';
 // ----------------------------------------------------------------------
@@ -58,7 +59,8 @@ const TABLE_HEAD = [
   { id: 'rating', label: '평점', alignRight: false },
   { id: 'review', label: '리뷰', alignRight: false },
   { id: 'isnew', label: '신규', alignRight: false },
-  { id: 'status', label: '진행상황', alignRight: false },
+  { id: 'location', label: '위치', alignRight: false },
+  //   { id: 'status', label: '진행상황', alignRight: false },
 
   { id: '' },
 ];
@@ -163,16 +165,20 @@ export default function DashboardApp() {
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Total Market Num" total={4867911} icon="mdi:store" />
+            <AppWidgetSummary title="총 매장 수" total={4867911} icon="mdi:store" />
+            {/* <AppWidgetSummary title="Total Market Num" total={4867911} icon="mdi:store" /> */}
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Total Search Market Num" total={456484} color="info" icon="mdi:store-search" />
+            <AppWidgetSummary title="총 검색된 시장 수" total={456484} color="info" icon="mdi:store-search" />
+            {/* <AppWidgetSummary title="Total Search Market Num" total={456484} color="info" icon="mdi:store-search" /> */}
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Stored Markets" total={897895} color="warning" icon="mdi:store-check" />
+            <AppWidgetSummary title="저장한 시장 수" total={897895} color="warning" icon="mdi:store-check" />
+            {/* <AppWidgetSummary title="Stored Markets" total={897895} color="warning" icon="mdi:store-check" /> */}
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="New Store Registration" total={315} color="error" icon="mdi:store-plus" />
+            <AppWidgetSummary title="신규 매장 등록 수" total={315} color="error" icon="mdi:store-plus" />
+            {/* <AppWidgetSummary title="New Store Registration" total={315} color="error" icon="mdi:store-plus" /> */}
           </Grid>
 
           {/* Recent Market Search */}
@@ -185,7 +191,7 @@ export default function DashboardApp() {
             </Stack>
 
             <Card>
-              <UserListToolbar
+              <DashUserListToolbar
                 numSelected={selected.length}
                 filterName={filterName}
                 onFilterName={handleFilterByName}
@@ -205,7 +211,19 @@ export default function DashboardApp() {
                     />
                     <TableBody>
                       {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                        const { company, id, name, repnum, sector, rating, review, isnew, status, avatarUrl } = row;
+                        const {
+                          company,
+                          id,
+                          name,
+                          repnum,
+                          sector,
+                          rating,
+                          review,
+                          isnew,
+                          //   status,
+                          location,
+                          avatarUrl,
+                        } = row;
                         const isItemSelected = selected.indexOf(name) !== -1;
 
                         return (
@@ -236,12 +254,12 @@ export default function DashboardApp() {
                             <TableCell align="left">
                               {isnew ? <Icon icon="bi:check" width="25" height="25" /> : ''}
                             </TableCell>
-
-                            <TableCell align="left">
-                              <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
+                            <TableCell align="left">{location}</TableCell>
+                            {/* <TableCell align="left">
+                              <Label variant="ghost" color={(status === 'failure' && 'error') || 'success'}>
                                 {sentenceCase(status)}
                               </Label>
-                            </TableCell>
+                            </TableCell> */}
 
                             <TableCell align="right">
                               <UserMoreMenu />

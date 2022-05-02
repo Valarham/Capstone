@@ -1,5 +1,15 @@
 {
   "root": true,
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx"]
+      }
+    },
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    }
+  },
   "extends": [
     "airbnb",
     "plugin:react/recommended",
@@ -79,6 +89,12 @@
       {
         "object": true,
         "array": false
+      }
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
       }
     ]
   }
