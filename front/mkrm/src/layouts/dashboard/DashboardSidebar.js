@@ -85,7 +85,8 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       <Box sx={{ px: 2.5, pb: 3, mt: 10 }}>
         <Stack alignItems="center" spacing={3} sx={{ pt: 5, borderRadius: 2, position: 'relative' }}>
           <Button href="https://www.google.co.kr/" target="_blank" variant="contained">
-            Log Out
+            로그아웃
+            {/* Log Out */}
           </Button>
         </Stack>
       </Box>

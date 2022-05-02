@@ -43,6 +43,7 @@ const TABLE_HEAD = [
   { id: 'rating', label: '평점', alignRight: false },
   { id: 'review', label: '리뷰', alignRight: false },
   { id: 'isnew', label: '신규', alignRight: false },
+  { id: 'location', label: '위치', alignRight: false },
   { id: 'status', label: '진행상황', alignRight: false },
 
   { id: '' },
@@ -145,16 +146,24 @@ export default function User() {
     <Page title="My Shop">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={7}>
-          <Typography variant="h4" gutterBottom>
-            My Shop
+          <Typography lang="ko" variant="h4" gutterBottom>
+            영업 관리 매장{/* My Shop */}
           </Typography>
           <Stack direction="row" spacing={2}>
-            <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
-              New Shop
+            <Button
+              lang="ko"
+              variant="contained"
+              component={RouterLink}
+              to="#"
+              startIcon={<Iconify icon="eva:plus-fill" />}
+            >
+              새로운 매장{/* New Shop */}
             </Button>
             {/* <Button variant="contained">삭제</Button> */}
-            <Button variant="contained">진행상황 저장</Button>
-            <Button variant="contained" color="success">
+            <Button lang="ko" variant="contained">
+              진행상황 저장
+            </Button>
+            <Button lang="ko" variant="contained" color="success">
               Excel 다운로드
             </Button>
           </Stack>
@@ -167,6 +176,7 @@ export default function User() {
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
                 <UserListHead
+                  lang="ko"
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
@@ -177,7 +187,8 @@ export default function User() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { company, id, name, repnum, sector, rating, review, isnew, status, avatarUrl } = row;
+                    const { company, id, name, repnum, sector, rating, review, isnew, status, location, avatarUrl } =
+                      row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -205,16 +216,17 @@ export default function User() {
                         <TableCell align="left">{sector}</TableCell>
                         <TableCell align="left">{rating}</TableCell>
                         <TableCell align="left">{review}</TableCell>
+
                         <TableCell align="left">
                           {isnew ? <Icon icon="bi:check" width="25" height="25" /> : ''}
                         </TableCell>
 
+                        <TableCell align="left">{location}</TableCell>
                         <TableCell align="left">
-                          <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
+                          <Label lang="ko" variant="ghost" color={(status === 'failure' && 'error') || 'success'}>
                             {sentenceCase(status)}
                           </Label>
                         </TableCell>
-
                         <TableCell align="right">
                           <UserMoreMenu />
                         </TableCell>

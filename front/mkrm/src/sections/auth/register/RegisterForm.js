@@ -19,11 +19,16 @@ export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   // 빨간색 글씨로 오류 처리하는 부분
   const RegisterSchema = Yup.object().shape({
-    firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('First name required'),
-    lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
-    password: Yup.string().required('Password is required'),
-    phonenumber: Yup.string().required('Phone number is required'),
+    firstName: Yup.string().min(1, '너무 짧습니다.').max(50, '너무 깁니다.').required('이름은 필수 항목입니다.'),
+    lastName: Yup.string().min(1, '너무 짧습니다.').max(50, '너무 깁니다.').required('성은 필수 항목입니다.'),
+    email: Yup.string().email('이메일은 유효한 이메일 형식이어야 합니다.').required('이메일은 필수 항목입니다.'),
+    password: Yup.string().required('비밀번호는 필수 항목입니다.'),
+    phonenumber: Yup.string().required('핸드폰 번호는 필수 항목입니다.'),
+    // firstName: Yup.string().min(1, 'Too Short!').max(50, 'Too Long!').required('First name required'),
+    // lastName: Yup.string().min(1, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
+    // email: Yup.string().email('Email must be a valid email address').required('Email is required'),
+    // password: Yup.string().required('Password is required'),
+    // phonenumber: Yup.string().required('Phone number is required'),
   });
   // register 변수
   const formik = useFormik({
@@ -32,7 +37,7 @@ export default function RegisterForm() {
       lastName: '',
       email: '',
       password: '',
-      re_enter_password: '',
+      //   re_enter_password: '',
       phonenumber: '',
     },
     validationSchema: RegisterSchema,
@@ -50,16 +55,20 @@ export default function RegisterForm() {
         <Stack spacing={3}>
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
+              lang="ko"
               fullWidth
-              label="First name"
+              label="이름"
+              //   label="First name"
               {...getFieldProps('firstName')}
               error={Boolean(touched.firstName && errors.firstName)}
               helperText={touched.firstName && errors.firstName}
             />
 
             <TextField
+              lang="ko"
               fullWidth
-              label="Last name"
+              label="성"
+              //   label="Last name"
               {...getFieldProps('lastName')}
               error={Boolean(touched.lastName && errors.lastName)}
               helperText={touched.lastName && errors.lastName}
@@ -67,20 +76,24 @@ export default function RegisterForm() {
           </Stack>
 
           <TextField
+            lang="ko"
             fullWidth
             autoComplete="username"
             type="email"
-            label="Email address"
+            label="이메일"
+            // label="Email address"
             {...getFieldProps('email')}
             error={Boolean(touched.email && errors.email)}
             helperText={touched.email && errors.email}
           />
 
           <TextField
+            lang="ko"
             fullWidth
             autoComplete="current-password"
             type={showPassword ? 'text' : 'password'}
-            label="Password"
+            label="비밀번호"
+            // label="Password"
             {...getFieldProps('password')}
             InputProps={{
               endAdornment: (
@@ -96,14 +109,17 @@ export default function RegisterForm() {
           />
 
           <TextField
+            lang="ko"
             fullWidth
-            label="Phone number"
+            label="핸드폰 번호"
+            // label="Phone number"
             {...getFieldProps('phonenumber')}
             error={Boolean(touched.phonenumber && errors.phonenumber)}
             helperText={touched.phonenumber && errors.phonenumber}
           />
-          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
-            Create Account
+          <LoadingButton lang="ko" fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
+            계정 생성
+            {/* Create Account */}
           </LoadingButton>
         </Stack>
       </Form>

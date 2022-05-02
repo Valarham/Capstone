@@ -16,8 +16,10 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
-    password: Yup.string().required('Password is required'),
+    email: Yup.string().email('이메일은 유효한 이메일 형식이어야 합니다.').required('이메일은 필수 항목입니다.'),
+    password: Yup.string().required('비밀번호가 필요합니다'),
+    // email: Yup.string().email('Email must be a valid email address').required('Email is required'),
+    // password: Yup.string().required('Password is required'),
   });
 
   const formik = useFormik({
@@ -43,20 +45,24 @@ export default function LoginForm() {
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
           <TextField
+            lang="ko"
             fullWidth
             autoComplete="username"
             type="email"
-            label="Email address"
+            label="이메일"
+            // label="Email address"
             {...getFieldProps('email')}
             error={Boolean(touched.email && errors.email)}
             helperText={touched.email && errors.email}
           />
 
           <TextField
+            lang="ko"
             fullWidth
             autoComplete="current-password"
             type={showPassword ? 'text' : 'password'}
-            label="Password"
+            label="비밀번호"
+            // label="Password"
             {...getFieldProps('password')}
             InputProps={{
               endAdornment: (
@@ -74,8 +80,10 @@ export default function LoginForm() {
 
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
           <FormControlLabel
+            lang="ko"
             control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}
-            label="Remember me"
+            label="이메일 기억하기"
+            // label="Remember me"
           />
 
           {/* <Link component={RouterLink} variant="subtitle2" to="#" underline="hover">
@@ -84,7 +92,8 @@ export default function LoginForm() {
         </Stack>
 
         <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
-          Login
+          로그인
+          {/* Login */}
         </LoadingButton>
       </Form>
     </FormikProvider>

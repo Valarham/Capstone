@@ -9,20 +9,23 @@ import MenuPopover from '../../components/MenuPopover';
 import account from '../../_mock/account';
 // dashboard에서 오른쪽 상단에 표시될 User의 account 클릭 반응 및 출력 관련 함수
 // ----------------------------------------------------------------------
-
+// 아래의 내용 개발 안할 경우 지우기
 const MENU_OPTIONS = [
   {
-    label: 'Home',
+    // label: 'Home',
+    label: '메인홈',
     icon: 'eva:home-fill',
     linkTo: '/',
   },
   {
-    label: 'Profile',
+    // label: 'Profile',
+    label: '내 계정',
     icon: 'eva:person-fill',
     linkTo: '#',
   },
   {
-    label: 'Settings',
+    // label: 'Settings',
+    label: '환경설정',
     icon: 'eva:settings-2-fill',
     linkTo: '#',
   },
@@ -102,7 +105,7 @@ export default function AccountPopover() {
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <MenuItem onClick={handleClose} sx={{ m: 1 }}>
-          Logout
+          로그아웃{/* Logout */}
         </MenuItem>
       </MenuPopover>
     </>

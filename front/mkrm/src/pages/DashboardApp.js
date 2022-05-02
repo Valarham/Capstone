@@ -158,7 +158,7 @@ export default function DashboardApp() {
     <Page title="Dashboard">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 2 }}>
-          Hi, Welcome
+          안녕하세요, 환영합니다.
         </Typography>
 
         <Grid container spacing={3}>
@@ -180,7 +180,7 @@ export default function DashboardApp() {
           <Container>
             <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}>
               <Typography variant="h4" sx={{ mb: 2 }} gutterBottom>
-                Recent Market Search
+                최근 시장 검색 {/* Recent Market Search */}
               </Typography>
             </Stack>
 

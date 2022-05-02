@@ -84,28 +84,32 @@ export default function Login() {
 
         <Container maxWidth="sm">
           <ContentStyle>
-            <Typography variant="h4" gutterBottom>
-              Sign In
+            <Typography lang="ko" variant="h4" gutterBottom>
+              로그인{/* Sign In */}
             </Typography>
 
-            <Typography sx={{ color: 'text.secondary', mb: 5 }}>Enter your details below.</Typography>
+            <Typography lang="ko" sx={{ color: 'text.secondary', mb: 5 }}>
+              아래에 세부 정보를 입력하세요.{/* Enter your details below. */}
+            </Typography>
 
             {/* <AuthSocial /> */}
 
             <LoginForm />
             {smUp && (
-              <Typography variant="body2" sx={{ mt: { md: 5 } }}>
-                Don’t have an account? {''}
+              <Typography lang="ko" variant="body2" sx={{ mt: { md: 5 } }}>
+                계정이 없으신가요?{/* Don’t have an account?  */}
+                {''}
                 <Link variant="subtitle2" component={RouterLink} to="/register">
-                  Get started
+                  회원가입{/* Get started */}
                 </Link>
               </Typography>
             )}
             {!smUp && (
-              <Typography variant="body2" align="center" sx={{ mt: 3 }}>
-                Don’t have an account?{' '}
-                <Link variant="subtitle2" component={RouterLink} to="/register">
-                  Get started
+              <Typography lang="ko" variant="body2" align="center" sx={{ mt: 3 }}>
+                계정이 없으신가요?
+                {/* Don’t have an account? */}{' '}
+                <Link lang="ko" variant="subtitle2" component={RouterLink} to="/register">
+                  회원가입{/* Get started */}
                 </Link>
               </Typography>
             )}
