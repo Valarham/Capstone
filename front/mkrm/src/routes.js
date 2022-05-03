@@ -1,4 +1,10 @@
-import { Navigate, useRoutes } from 'react-router-dom';
+// import { Navigate, useRoutes } from 'react-router-dom';
+import { useLocation, Navigate, useRoutes } from 'react-router-dom';
+// import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
+
+import { loadUser } from './actions/userAction';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 // layouts
 import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
