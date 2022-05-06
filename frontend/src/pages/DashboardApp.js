@@ -61,7 +61,6 @@ const TABLE_HEAD = [
   { id: 'isnew', label: '신규', alignRight: false },
   { id: 'location', label: '위치', alignRight: false },
   //   { id: 'status', label: '진행상황', alignRight: false },
-
   { id: '' },
 ];
 function descendingComparator(a, b, orderBy) {

@@ -5,7 +5,7 @@
 // import { useEffect } from 'react';
 // import { useDispatch } from 'react-redux';
 // // routes
-// // import Router from './routes';
+// import Router from './routes';
 // // theme
 // import ThemeProvider from './theme';
 // // components
@@ -68,26 +68,27 @@
 //   });
 //   return (
 //     <>
+//       {/* <Routes>
+//         <Route path="/" element={<DashboardApp />} />
+//         <Route index element={<LogoOnlyLayout />} />
+//         <Route path="/login" element={<Login />} />
+//         <Route path="/register" element={<Register />} />
+//         <Route path="/404" element={<NotFound />} />
+
+//         <Route path="/app" element={<DashboardApp />} />
+//         <Route index element={<DashboardLayout />} />
+//         <Route path="/user" element={<User />} />
+//         <Route path="/products" element={<Products />} />
+//         <Route path="/blog" element={<Blog />} />
+
+//         <Route path="*" element={<NotFound />}></Route>
+//       </Routes> */}
 //       <ThemeProvider>
 //         <ScrollToTop />
-
 //         <BaseOptionChartStyle />
-//         <Routes>
-//           <Route path="dashboard" element={<DashboardLayout />}>
-//             <Route path="app" element={<DashboardApp />} />
-//             <Route path="user" element={<User />} />
-//             <Route path="products" element={<Products />} />
-//             <Route path="blog" element={<Blog />} />
-//           </Route>
-//           <Route path="/" element={<LogoOnlyLayout />}>
-//             <Route path="/" element={<DashboardApp />} />
-//             <Route path="login" element={<Login />} />
-//             <Route path="register" element={<Register />} />
-//             <Route path="404" element={<NotFound />} />
-//           </Route>
-//           <Route path="*" element={<NotFound />}></Route>
-//         </Routes>
+//         <Router />
 //       </ThemeProvider>
+//       ;
 //     </>
 //   );
 // }

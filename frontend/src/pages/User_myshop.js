@@ -1,16 +1,3 @@
-// import * as React from 'react';
-// import PropTypes from 'prop-types';
-// import Box from '@mui/material/Box';
-// import { DataGridPro, GridToolbar } from '@mui/x-data-grid-pro';
-// import { useDemoData } from '@mui/x-data-grid-generator';
-// import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-// import { styled } from '@mui/material/styles';
-// import FormControl from '@mui/material/FormControl';
-// import FormGroup from '@mui/material/FormGroup';
-// import InputLabel from '@mui/material/InputLabel';
-// import MenuItem from '@mui/material/MenuItem';
-// import Select from '@mui/material/Select';
-
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useState } from 'react';
@@ -92,8 +79,8 @@ function applySortFilter(array, comparator, query) {
   }
   return stabilizedThis.map((el) => el[0]);
 }
-
-export default function User() {
+// export default function User() {
+const User = () => {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -279,4 +266,6 @@ export default function User() {
       </Container>
     </Page>
   );
-}
+};
+
+export default User;
