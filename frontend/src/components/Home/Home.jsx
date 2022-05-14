@@ -93,7 +93,7 @@ const initialRows = [
   {
     id: 1,
     company: '광화문진뚝해',
-    name: '해장국',
+    name: '',
     repnum: '02-730-0172',
     sector: '해장국',
     rating: '4.7',

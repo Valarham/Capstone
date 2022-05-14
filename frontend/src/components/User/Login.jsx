@@ -23,6 +23,7 @@ import useResponsive from '../../utils/useResponsive';
 // login form auth
 
 import Iconify from '../Home/Dashboard/Iconify';
+import axios from 'axios';
 const RootStyle = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
     display: 'flex',
@@ -100,13 +101,23 @@ const Login = () => {
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
   };
+
   // login 버튼 클릭 이벤트
   const onClickLogin = () => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    axios.post('/api/login', { email, password }, config);
+
     console.log('click login');
   };
   useEffect(() => {
-    loginUser(email, password);
-  }, []);
+    //console.log('clickLogin');
+    //loginUser(email, password);
+  });
+
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email('이메일은 유효한 이메일 형식이어야 합니다.').required('이메일은 필수 항목입니다.'),
     password: Yup.string().required('비밀번호가 필요합니다'),
@@ -121,7 +132,7 @@ const Login = () => {
     validationSchema: LoginSchema,
     onSubmit: () => {
       loginUser(email, password);
-      navigate('/dashboard', { replace: true });
+      navigate('/dashboard/home', { replace: true });
     },
   });
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
@@ -214,6 +225,7 @@ const Login = () => {
                     type="submit"
                     variant="contained"
                     onClick={onClickLogin}
+                    //onClick={loginUser(email, password)}
                     loading={isSubmitting}
                   >
                     로그인
