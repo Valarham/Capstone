@@ -29,17 +29,6 @@ const navConfig = [
     icon: <GroupIcon />,
   },
   {
-    title: 'product',
-    path: '/dashboard/products',
-    // icon: getIcon('eva:shopping-bag-fill'),
-    icon: <InventoryIcon />,
-  },
-  {
-    title: 'admin',
-    path: '/dashboard/admin/admindashboard',
-    icon: getIcon('eva:file-text-fill'),
-  },
-  {
     title: 'login',
     path: '/login',
     // icon: getIcon('eva:lock-fill'),

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+//import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 // material
@@ -49,17 +49,17 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
 
   const isDesktop = useResponsive('up', 'lg');
 
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
-  const { user } = useSelector((state) => state.user);
+  //const { user } = useSelector((state) => state.user);
 
-  const handleLogout = () => {
-    dispatch(logoutUser());
-    enqueueSnackbar('Logout Successfully', { variant: 'success' });
-    navigate('/login');
-  };
+  //   const handleLogout = () => {
+  //     dispatch(logoutUser());
+  //     enqueueSnackbar('Logout Successfully', { variant: 'success' });
+  //     navigate('/login');
+  //   };
   useEffect(() => {
     if (isOpenSidebar) {
       onCloseSidebar();

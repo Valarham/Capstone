@@ -8,11 +8,11 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import { useSnackbar } from 'notistack';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+// import { useDispatch, useSelector } from 'react-redux';
 import { clearErrors, registerUser } from '../../actions/userAction';
 import BackdropLoader from '../Layouts/BackdropLoader';
 import MetaData from '../Layouts/MetaData';
-import FormSidebar from './FormSidebar';
+// import FormSidebar from './FormSidebar';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Card, Link, Container, Typography, Stack, TextField, IconButton, InputAdornment } from '@mui/material';
@@ -67,7 +67,7 @@ const Register = () => {
   const smUp = useResponsive('up', 'sm');
 
   const mdUp = useResponsive('up', 'md');
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
 
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
@@ -104,7 +104,7 @@ const Register = () => {
   });
   // error handler 및 유저 선택적 api 변수
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
-  const { loading, isAuthenticated, error } = useSelector((state) => state.user);
+  //const { loading, isAuthenticated, error } = useSelector((state) => state.user);
 
   const [user, setUser] = useState({
     name: '',
@@ -141,7 +141,7 @@ const Register = () => {
     formData.set('password', password);
     formData.set('avatar', avatar);
 
-    dispatch(registerUser(formData));
+    //dispatch(registerUser(formData));
   };
 
   const handleDataChange = (e) => {
@@ -161,15 +161,15 @@ const Register = () => {
     }
   };
 
-  useEffect(() => {
-    if (error) {
-      enqueueSnackbar(error, { variant: 'error' });
-      dispatch(clearErrors());
-    }
-    if (isAuthenticated) {
-      navigate('/');
-    }
-  }, [dispatch, error, isAuthenticated, navigate, enqueueSnackbar]);
+  //   useEffect(() => {
+  //     if (error) {
+  //       enqueueSnackbar(error, { variant: 'error' });
+  //       dispatch(clearErrors());
+  //     }
+  //     if (isAuthenticated) {
+  //       navigate('/');
+  //     }
+  //   }, [dispatch, error, isAuthenticated, navigate, enqueueSnackbar]);
 
   return (
     <>

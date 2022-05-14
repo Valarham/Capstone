@@ -10,7 +10,7 @@ import { LoadingButton } from '@mui/lab';
 
 import { useEffect, useState } from 'react';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+// import { useDispatch, useSelector } from 'react-redux';
 import { clearErrors, loginUser } from '../../actions/userAction';
 import { useSnackbar } from 'notistack';
 import BackdropLoader from '../Layouts/BackdropLoader';
@@ -68,32 +68,32 @@ const Login = () => {
   const smUp = useResponsive('up', 'sm');
 
   const mdUp = useResponsive('up', 'md');
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const location = useLocation();
 
-  const { loading, isAuthenticated, error } = useSelector((state) => state.user);
+  //const { loading, isAuthenticated, error } = useSelector((state) => state.user);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    dispatch(loginUser(email, password));
-  };
+  //   const handleLogin = (e) => {
+  //     e.preventDefault();
+  //     dispatch(loginUser(email, password));
+  //   };
 
   const redirect = location.search ? location.search.split('=')[1] : 'account';
 
-  useEffect(() => {
-    if (error) {
-      enqueueSnackbar(error, { variant: 'error' });
-      dispatch(clearErrors());
-    }
-    if (isAuthenticated) {
-      navigate(`/${redirect}`);
-    }
-  }, [dispatch, error, isAuthenticated, redirect, navigate, enqueueSnackbar]);
+  //   useEffect(() => {
+  //     if (error) {
+  //       enqueueSnackbar(error, { variant: 'error' });
+  //       dispatch(clearErrors());
+  //     }
+  //     if (isAuthenticated) {
+  //       navigate(`/${redirect}`);
+  //     }
+  //   }, [dispatch, error, isAuthenticated, redirect, navigate, enqueueSnackbar]);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -124,13 +124,7 @@ const Login = () => {
       <MetaData title="Login">
         <RootStyle>
           <HeaderStyle>{/* <Logo /> */}</HeaderStyle>
-          {loading && <BackdropLoader />}
-          {/* <main className="w-full mt-12 sm:pt-0 sm:mt-0"> */}
-          {/* <!-- row --> */}
-          {/* <div className="flex sm:w-4/6 sm:mt-0 m-auto mb- bg-white shadow-lg"> */}
-          {/* <!-- sidebar column  --> */}
-          {/* <div className="loginSidebar bg-primary-blue p-10 pr-12 hidden sm:flex flex-col gap-4 w-2/5"> */}
-          {/* <h1 className="font-medium text-white text-3xl">Login</h1> */}
+          {/* {loading && <BackdropLoader />} */}
           {mdUp && (
             <SectionStyle>
               <Typography variant="h3" sx={{ px: 5 }}>
@@ -207,21 +201,11 @@ const Login = () => {
           </Link> */}
                   </Stack>
 
-                  <LoadingButton
-                    color="primary"
-                    fullWidth
-                    size="large"
-                    type="submit"
-                    variant="outlined"
-                    loading={isSubmitting}
-                  >
+                  <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
                     로그인
                     {/* Login */}
                   </LoadingButton>
                   {/* forget Password  */}
-                  <LoadingButton>
-                    <RouterLink to="/password/forgot">Forgot Password?</RouterLink>
-                  </LoadingButton>
                 </Form>
               </FormikProvider>
               {smUp && (
