@@ -9,8 +9,8 @@ import { useEffect } from 'react';
 
 import ProtectedRoute from './Routes/ProtectedRoute';
 import Home from './components/Home/Home';
-
 import NotFound from './components/NotFound';
+import detailshop from './components/Detailshop/Detailshop';
 
 //layouts
 import DashboardLayout from './components/Layouts/dashboard';
