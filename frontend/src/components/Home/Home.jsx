@@ -388,7 +388,7 @@ function SettingsPanel(props) {
         <InputLabel>Dataset</InputLabel>
         <Select value={typeState} onChange={handleDatasetChange}>
           <MenuItem value="Employee">Employee</MenuItem>
-          <MenuItem value="Commodity">Market</MenuItem>
+          <MenuItem value="Market">Market</MenuItem>
         </Select>
       </FormControl>
       <FormControl variant="standard">
@@ -598,7 +598,7 @@ const Home = () => {
   const isUserNotFound = filteredUsers.length === 0;
   //-----------------------------------------------------------------------------------
   //const [isAntDesign, setIsAntDesign] = React.useState(false);
-  const [type, setType] = React.useState('Commodity');
+  const [type, setType] = React.useState('Market');
   const [size, setSize] = React.useState(100);
   const { data, setRowLength, loadNewData } = useDemoData({
     dataSet: type,
@@ -608,7 +608,7 @@ const Home = () => {
   });
 
   const [pagination, setPagination] = React.useState({
-    pagination: false,
+    // pagination: false,
     autoPageSize: false,
     pageSize: undefined,
   });
@@ -648,13 +648,14 @@ const Home = () => {
       return newPaginationSettings;
     });
   };
+  const value = 'true';
   function CustomToolbar() {
     return (
       <GridToolbarContainer>
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
         <GridToolbarDensitySelector />
-        <GridToolbarExport utf8WithBom={true} />
+        <GridToolbarExport />
       </GridToolbarContainer>
     );
   }
@@ -722,7 +723,7 @@ const Home = () => {
     <>
       <MetaData title="Dashboard" />
       {/* -----------------20220506 dashboard 중첩------------------------------- */}
-      <Container maxWidth="xl">
+      <Container width="xl">
         <Typography variant="h4" sx={{ mb: 2 }}>
           안녕하세요, 환영합니다.
         </Typography>
@@ -751,7 +752,7 @@ const Home = () => {
             </Stack>
             <StyledBox>
               <SettingsPanel onApply={handleApplyClick} size={size} type={type} />
-              <Card maxWidth="xl">
+              <Card width="xl">
                 <DataGrid
                   columns={columns}
                   rows={rows}
@@ -777,7 +778,7 @@ const Home = () => {
                   Name={handleFilterByName}
                 />
                 <Scrollbar>
-                  <TableContainer sx={{ minWidth: 800 }}>
+                  <TableContainer sx={{ MinWidth: 800 }}>
                     <Table>
                       <UserListHead
                         lang="ko"
@@ -957,7 +958,7 @@ const Home = () => {
               chartColors={[...Array(6)].map(() => theme.palette.text.secondary)}
             />
           </Grid>
-          <Grid item xs={12} md={6} lg={8}>
+          {/* <Grid item xs={12} md={6} lg={8}>
             <AppNewsUpdate
               title="News Update"
               list={[...Array(5)].map((_, index) => ({
@@ -968,7 +969,7 @@ const Home = () => {
                 postedAt: faker.date.recent(),
               }))}
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} md={6} lg={4}>
             <AppOrderTimeline
               title="Order Timeline"

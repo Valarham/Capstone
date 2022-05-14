@@ -219,7 +219,7 @@ function SettingsPanel(props) {
         <InputLabel>Dataset</InputLabel>
         <Select value={typeState} onChange={handleDatasetChange}>
           <MenuItem value="Employee">Employee</MenuItem>
-          <MenuItem value="Commodity">Market</MenuItem>
+          <MenuItem value="Market">Market</MenuItem>
         </Select>
       </FormControl>
       <FormControl variant="standard">
@@ -440,7 +440,7 @@ const User = () => {
   const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
-  const [type, setType] = React.useState('Commodity');
+  const [type, setType] = React.useState('Market');
   const [size, setSize] = React.useState(100);
   const { data, setRowLength, loadNewData } = useDemoData({
     dataSet: type,
@@ -450,7 +450,7 @@ const User = () => {
   });
 
   const [pagination, setPagination] = React.useState({
-    pagination: false,
+    // pagination: false,
     autoPageSize: false,
     pageSize: undefined,
   });
@@ -486,13 +486,14 @@ const User = () => {
       return newPaginationSettings;
     });
   };
+  const value = 'true';
   function CustomToolbar() {
     return (
       <GridToolbarContainer>
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
         <GridToolbarDensitySelector />
-        <GridToolbarExport utf8WithBom={true} />
+        <GridToolbarExport />
       </GridToolbarContainer>
     );
   }

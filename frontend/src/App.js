@@ -18,7 +18,6 @@ import LogoOnlyLayout from './components/Layouts/LogoOnlyLayout/LogoOnlyLayout';
 function App() {
   //const dispatch = useDispatch();
   const { pathname } = useLocation();
-  //   api axios 구현 추가함/--------------------------------------------
   //   const [stripeApiKey, setStripeApiKey] = useState("");
 
   //   async function getStripeApiKey() {
@@ -34,10 +33,10 @@ function App() {
     });
   });
 
-  //   useEffect(() => {
-  //     dispatch(loadUser());
-  //     // getStripeApiKey();
-  //   }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(loadUser());
+  //   // getStripeApiKey();
+  // }, [dispatch]);
 
   // always scroll to top on route/path change
   useEffect(() => {

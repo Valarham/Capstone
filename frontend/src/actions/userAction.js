@@ -11,30 +11,6 @@ import {
   LOGOUT_USER_SUCCESS,
   LOGOUT_USER_FAIL,
   CLEAR_ERRORS,
-  UPDATE_PROFILE_REQUEST,
-  UPDATE_PROFILE_SUCCESS,
-  UPDATE_PROFILE_FAIL,
-  UPDATE_PASSWORD_REQUEST,
-  UPDATE_PASSWORD_SUCCESS,
-  UPDATE_PASSWORD_FAIL,
-  FORGOT_PASSWORD_REQUEST,
-  FORGOT_PASSWORD_SUCCESS,
-  FORGOT_PASSWORD_FAIL,
-  RESET_PASSWORD_SUCCESS,
-  RESET_PASSWORD_FAIL,
-  RESET_PASSWORD_REQUEST,
-  UPDATE_USER_REQUEST,
-  UPDATE_USER_SUCCESS,
-  UPDATE_USER_FAIL,
-  DELETE_USER_REQUEST,
-  DELETE_USER_SUCCESS,
-  DELETE_USER_FAIL,
-  USER_DETAILS_REQUEST,
-  USER_DETAILS_SUCCESS,
-  USER_DETAILS_FAIL,
-  ALL_USERS_FAIL,
-  ALL_USERS_SUCCESS,
-  ALL_USERS_REQUEST,
 } from '../constants/userConstants';
 import axios from 'axios';
 
@@ -49,7 +25,7 @@ export const loginUser = (email, password) => async (dispatch) => {
       },
     };
 
-    const { data } = await axios.post('/api/v1/login', { email, password }, config);
+    const { data } = await axios.post('/api/login', { email, password }, config);
 
     dispatch({
       type: LOGIN_USER_SUCCESS,
@@ -74,7 +50,7 @@ export const registerUser = (userData) => async (dispatch) => {
       },
     };
 
-    const { data } = await axios.post('/api/v1/register', userData, config);
+    const { data } = await axios.post('/api/register', userData, config);
 
     dispatch({
       type: REGISTER_USER_SUCCESS,
@@ -93,7 +69,7 @@ export const loadUser = () => async (dispatch) => {
   try {
     dispatch({ type: LOAD_USER_REQUEST });
 
-    const { data } = await axios.get('/api/v1/me');
+    const { data } = await axios.get('/api/me');
 
     dispatch({
       type: LOAD_USER_SUCCESS,
@@ -110,36 +86,11 @@ export const loadUser = () => async (dispatch) => {
 // Logout User
 export const logoutUser = () => async (dispatch) => {
   try {
-    await axios.get('/api/v1/logout');
+    await axios.get('/api/logout');
     dispatch({ type: LOGOUT_USER_SUCCESS });
   } catch (error) {
     dispatch({
       type: LOGOUT_USER_FAIL,
-      payload: error.response.data.message,
-    });
-  }
-};
-
-// Update User
-export const updateProfile = (userData) => async (dispatch) => {
-  try {
-    dispatch({ type: UPDATE_PROFILE_REQUEST });
-
-    const config = {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    };
-
-    const { data } = await axios.put('/api/v1/me/update', userData, config);
-
-    dispatch({
-      type: UPDATE_PROFILE_SUCCESS,
-      payload: data.success,
-    });
-  } catch (error) {
-    dispatch({
-      type: UPDATE_PROFILE_FAIL,
       payload: error.response.data.message,
     });
   }

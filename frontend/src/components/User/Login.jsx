@@ -47,7 +47,7 @@ const HeaderStyle = styled('header')(({ theme }) => ({
 
 const SectionStyle = styled(Card)(({ theme }) => ({
   width: '100%',
-  maxWidth: 464,
+  width: 464,
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -55,7 +55,7 @@ const SectionStyle = styled(Card)(({ theme }) => ({
 }));
 
 const ContentStyle = styled('div')(({ theme }) => ({
-  maxWidth: 480,
+  width: 480,
   margin: 'auto',
   minHeight: '100vh',
   display: 'flex',
@@ -66,42 +66,50 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 const Login = () => {
   const smUp = useResponsive('up', 'sm');
-
   const mdUp = useResponsive('up', 'md');
   //const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar();
-  const location = useLocation();
-
+  //   const { enqueueSnackbar } = useSnackbar();
+  //   const location = useLocation();
   //const { loading, isAuthenticated, error } = useSelector((state) => state.user);
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  //   const handleLogin = (e) => {
-  //     e.preventDefault();
-  //     dispatch(loginUser(email, password));
-  //   };
-
-  const redirect = location.search ? location.search.split('=')[1] : 'account';
-
-  //   useEffect(() => {
-  //     if (error) {
-  //       enqueueSnackbar(error, { variant: 'error' });
-  //       dispatch(clearErrors());
-  //     }
-  //     if (isAuthenticated) {
-  //       navigate(`/${redirect}`);
-  //     }
-  //   }, [dispatch, error, isAuthenticated, redirect, navigate, enqueueSnackbar]);
-
   const [showPassword, setShowPassword] = useState(false);
 
+  // const handleLogin = (e) => {
+  //   e.preventDefault();
+  //   dispatch(loginUser(email, password));
+  // };
+  //   const redirect = location.search ? location.search.split('=')[1] : 'account';
+  // useEffect(() => {
+  //   if (error) {
+  //     enqueueSnackbar(error, { variant: 'error' });
+  //     dispatch(clearErrors());
+  //   }
+  //   if (isAuthenticated) {
+  //     navigate(`/${redirect}`);
+  //   }
+  // }, [dispatch, error, isAuthenticated, redirect, navigate, enqueueSnackbar]);
+  const handleInputId = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleInputPw = (e) => {
+    setPassword(e.target.value);
+  };
+  const handleShowPassword = () => {
+    setShowPassword((show) => !show);
+  };
+  // login 버튼 클릭 이벤트
+  const onClickLogin = () => {
+    console.log('click login');
+  };
+  useEffect(() => {
+    loginUser(email, password);
+  }, []);
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email('이메일은 유효한 이메일 형식이어야 합니다.').required('이메일은 필수 항목입니다.'),
     password: Yup.string().required('비밀번호가 필요합니다'),
-    // email: Yup.string().email('Email must be a valid email address').required('Email is required'),
-    // password: Yup.string().required('Password is required'),
   });
 
   const formik = useFormik({
@@ -112,13 +120,12 @@ const Login = () => {
     },
     validationSchema: LoginSchema,
     onSubmit: () => {
+      loginUser(email, password);
       navigate('/dashboard', { replace: true });
     },
   });
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
-  const handleShowPassword = () => {
-    setShowPassword((show) => !show);
-  };
+
   return (
     <>
       <MetaData title="Login">
@@ -139,7 +146,7 @@ const Login = () => {
               <img src="/static/illustrations/illustration_login.png" alt="login" />
             </SectionStyle>
           )}
-          <Container maxWidth="sm">
+          <Container width="sm">
             <ContentStyle>
               <Typography lang="ko" variant="h4" gutterBottom>
                 로그인{/* Sign In */}
@@ -160,7 +167,7 @@ const Login = () => {
                       autoComplete="username"
                       type="email"
                       label="이메일"
-                      // label="Email address"
+                      onChange={handleInputId}
                       {...getFieldProps('email')}
                       error={Boolean(touched.email && errors.email)}
                       helperText={touched.email && errors.email}
@@ -172,7 +179,7 @@ const Login = () => {
                       autoComplete="current-password"
                       type={showPassword ? 'text' : 'password'}
                       label="비밀번호"
-                      // label="Password"
+                      onChange={handleInputPw}
                       {...getFieldProps('password')}
                       InputProps={{
                         endAdornment: (
@@ -201,7 +208,14 @@ const Login = () => {
           </Link> */}
                   </Stack>
 
-                  <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
+                  <LoadingButton
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                    onClick={onClickLogin}
+                    loading={isSubmitting}
+                  >
                     로그인
                     {/* Login */}
                   </LoadingButton>
