@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-
+import { response } from 'express';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Card, Link, Container, Typography } from '@mui/material';
@@ -130,8 +130,14 @@ const Login = () => {
       remember: true,
     },
     validationSchema: LoginSchema,
-    onSubmit: () => {
-      loginUser(email, password);
+    onSubmit: (event) => {
+      event.preventDefault();
+      let body = {
+        email: setEmail,
+        password: setPassword,
+      };
+
+      axios.post('/api/users/login', body).then(response);
       navigate('/dashboard/home', { replace: true });
     },
   });

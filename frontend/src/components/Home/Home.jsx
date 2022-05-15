@@ -667,7 +667,17 @@ const Home = () => {
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
         <GridToolbarDensitySelector />
-        <GridToolbarExport />
+        <GridToolbarExport
+          csvOptions={{
+            fileName: 'customerDataBase',
+            delimiter: ';',
+            utf8WithBom: true,
+          }}
+          printOptions={{
+            hideFooter: true,
+            hideToolbar: true,
+          }}
+        />
       </GridToolbarContainer>
     );
   }
@@ -758,7 +768,7 @@ const Home = () => {
           <Container maxWidth="xl">
             <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}>
               <Typography variant="h4" sx={{ mb: 2 }} gutterBottom>
-                최근 시장 검색
+                최근 매장 검색
               </Typography>
             </Stack>
             <StyledBox>

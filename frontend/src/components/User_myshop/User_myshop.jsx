@@ -805,7 +805,17 @@ const User = () => {
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
         <GridToolbarDensitySelector />
-        <GridToolbarExport />
+        <GridToolbarExport
+          csvOptions={{
+            fileName: 'customerDataBase',
+            delimiter: ';',
+            utf8WithBom: true,
+          }}
+          printOptions={{
+            hideFooter: true,
+            hideToolbar: true,
+          }}
+        />
         <Managepanel />
       </GridToolbarContainer>
     );
