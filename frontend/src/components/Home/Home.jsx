@@ -93,7 +93,6 @@ const initialRows = [
   {
     id: 1,
     company: '스코프 부암점',
-    name: '',
     repnum: '070-736-7629',
     sector: '제과,베이커리',
     rating: '3.8',
@@ -104,7 +103,6 @@ const initialRows = [
   {
     id: 2,
     company: '하이버',
-    name: '',
     repnum: '02-6015-7988',
     sector: '제과,베이커리',
     rating: '3.7',
@@ -115,7 +113,6 @@ const initialRows = [
   {
     id: 3,
     company: '안국153',
-    name: '',
     repnum: '02-733-1530',
     sector: '제과,베이커리',
     rating: '2.7',
@@ -126,7 +123,6 @@ const initialRows = [
   {
     id: 4,
     company: '솔트24',
-    name: '',
     repnum: '02-744-9273',
     sector: '제과,베이커리',
     rating: '3.5',
@@ -137,7 +133,6 @@ const initialRows = [
   {
     id: 5,
     company: '금상고로케 서촌마을점',
-    name: '',
     repnum: '02-725-3157',
     sector: '제과,베이커리',
     rating: '4.7',
@@ -148,7 +143,6 @@ const initialRows = [
   {
     id: 6,
     company: '김용현 베이커리',
-    name: '',
     repnum: '02-3217-6800',
     sector: '제과,베이커리',
     rating: '4.2',
@@ -159,7 +153,6 @@ const initialRows = [
   {
     id: 7,
     company: '망원동티라미수 익선동점',
-    name: '',
     repnum: '02-745-9446',
     sector: '제과,베이커리',
     rating: '3.9',
@@ -170,7 +163,6 @@ const initialRows = [
   {
     id: 8,
     company: '하이제씨',
-    name: '',
     repnum: '02-745-2468',
     sector: '제과,베이커리',
     rating: '4.1',
@@ -181,7 +173,6 @@ const initialRows = [
   {
     id: 9,
     company: '아우어베이커리 광화문디팰리스점',
-    name: '',
     repnum: '02-737-0050',
     sector: '제과,베이커리',
     rating: '4.1',
@@ -192,7 +183,6 @@ const initialRows = [
   {
     id: 10,
     company: '우드앤브릭 타워8점',
-    name: '',
     repnum: '02-6226-8211',
     sector: '제과,베이커리',
     rating: '2.2',
@@ -203,7 +193,6 @@ const initialRows = [
   {
     id: 11,
     company: '아티장크로아상',
-    name: '',
     repnum: '02-741-3050',
     sector: '제과,베이커리',
     rating: '4.3',
@@ -214,7 +203,6 @@ const initialRows = [
   {
     id: 12,
     company: '푸하하크림빵 익선동',
-    name: '',
     repnum: '02-762-6003',
     sector: '제과,베이커리',
     rating: '3.5',
@@ -225,7 +213,6 @@ const initialRows = [
 ];
 const TABLE_HEAD = [
   { id: 'company', label: '매장이름', alignRight: false },
-  { id: 'name', label: '대표자이름', alignRight: false },
   { id: 'repnum', label: '대표번호', alignRight: false },
   { id: 'sector', label: '업종', alignRight: false },
   { id: 'rating', label: '평점', alignRight: false },
@@ -233,12 +220,15 @@ const TABLE_HEAD = [
   { id: 'isnew', label: '신규', alignRight: false },
   { id: 'location', label: '위치', alignRight: false },
   //   { id: 'status', label: '진행상황', alignRight: false },
-  { id: '' },
+  //   { id: '' },
 ];
 
-const StyledDataGrid = styled(DataGridPro)(({ theme }) => ({
+const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   border: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'}`,
   color: theme.palette.mode === 'light' ? 'rgba(0,0,0,.85)' : 'rgba(255,255,255,0.85)',
+  '& .div.MuiDataGrid-main css-204u17-MuiDataGrid-main.div': {
+    color: 'rgba(255, 255, 255, 0)',
+  },
   fontFamily: [
     '-apple-system',
     'BlinkMacSystemFont',
@@ -281,6 +271,7 @@ const StyledDataGrid = styled(DataGridPro)(({ theme }) => ({
     ].join(','),
     WebkitFontSmoothing: 'auto',
     letterSpacing: 'normal',
+
     '& .MuiDataGrid-columnsContainer': {
       backgroundColor: theme.palette.mode === 'light' ? '#fafafa' : '#1d1d1d',
     },
@@ -373,6 +364,7 @@ const StyledBox = styled(Box)(({ theme }) => ({
   flexDirection: 'column',
   height: 750,
   width: '100%',
+
   '& .MuiFormGroup-options': {
     alignItems: 'center',
     paddingBottom: theme.spacing(1),
@@ -384,11 +376,11 @@ const StyledBox = styled(Box)(({ theme }) => ({
   },
 }));
 function SettingsPanel(props) {
-  const { onApply, type, size } = props;
+  const { onApply, type, size, theme } = props;
   const [sizeState, setSize] = React.useState(size);
   const [typeState, setType] = React.useState(type);
   const [selectedPaginationValue, setSelectedPaginationValue] = React.useState(-1);
-  //   const [activeTheme, setActiveTheme] = React.useState(theme);
+  const [activeTheme, setActiveTheme] = React.useState(theme);
 
   const handleSizeChange = React.useCallback((event) => {
     setSize(Number(event.target.value));
@@ -402,18 +394,18 @@ function SettingsPanel(props) {
     setSelectedPaginationValue(event.target.value);
   }, []);
 
-  //   const handleThemeChange = React.useCallback((event) => {
-  //     setActiveTheme(event.target.value);
-  //   }, []);
+  const handleThemeChange = React.useCallback((event) => {
+    setActiveTheme(event.target.value);
+  }, []);
 
   const handleApplyChanges = React.useCallback(() => {
     onApply({
       size: sizeState,
       type: typeState,
       pagesize: selectedPaginationValue,
-      //   theme: activeTheme,
+      theme: activeTheme,
     });
-  }, [sizeState, typeState, selectedPaginationValue, onApply]);
+  }, [sizeState, typeState, selectedPaginationValue, activeTheme, onApply]);
 
   return (
     <FormGroup className="MuiFormGroup-options" row>
@@ -443,7 +435,13 @@ function SettingsPanel(props) {
           <MenuItem value={1000}>{Number(1000).toLocaleString()}</MenuItem>
         </Select>
       </FormControl>
-
+      <FormControl variant="standard">
+        <InputLabel>Theme</InputLabel>
+        <Select value={activeTheme} onChange={handleThemeChange}>
+          <MenuItem value="ant">Ant Design</MenuItem>
+          <MenuItem value="default">Default Theme</MenuItem>
+        </Select>
+      </FormControl>
       <Button size="small" variant="outlined" color="primary" onClick={handleApplyChanges}>
         <KeyboardArrowRightIcon fontSize="small" /> Apply
       </Button>
@@ -454,15 +452,15 @@ function SettingsPanel(props) {
 SettingsPanel.propTypes = {
   onApply: PropTypes.func.isRequired,
   size: PropTypes.number.isRequired,
-  //   theme: PropTypes.oneOf(['ant', 'default']).isRequired,
+  theme: PropTypes.oneOf(['ant', 'default']).isRequired,
   type: PropTypes.oneOf(['Market', 'Employee']).isRequired,
 };
 
-function querySelectorByClassName() {
-  const div_list = document.querySelectorAll('.MuiDataGrid-root css-k7dv9g-MuiDataGrid-root');
+// function querySelectorByClassName() {
+//   const div_list = document.querySelectorAll('.MuiDataGrid-root css-k7dv9g-MuiDataGrid-root');
 
-  div_list.style.visibility = 'hidden';
-}
+//   div_list.style.visibility = 'hidden';
+// }
 const Home = () => {
   //const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
@@ -478,27 +476,13 @@ const Home = () => {
     },
     [],
   );
-  // 진행상황 변경
-  //   const editStatus = React.useCallback(
-  //     (id) => () => {
-  //       setRows((prevRows) => prevRows.map((row) => (row.id === id ? { ...row, status: '미정' } : row)));
-  //     },
-  //     [],
-  //   );
   const columns = React.useMemo(
     () => [
       {
         field: 'company',
         headerName: '매장이름',
         type: 'string',
-        width: 150,
-        alignRight: false,
-      },
-      {
-        field: 'name',
-        headerName: '대표자이름',
-        type: 'string',
-        width: 80,
+        width: 300,
         alignRight: false,
       },
       {
@@ -512,7 +496,7 @@ const Home = () => {
         field: 'sector',
         headerName: '업종',
         type: 'string',
-        width: 130,
+        width: 150,
         alignRight: false,
       },
       {
@@ -526,7 +510,7 @@ const Home = () => {
         field: 'review',
         headerName: '리뷰',
         type: 'number',
-        width: 80,
+        width: 85,
         alignRight: false,
       },
       {
@@ -540,21 +524,16 @@ const Home = () => {
         field: 'location',
         headerName: '위치',
         type: 'string',
-        width: 280,
+        width: 380,
         alignRight: false,
       },
       {
         field: 'actions',
+        headerName: '수집',
         type: 'actions',
         width: 80,
         getActions: (params) => [
           <GridActionsCellItem icon={<AddToPhotosIcon />} label="Store" onClick={storeCompany(params.id)} />,
-          //   <GridActionsCellItem
-          //     icon={<SecurityIcon />}
-          //     label="Edit 진행상황"
-          //     onClick={editStatus(params.id)}
-          //     showInMenu
-          //   />,
         ],
       },
     ],
@@ -575,7 +554,7 @@ const Home = () => {
   // 최근 검색 매장에서 유저가 선택하기전 미리 선택해놓은 데이터는 없음(디폴트)
   const [selected, setSelected] = useState([]);
   // 최근 검색 매장에서 출력된 후 첫 번째는 매장 이름순으로 정렬
-  const [orderBy, setOrderBy] = useState('name');
+  const [orderBy, setOrderBy] = useState('company');
   // 최근 검색 매장에서 매장이름으로 검색 상태
   const [filterName, setFilterName] = useState('');
   // 최근 검색 매장 출력되는 행은 5개
@@ -589,18 +568,18 @@ const Home = () => {
   // 모든 click시 선택되는 핸들러 처리
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = USERLIST.map((n) => n.company);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
   // Click관련 핸들러 처리
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, company) => {
+    const selectedIndex = selected.indexOf(company);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, company);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -630,7 +609,8 @@ const Home = () => {
   // 매장이름으로 검색했는데 찾지 못했을 경우 반환 값
   const isUserNotFound = filteredUsers.length === 0;
   //-----------------------------------------------------------------------------------
-  //const [isAntDesign, setIsAntDesign] = React.useState(false);
+
+  const [isAntDesign, setIsAntDesign] = React.useState(true);
   const [type, setType] = React.useState('Market');
   const [size, setSize] = React.useState(100);
   const { data, setRowLength, loadNewData } = useDemoData({
@@ -645,9 +625,9 @@ const Home = () => {
     autoPageSize: false,
     pageSize: undefined,
   });
-  //   const getActiveTheme = () => {
-  //     return isAntDesign ? 'ant' : 'default';
-  //   };
+  const getActiveTheme = () => {
+    return isAntDesign ? 'ant' : 'default';
+  };
   const handleApplyClick = (settings) => {
     if (size !== settings.size) {
       setSize(settings.size);
@@ -656,9 +636,9 @@ const Home = () => {
     if (type !== settings.type) {
       setType(settings.type);
     }
-    // if (getActiveTheme() !== settings.theme) {
-    //   setIsAntDesign(!isAntDesign);
-    // }
+    if (getActiveTheme() !== settings.theme) {
+      setIsAntDesign(!isAntDesign);
+    }
     if (size !== settings.size || type !== settings.type) {
       setRowLength(settings.size);
       loadNewData();
@@ -681,7 +661,6 @@ const Home = () => {
       return newPaginationSettings;
     });
   };
-  const value = 'true';
   function CustomToolbar() {
     return (
       <GridToolbarContainer>
@@ -697,7 +676,6 @@ const Home = () => {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-
     height: '100%',
     '& .ant-empty-img-1': {
       fill: theme.palette.mode === 'light' ? '#aeb8c2' : '#262626',
@@ -751,7 +729,7 @@ const Home = () => {
       </StyledGridOverlay>
     );
   }
-
+  const DataGridComponent = isAntDesign ? StyledDataGrid : DataGridPro;
   return (
     <>
       <MetaData title="Dashboard" />
@@ -777,16 +755,16 @@ const Home = () => {
             <AppWidgetSummary title="신규 매장 등록 수" total={315} color="error" icon="mdi:store-plus" />
             {/* <AppWidgetSummary title="New Store Registration" total={315} color="error" icon="mdi:store-plus" /> */}
           </Grid>
-          <Container>
+          <Container maxWidth="xl">
             <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}>
               <Typography variant="h4" sx={{ mb: 2 }} gutterBottom>
                 최근 시장 검색
               </Typography>
             </Stack>
             <StyledBox>
-              <SettingsPanel onApply={handleApplyClick} size={size} type={type} />
-              <Card width="xl">
-                <DataGrid
+              <SettingsPanel onApply={handleApplyClick} size={size} type={type} theme={getActiveTheme()} />
+              <Card>
+                <DataGridComponent
                   columns={columns}
                   rows={rows}
                   components={{
@@ -795,6 +773,7 @@ const Home = () => {
                     NoRowsOverlay: CustomNoRowsOverlay,
                   }}
                   //   loading={loading}
+
                   checkboxSelection
                   disableSelectionOnClick
                   rowThreshold={0}
@@ -828,7 +807,6 @@ const Home = () => {
                           const {
                             company,
                             id,
-                            name,
                             repnum,
                             sector,
                             rating,
@@ -838,7 +816,7 @@ const Home = () => {
                             location,
                             avatarUrl,
                           } = row;
-                          const isItemSelected = selected.indexOf(name) !== -1;
+                          const isItemSelected = selected.indexOf(company) !== -1;
                           return (
                             <TableRow
                               hover
@@ -849,14 +827,14 @@ const Home = () => {
                               aria-checked={isItemSelected}
                             >
                               <TableCell padding="checkbox">
-                                <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
+                                <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, company)} />
                               </TableCell>
                               <TableCell component="th" scope="row" padding="none">
                                 <Stack direction="row" alignItems="center" spacing={2}>
-                                  <Avatar alt={name} src={avatarUrl} />
+                                  {/* <Avatar alt={name} src={avatarUrl} />
                                   <Typography variant="subtitle2" noWrap>
                                     {name}
-                                  </Typography>
+                                  </Typography> */}
                                 </Stack>
                               </TableCell>
                               <TableCell align="left">{company}</TableCell>
@@ -1061,8 +1039,6 @@ const Home = () => {
           </Grid>
         </Grid>
       </Container>
-      {/* -----------------20220506 dashboard 중첩------------------------------- */}
-
       {/* <Container>
         <Categories />
         <main className="flex flex-col gap-3 px-2 mt-16 sm:mt-2">
