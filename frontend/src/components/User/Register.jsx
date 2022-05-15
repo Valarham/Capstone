@@ -17,9 +17,10 @@ import MetaData from '../Layouts/MetaData';
 import { styled } from '@mui/material/styles';
 import { Card, Link, Container, Typography, Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import useResponsive from '../../utils/useResponsive';
-
+import axios from 'axios';
 import { LoadingButton } from '@mui/lab';
-
+//hooks
+import { useInput } from '../../hooks/useInput';
 // component
 import Iconify from '../Home/Dashboard/Iconify';
 // register page 관련 form 출력함수
@@ -65,22 +66,42 @@ const ContentStyle = styled('div')(({ theme }) => ({
 }));
 const Register = () => {
   const smUp = useResponsive('up', 'sm');
-
   const mdUp = useResponsive('up', 'md');
-  //const dispatch = useDispatch();
-
-  //   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-  // default는 ******* 처럼 안보임 -> 클릭시 본인이 적은 비밀번호 확인가능
-  const [showPassword, setShowPassword] = useState(false);
   // 빨간색 글씨로 오류 처리하는 부분
   const RegisterSchema = Yup.object().shape({
-    firstName: Yup.string().min(1, '너무 짧습니다.').max(50, '너무 깁니다.').required('이름은 필수 항목입니다.'),
-    lastName: Yup.string().min(1, '너무 짧습니다.').max(50, '너무 깁니다.').required('성은 필수 항목입니다.'),
+    firstName: Yup.string().min(1, '너무 짧습니다.').max(5, '너무 깁니다.').required('이름은 필수 항목입니다.'),
+    lastName: Yup.string().min(1, '너무 짧습니다.').max(5, '너무 깁니다.').required('성은 필수 항목입니다.'),
     email: Yup.string().email('이메일은 유효한 이메일 형식이어야 합니다.').required('이메일은 필수 항목입니다.'),
-    password: Yup.string().required('비밀번호는 필수 항목입니다.'),
+    password: Yup.string().min(8, '너무 짧습니다.').max(20, '너무 깁니다.').required('비밀번호는 필수 항목입니다.'),
     phonenumber: Yup.string().required('핸드폰 번호는 필수 항목입니다.'),
   });
+  const [firstName, setfirstName] = useState('');
+  const [lastName, setlastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [phonenumber, setPhonenumber] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const handleInputfN = (e) => {
+    setEmail(e.target.value);
+  };
+  const handleInputlN = (e) => {
+    setPassword(e.target.value);
+  };
+  const handleInputEm = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleInputPw = (e) => {
+    setPassword(e.target.value);
+  };
+  const handleInputPn = (e) => {
+    setPhonenumber(e.target.value);
+  };
+  const handleShowPassword = () => {
+    setShowPassword((show) => !show);
+  };
+
   // register 변수
   const formik = useFormik({
     initialValues: {
@@ -88,82 +109,33 @@ const Register = () => {
       lastName: '',
       email: '',
       password: '',
-      //   re_enter_password: '',
       phonenumber: '',
     },
     validationSchema: RegisterSchema,
+
     // register 확인될 경우 dashboard로 navigate
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+    onSubmit: (event) => {
+      //event.preventDefault;
+      let body = {
+        firstName: setfirstName,
+        lastName: setlastName,
+        email: setEmail,
+        password: setPassword,
+        phonenumber: setPhonenumber,
+      };
+
+      axios.post('/api/register', body).then((response) => {
+        if (response.payload.loginSuccess) {
+          alert(JSON.stringify(event, null, 2));
+          navigate('/login', { replace: true });
+        } else {
+          alert('Error');
+        }
+      });
     },
   });
   // error handler 및 유저 선택적 api 변수
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
-  //const { loading, isAuthenticated, error } = useSelector((state) => state.user);
-
-  const [user, setUser] = useState({
-    name: '',
-    email: '',
-    gender: '',
-    password: '',
-    cpassword: '',
-  });
-
-  const { name, email, password, cpassword } = user;
-
-  const [avatar, setAvatar] = useState();
-  const [avatarPreview, setAvatarPreview] = useState('preview.png');
-
-  //   const handleRegister = (e) => {
-  //     e.preventDefault();
-  //     if (password.length < 8) {
-  //       enqueueSnackbar('Password length must be atleast 8 characters', { variant: 'warning' });
-  //       return;
-  //     }
-  //     if (password !== cpassword) {
-  //       enqueueSnackbar("Password Doesn't Match", { variant: 'error' });
-  //       return;
-  //     }
-  //     if (!avatar) {
-  //       enqueueSnackbar('Select Avatar', { variant: 'error' });
-  //       return;
-  //     }
-
-  //   const formData = new FormData();
-  //   formData.set('name', name);
-  //   formData.set('email', email);
-  //   formData.set('password', password);
-  //   formData.set('avatar', avatar);
-
-  //dispatch(registerUser(formData));
-  // };
-
-  const handleDataChange = (e) => {
-    if (e.target.name === 'avatar') {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setAvatarPreview(reader.result);
-          setAvatar(reader.result);
-        }
-      };
-
-      reader.readAsDataURL(e.target.files[0]);
-    } else {
-      setUser({ ...user, [e.target.name]: e.target.value });
-    }
-  };
-
-  //   useEffect(() => {
-  //     if (error) {
-  //       enqueueSnackbar(error, { variant: 'error' });
-  //       dispatch(clearErrors());
-  //     }
-  //     if (isAuthenticated) {
-  //       navigate('/');
-  //     }
-  //   }, [dispatch, error, isAuthenticated, navigate, enqueueSnackbar]);
 
   return (
     <>
@@ -202,7 +174,7 @@ const Register = () => {
                       lang="ko"
                       fullWidth
                       label="이름"
-                      //   label="First name"
+                      onChange={handleInputfN}
                       {...getFieldProps('firstName')}
                       error={Boolean(touched.firstName && errors.firstName)}
                       helperText={touched.firstName && errors.firstName}
@@ -212,7 +184,7 @@ const Register = () => {
                       lang="ko"
                       fullWidth
                       label="성"
-                      //   label="Last name"
+                      onChange={handleInputlN}
                       {...getFieldProps('lastName')}
                       error={Boolean(touched.lastName && errors.lastName)}
                       helperText={touched.lastName && errors.lastName}
@@ -225,7 +197,7 @@ const Register = () => {
                     autoComplete="username"
                     type="email"
                     label="이메일"
-                    // label="Email address"
+                    onChange={handleInputEm}
                     {...getFieldProps('email')}
                     error={Boolean(touched.email && errors.email)}
                     helperText={touched.email && errors.email}
@@ -237,7 +209,7 @@ const Register = () => {
                     autoComplete="current-password"
                     type={showPassword ? 'text' : 'password'}
                     label="비밀번호"
-                    // label="Password"
+                    onChange={handleInputPw}
                     {...getFieldProps('password')}
                     InputProps={{
                       endAdornment: (
@@ -256,26 +228,12 @@ const Register = () => {
                     lang="ko"
                     fullWidth
                     label="핸드폰 번호"
-                    // label="Phone number"
+                    onChange={handleInputPn}
                     {...getFieldProps('phonenumber')}
                     error={Boolean(touched.phonenumber && errors.phonenumber)}
                     helperText={touched.phonenumber && errors.phonenumber}
                   />
-                  {/* <!-- input container column --> */}
 
-                  <div className="flex flex-col w-full justify-between sm:flex-row gap-3 items-center">
-                    <Avatar alt="Avatar Preview" src={avatarPreview} sx={{ width: 56, height: 56 }} />
-                    <label className="rounded font-medium bg-gray-400 text-center cursor-pointer text-white w-full py-2 px-2.5 shadow hover:shadow-lg">
-                      <input
-                        type="file"
-                        name="avatar"
-                        accept="image/*"
-                        onChange={handleDataChange}
-                        className="hidden"
-                      />
-                      Choose File
-                    </label>
-                  </div>
                   <LoadingButton
                     lang="ko"
                     fullWidth

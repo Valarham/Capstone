@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { response } from 'express';
+
 // @mui
 import { styled } from '@mui/material/styles';
 import { Card, Link, Container, Typography } from '@mui/material';
@@ -68,29 +68,13 @@ const ContentStyle = styled('div')(({ theme }) => ({
 const Login = () => {
   const smUp = useResponsive('up', 'sm');
   const mdUp = useResponsive('up', 'md');
-  //const dispatch = useDispatch();
+
   const navigate = useNavigate();
-  //   const { enqueueSnackbar } = useSnackbar();
-  //   const location = useLocation();
-  //const { loading, isAuthenticated, error } = useSelector((state) => state.user);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  // const handleLogin = (e) => {
-  //   e.preventDefault();
-  //   dispatch(loginUser(email, password));
-  // };
-  //   const redirect = location.search ? location.search.split('=')[1] : 'account';
-  // useEffect(() => {
-  //   if (error) {
-  //     enqueueSnackbar(error, { variant: 'error' });
-  //     dispatch(clearErrors());
-  //   }
-  //   if (isAuthenticated) {
-  //     navigate(`/${redirect}`);
-  //   }
-  // }, [dispatch, error, isAuthenticated, redirect, navigate, enqueueSnackbar]);
   const handleInputId = (e) => {
     setEmail(e.target.value);
   };
@@ -101,22 +85,6 @@ const Login = () => {
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
   };
-
-  // login 버튼 클릭 이벤트
-  const onClickLogin = () => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-    axios.post('/api/login', { email, password }, config);
-
-    console.log('click login');
-  };
-  useEffect(() => {
-    //console.log('clickLogin');
-    //loginUser(email, password);
-  });
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email('이메일은 유효한 이메일 형식이어야 합니다.').required('이메일은 필수 항목입니다.'),
@@ -131,17 +99,23 @@ const Login = () => {
     },
     validationSchema: LoginSchema,
     onSubmit: (event) => {
-      event.preventDefault();
+      //event.preventDefault();
       let body = {
         email: setEmail,
         password: setPassword,
       };
 
-      axios.post('/api/users/login', body).then(response);
-      navigate('/dashboard/home', { replace: true });
+      axios.post('/api/login', body).then((response) => {
+        if (response.payload.loginSuccess) {
+          alert(JSON.stringify(event, null, 2));
+          navigate('/dashboard/home', { replace: true });
+        } else {
+          alert('Error');
+        }
+      });
     },
   });
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   return (
     <>
@@ -213,27 +187,19 @@ const Login = () => {
                   </Stack>
 
                   <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-                    <FormControlLabel
+                    {/* <FormControlLabel
                       lang="ko"
                       control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}
                       label="이메일 기억하기"
-                      // label="Remember me"
-                    />
+
+                    /> */}
 
                     {/* <Link component={RouterLink} variant="subtitle2" to="#" underline="hover">
             Forgot password?
           </Link> */}
                   </Stack>
 
-                  <LoadingButton
-                    fullWidth
-                    size="large"
-                    type="submit"
-                    variant="contained"
-                    onClick={onClickLogin}
-                    //onClick={loginUser(email, password)}
-                    loading={isSubmitting}
-                  >
+                  <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
                     로그인
                     {/* Login */}
                   </LoadingButton>
