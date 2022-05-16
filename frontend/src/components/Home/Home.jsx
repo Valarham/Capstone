@@ -640,7 +640,7 @@ const Home = () => {
         <GridToolbarExport
           csvOptions={{
             fileName: 'customerDataBase',
-            delimiter: ';',
+            // delimiter: ';',
             utf8WithBom: true,
           }}
           printOptions={{
@@ -713,7 +713,6 @@ const Home = () => {
   return (
     <>
       <MetaData title="Dashboard" />
-      {/* -----------------20220506 dashboard 중첩------------------------------- */}
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 2 }}>
           안녕하세요, 환영합니다.

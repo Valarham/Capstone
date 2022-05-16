@@ -71,6 +71,7 @@ const Login = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [state, setState] = useState(null || '');
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
@@ -88,21 +89,40 @@ const Login = () => {
     },
     validationSchema: LoginSchema,
     onSubmit: async (values) => {
-      //   values.preventDefault();
-      alert(JSON.stringify(values, null, 2));
-      console.log(values);
       try {
-        const config = {
+        alert(JSON.stringify(values, null, 2));
+        console.log(values);
+        const result = await axios({
+          //body: JSON.stringify(values),
+          url: `http://localhost:3000/api/login`,
           headers: {
-            'Content-Type': 'application/json',
+            //Authorization: `Basic ${TOKEN}`,
+            'content-Type': 'application/json',
           },
-        };
-        await axios.post('http://localhost:3000/api/login', { values }, config);
-        navigate('/dashboard/home', { replace: true });
+          method: 'POST',
+          data: JSON.stringify(values),
+        });
+        setState(result.data.message);
       } catch (error) {
-        console.log(error);
+        setState('error');
       }
     },
+    // onSubmit: async (values) => {
+    //   //   values.preventDefault();
+    //   alert(JSON.stringify(values, null, 2));
+    //   console.log(values);
+    //   try {
+    //     const config = {
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //     };
+    //     await axios.post('http://localhost:3000/api/login', { values }, config);
+    //     navigate('/dashboard/home', { replace: true });
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
   });
 
   const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;

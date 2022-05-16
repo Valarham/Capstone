@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import ProtectedRoute from './Routes/ProtectedRoute';
 import Home from './components/Home/Home';
 import NotFound from './components/NotFound';
-import detailshop from './components/Detailshop/Detailshop';
+import DetailStore from './components/DetailStore/DetailStore';
 
 //layouts
 import DashboardLayout from './components/Layouts/dashboard';
@@ -61,6 +61,7 @@ function App() {
       children: [
         { path: 'home', element: <Home /> },
         { path: 'user', element: <User /> },
+        { path: 'detailsotre', element: <DetailStore /> },
       ],
     },
     {

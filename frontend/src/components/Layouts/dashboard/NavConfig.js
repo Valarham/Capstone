@@ -4,6 +4,7 @@ import EqualizerIcon from '@mui/icons-material/Equalizer';
 // import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import GroupIcon from '@mui/icons-material/Group';
+import StoreIcon from '@mui/icons-material/Store';
 // import ReviewsIcon from '@mui/icons-material/Reviews';
 // import AddBoxIcon from '@mui/icons-material/AddBox';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -27,6 +28,12 @@ const navConfig = [
     path: '/dashboard/User',
     // icon: getIcon('eva:people-fill'),
     icon: <GroupIcon />,
+  },
+  {
+    title: 'Detail Store',
+    path: '/dashboard/detailsotre',
+    // icon: getIcon('eva:people-fill'),
+    icon: <StoreIcon />,
   },
   {
     title: 'login',

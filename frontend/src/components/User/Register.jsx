@@ -76,6 +76,7 @@ const Register = () => {
     password: Yup.string().min(8, '너무 짧습니다.').max(20, '너무 깁니다.').required('비밀번호는 필수 항목입니다.'),
     phone: Yup.string().required('핸드폰 번호는 필수 항목입니다.'),
   });
+  const [state, setState] = useState(null || '');
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
@@ -146,33 +147,32 @@ const Register = () => {
   // register (sign up)
   const formik = useFormik({
     initialValues: {
-      setSignUp,
+      first_name: '',
+      last_name: '',
+      email: '',
+      password: '',
+      phone: '',
     },
     validationSchema: RegisterSchema,
 
     // register 확인될 경우 dashboard로 navigate
     onSubmit: async (values) => {
-      alert(JSON.stringify(values, null, 2));
-      console.log(values);
       try {
-        const config = {
+        alert(JSON.stringify(values, null, 2));
+        console.log(values);
+        const result = await axios({
+          //body: JSON.stringify(values),
+          url: `http://localhost:3000/api/login`,
           headers: {
-            'Content-Type': 'application/json',
+            //Authorization: `Basic ${TOKEN}`,
+            'content-Type': 'application/json',
           },
-        };
-        await axios.post('http://localhost:3000/api/register', { ...signUp }, config);
-        setSignUp({
-          first_name: '',
-          last_name: '',
-          email: '',
-          password: '',
-          phone: '',
+          method: 'POST',
+          data: JSON.stringify(values),
         });
-        setCheckEmail(false);
-        alert('영업자 계정이 생성되었습니다.');
-        navigate('/login', { replace: true });
-      } catch (err) {
-        console.error(err);
+        setState(result.data.message);
+      } catch (error) {
+        setState('error');
       }
     },
   });
