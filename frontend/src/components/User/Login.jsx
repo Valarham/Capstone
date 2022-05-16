@@ -70,17 +70,8 @@ const Login = () => {
   const mdUp = useResponsive('up', 'md');
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleInputId = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handleInputPw = (e) => {
-    setPassword(e.target.value);
-  };
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
   };
@@ -94,26 +85,26 @@ const Login = () => {
     initialValues: {
       email: '',
       password: '',
-      remember: true,
     },
     validationSchema: LoginSchema,
-    onSubmit: (event) => {
-      //event.preventDefault();
-      let body = {
-        email: setEmail,
-        password: setPassword,
-      };
-
-      axios.post('/api/login', body).then((response) => {
-        if (response.payload.loginSuccess) {
-          alert(JSON.stringify(event, null, 2));
-          navigate('/dashboard/home', { replace: true });
-        } else {
-          alert('Error');
-        }
-      });
+    onSubmit: async (values) => {
+      //   values.preventDefault();
+      alert(JSON.stringify(values, null, 2));
+      console.log(values);
+      try {
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        };
+        await axios.post('http://localhost:3000/api/login', { values }, config);
+        navigate('/dashboard/home', { replace: true });
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
+
   const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   return (
@@ -157,7 +148,6 @@ const Login = () => {
                       autoComplete="username"
                       type="email"
                       label="이메일"
-                      onChange={handleInputId}
                       {...getFieldProps('email')}
                       error={Boolean(touched.email && errors.email)}
                       helperText={touched.email && errors.email}
@@ -169,7 +159,6 @@ const Login = () => {
                       autoComplete="current-password"
                       type={showPassword ? 'text' : 'password'}
                       label="비밀번호"
-                      onChange={handleInputPw}
                       {...getFieldProps('password')}
                       InputProps={{
                         endAdornment: (

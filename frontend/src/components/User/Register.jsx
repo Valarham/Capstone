@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import * as React from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
-import { useEffect, useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
@@ -70,70 +70,123 @@ const Register = () => {
   const navigate = useNavigate();
   // 빨간색 글씨로 오류 처리하는 부분
   const RegisterSchema = Yup.object().shape({
-    firstName: Yup.string().min(1, '너무 짧습니다.').max(5, '너무 깁니다.').required('이름은 필수 항목입니다.'),
-    lastName: Yup.string().min(1, '너무 짧습니다.').max(5, '너무 깁니다.').required('성은 필수 항목입니다.'),
+    first_name: Yup.string().min(1, '너무 짧습니다.').max(5, '너무 깁니다.').required('이름은 필수 항목입니다.'),
+    last_name: Yup.string().min(1, '너무 짧습니다.').max(5, '너무 깁니다.').required('성은 필수 항목입니다.'),
     email: Yup.string().email('이메일은 유효한 이메일 형식이어야 합니다.').required('이메일은 필수 항목입니다.'),
     password: Yup.string().min(8, '너무 짧습니다.').max(20, '너무 깁니다.').required('비밀번호는 필수 항목입니다.'),
-    phonenumber: Yup.string().required('핸드폰 번호는 필수 항목입니다.'),
+    phone: Yup.string().required('핸드폰 번호는 필수 항목입니다.'),
   });
-  const [firstName, setfirstName] = useState('');
-  const [lastName, setlastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [phonenumber, setPhonenumber] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const handleInputfN = (e) => {
-    setEmail(e.target.value);
-  };
-  const handleInputlN = (e) => {
-    setPassword(e.target.value);
-  };
-  const handleInputEm = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handleInputPw = (e) => {
-    setPassword(e.target.value);
-  };
-  const handleInputPn = (e) => {
-    setPhonenumber(e.target.value);
-  };
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
   };
+  const [signUp, setSignUp] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: '',
+    phone: '',
+  });
+  const [checkEmail, setCheckEmail] = useState(false);
 
-  // register 변수
+  const handleSignUpChange = useCallback((e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    switch (name) {
+      case 'first_name':
+        setSignUp((prev) => ({
+          ...prev,
+          first_name: value,
+        }));
+        break;
+      case 'last_name':
+        setSignUp((prev) => ({
+          ...prev,
+          last_name: value,
+        }));
+        break;
+      case 'email':
+        setSignUp((prev) => ({
+          ...prev,
+          email: value,
+        }));
+        setCheckEmail(false);
+        break;
+      case 'password':
+        setSignUp((prev) => ({
+          ...prev,
+          password: value,
+        }));
+        break;
+      case 'phone':
+        setSignUp((prev) => ({
+          ...prev,
+          phone: value,
+        }));
+        break;
+      default:
+    }
+  }, []);
+  const handleCheckEmailClick = useCallback(async () => {
+    const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+    if (!signUp.email.match(emailRegex)) return alert('이메일을 정확히 입력하세요!');
+    try {
+      await axios.get(`http://localhost:3000/api/check`, {
+        params: { email: signUp.email },
+      });
+      setCheckEmail(true);
+    } catch (err) {
+      if (err?.response?.status === 401) {
+        setCheckEmail(false);
+        return alert('이미 가입된 이메일 입니다.');
+      }
+      console.error(err);
+    }
+  }, [signUp]);
+  // register (sign up)
   const formik = useFormik({
     initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      phonenumber: '',
+      setSignUp,
     },
     validationSchema: RegisterSchema,
 
     // register 확인될 경우 dashboard로 navigate
-    onSubmit: (event) => {
-      //event.preventDefault;
-      let body = {
-        first_name: setfirstName,
-        last_name: setlastName,
-        email: setEmail,
-        password: setPassword,
-        phonenumber: setPhonenumber,
-      };
-
-      axios.post('/api/register', body).then((response) => {
-        if (response.payload.loginSuccess) {
-          alert(JSON.stringify(event, null, 2));
-          navigate('/login', { replace: true });
-        } else {
-          alert('Error');
-        }
-      });
+    onSubmit: async (values) => {
+      alert(JSON.stringify(values, null, 2));
+      console.log(values);
+      try {
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        };
+        await axios.post('http://localhost:3000/api/register', { ...signUp }, config);
+        setSignUp({
+          first_name: '',
+          last_name: '',
+          email: '',
+          password: '',
+          phone: '',
+        });
+        setCheckEmail(false);
+        alert('영업자 계정이 생성되었습니다.');
+        navigate('/login', { replace: true });
+      } catch (err) {
+        console.error(err);
+      }
     },
   });
+
+  useEffect(() => {
+    setSignUp({
+      first_name: '',
+      last_name: '',
+      email: '',
+      password: '',
+      phone: '',
+    });
+    setCheckEmail(false);
+  }, []);
   // error handler 및 유저 선택적 api 변수
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
@@ -173,47 +226,47 @@ const Register = () => {
                       lang="ko"
                       fullWidth
                       label="이름"
-                      onChange={handleInputfN}
-                      {...getFieldProps('firstName')}
-                      error={Boolean(touched.firstName && errors.firstName)}
-                      helperText={touched.firstName && errors.firstName}
+                      {...getFieldProps('first_name')}
+                      error={Boolean(touched.first_name && errors.first_name)}
+                      helperText={touched.first_name && errors.first_name}
                     />
 
                     <TextField
                       lang="ko"
                       fullWidth
                       label="성"
-                      onChange={handleInputlN}
-                      {...getFieldProps('lastName')}
-                      error={Boolean(touched.lastName && errors.lastName)}
-                      helperText={touched.lastName && errors.lastName}
+                      {...getFieldProps('last_name')}
+                      error={Boolean(touched.last_name && errors.last_name)}
+                      helperText={touched.last_name && errors.last_name}
                     />
                   </Stack>
-
+                  {/* <div> */}
                   <TextField
                     lang="ko"
                     fullWidth
                     autoComplete="username"
                     type="email"
                     label="이메일"
-                    onChange={handleInputEm}
                     {...getFieldProps('email')}
                     error={Boolean(touched.email && errors.email)}
                     helperText={touched.email && errors.email}
                   />
-
+                  {/* {signUp.email.length > 5 && checkEmail && (
+                      <span style={{ color: `green`, fontWeight: `bold` }}>사용가능한 이메일</span>
+                    )} */}
+                  {/* <button onClick={handleCheckEmailClick}>중복 확인</button> */}
+                  {/* </div> */}
                   <TextField
                     lang="ko"
                     fullWidth
                     autoComplete="current-password"
                     type={showPassword ? 'text' : 'password'}
                     label="비밀번호"
-                    onChange={handleInputPw}
                     {...getFieldProps('password')}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
-                          <IconButton edge="end" onClick={() => setShowPassword((prev) => !prev)}>
+                          <IconButton onClick={handleShowPassword} edge="end">
                             <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
                           </IconButton>
                         </InputAdornment>
@@ -222,17 +275,14 @@ const Register = () => {
                     error={Boolean(touched.password && errors.password)}
                     helperText={touched.password && errors.password}
                   />
-
                   <TextField
                     lang="ko"
                     fullWidth
                     label="핸드폰 번호"
-                    onChange={handleInputPn}
-                    {...getFieldProps('phonenumber')}
-                    error={Boolean(touched.phonenumber && errors.phonenumber)}
-                    helperText={touched.phonenumber && errors.phonenumber}
+                    {...getFieldProps('phone')}
+                    error={Boolean(touched.phone && errors.phone)}
+                    helperText={touched.phone && errors.phone}
                   />
-
                   <LoadingButton
                     lang="ko"
                     fullWidth

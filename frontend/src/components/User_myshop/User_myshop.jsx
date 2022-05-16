@@ -76,137 +76,134 @@ import { sample } from 'lodash';
 const initialRows = [
   {
     id: 1,
-    company: '스코프 부암점',
-    repnum: '070-736-7629',
-    sector: '제과,베이커리',
+    store_name: '스코프 부암점',
+    telephone: '070-736-7629',
+    sub_category: '제과,베이커리',
     rating: '3.8',
-    review: '160',
+    review_count: '160',
     isnew: true,
-    location: '서울 종로구 필운대로 54',
+    address: '서울 종로구 필운대로 54',
   },
   {
     id: 2,
-    company: '하이버',
-    repnum: '02-6015-7988',
-    sector: '제과,베이커리',
+    store_name: '하이버',
+    telephone: '02-6015-7988',
+    sub_category: '제과,베이커리',
     rating: '3.7',
-    review: '43',
+    review_count: '43',
     isnew: false,
-    location: '서울 종로구 옥인6길 2',
+    address: '서울 종로구 옥인6길 2',
   },
   {
     id: 3,
-    company: '안국153',
-    repnum: '02-733-1530',
-    sector: '제과,베이커리',
+    store_name: '안국153',
+    telephone: '02-733-1530',
+    sub_category: '제과,베이커리',
     rating: '2.7',
-    review: '30',
+    review_count: '30',
     isnew: true,
-    location: '서울 종로구 율곡로 51 1층',
+    address: '서울 종로구 율곡로 51 1층',
   },
   {
     id: 4,
-    company: '솔트24',
-    repnum: '02-744-9273',
-    sector: '제과,베이커리',
+    store_name: '솔트24',
+    telephone: '02-744-9273',
+    sub_category: '제과,베이커리',
     rating: '3.5',
-    review: '33',
+    review_count: '33',
     isnew: false,
-    location: '서울 종로구 창경궁로 236 이화빌딩 1층',
+    address: '서울 종로구 창경궁로 236 이화빌딩 1층',
   },
   {
     id: 5,
-    company: '금상고로케 서촌마을점',
-    repnum: '02-725-3157',
-    sector: '제과,베이커리',
+    store_name: '금상고로케 서촌마을점',
+    telephone: '02-725-3157',
+    sub_category: '제과,베이커리',
     rating: '4.7',
-    review: '57',
+    review_count: '57',
     isnew: true,
-    location: '서울 종로구 자하문로9길 24',
+    address: '서울 종로구 자하문로9길 24',
   },
   {
     id: 6,
-    company: '김용현 베이커리',
-    repnum: '02-3217-6800',
-    sector: '제과,베이커리',
+    store_name: '김용현 베이커리',
+    telephone: '02-3217-6800',
+    sub_category: '제과,베이커리',
     rating: '4.2',
-    review: '17',
+    review_count: '17',
     isnew: true,
-    location: '서울 종로구 자하문로 21 1층',
+    address: '서울 종로구 자하문로 21 1층',
   },
   {
     id: 7,
-    company: '망원동티라미수 익선동점',
-    repnum: '02-745-9446',
-    sector: '제과,베이커리',
+    store_name: '망원동티라미수 익선동점',
+    telephone: '02-745-9446',
+    sub_category: '제과,베이커리',
     rating: '3.9',
-    review: '37',
+    review_count: '37',
     isnew: true,
-    location: '서울 종로구 수표로28길 22',
+    address: '서울 종로구 수표로28길 22',
   },
   {
     id: 8,
-    company: '하이제씨',
-    repnum: '02-745-2468',
-    sector: '제과,베이커리',
+    store_name: '하이제씨',
+    telephone: '02-745-2468',
+    sub_category: '제과,베이커리',
     rating: '4.1',
-    review: '24',
+    review_count: '24',
     isnew: false,
-    location: '서울 종로구 동숭1길 12 1층',
+    address: '서울 종로구 동숭1길 12 1층',
   },
   {
     id: 9,
-    company: '아우어베이커리 광화문디팰리스점',
-    repnum: '02-737-0050',
-    sector: '제과,베이커리',
+    store_name: '아우어베이커리 광화문디팰리스점',
+    telephone: '02-737-0050',
+    sub_category: '제과,베이커리',
     rating: '4.1',
-    review: '21',
+    review_count: '21',
     isnew: true,
-    location: '서울 종로구 새문안로2길 10 디팰리스 1층 103호',
+    address: '서울 종로구 새문안로2길 10 디팰리스 1층 103호',
   },
   {
     id: 10,
-    company: '우드앤브릭 타워8점',
-    repnum: '02-6226-8211',
-    sector: '제과,베이커리',
+    store_name: '우드앤브릭 타워8점',
+    telephone: '02-6226-8211',
+    sub_category: '제과,베이커리',
     rating: '2.2',
-    review: '21',
+    review_count: '21',
     isnew: true,
-    location: '서울 종로구 종로5길 7 타워8 1층 118~119',
+    address: '서울 종로구 종로5길 7 타워8 1층 118~119',
   },
   {
     id: 11,
-    company: '아티장크로아상',
-    repnum: '02-741-3050',
-    sector: '제과,베이커리',
+    store_name: '아티장크로아상',
+    telephone: '02-741-3050',
+    sub_category: '제과,베이커리',
     rating: '4.3',
-    review: '40',
+    review_count: '40',
     isnew: false,
-    location: '서울 종로구 계동길 51 1층',
+    address: '서울 종로구 계동길 51 1층',
   },
   {
     id: 12,
-    company: '푸하하크림빵 익선동',
-    repnum: '02-762-6003',
-    sector: '제과,베이커리',
+    store_name: '푸하하크림빵 익선동',
+    telephone: '02-762-6003',
+    sub_category: '제과,베이커리',
     rating: '3.5',
-    review: '15',
+    review_count: '15',
     isnew: false,
-    location: '서울 종로구 돈화문로11길 34-3',
+    address: '서울 종로구 돈화문로11길 34-3',
   },
 ];
 const TABLE_HEAD = [
-  { id: 'company', label: '매장이름', alignRight: false },
-  { id: 'repnum', label: '대표번호', alignRight: false },
-  { id: 'sector', label: '업종', alignRight: false },
+  { id: 'store_name', label: '매장이름', alignRight: false },
+  { id: 'telephone', label: '대표번호', alignRight: false },
+  { id: 'sub_category', label: '업종', alignRight: false },
   { id: 'rating', label: '평점', alignRight: false },
-  { id: 'review', label: '리뷰', alignRight: false },
+  { id: 'review_count', label: '리뷰', alignRight: false },
   { id: 'isnew', label: '신규', alignRight: false },
-  { id: 'status', label: '진행상황', alignRight: false },
-  { id: 'location', label: '위치', alignRight: false },
-  { id: 'manage', label: '관리', alignRight: false },
+  { id: 'address', label: '위치', alignRight: false },
 ];
-
 // ----------------------------------------------------------------------
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   border: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'}`,
@@ -438,15 +435,11 @@ SettingsPanel.propTypes = {
   onApply: PropTypes.func.isRequired,
   size: PropTypes.number.isRequired,
   theme: PropTypes.oneOf(['ant', 'default']).isRequired,
-
   type: PropTypes.oneOf(['Commodity', 'Employee']).isRequired,
 };
 
 const User = () => {
-  //const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-
-  //const { error, loading } = useSelector((state) => state.products);
   const [rows, setRows] = React.useState(initialRows);
   // 원하는 매장 삭제
   const deleteCompany = React.useCallback(
@@ -476,21 +469,21 @@ const User = () => {
   const columns = React.useMemo(
     () => [
       {
-        field: 'company',
+        field: 'store_name',
         headerName: '매장이름',
         type: 'string',
         width: 270,
         alignRight: false,
       },
       {
-        field: 'repnum',
+        field: 'telephone',
         headerName: '대표번호',
         type: 'string',
         width: 110,
         alignRight: false,
       },
       {
-        field: 'sector',
+        field: 'sub_category',
         headerName: '업종',
         type: 'string',
         width: 150,
@@ -504,7 +497,7 @@ const User = () => {
         alignRight: false,
       },
       {
-        field: 'review',
+        field: 'review_count',
         headerName: '리뷰',
         type: 'number',
         width: 80,
@@ -540,7 +533,7 @@ const User = () => {
         alignRight: false,
       },
       {
-        field: 'location',
+        field: 'address',
         headerName: '위치',
         type: 'string',
         width: 350,
@@ -585,7 +578,7 @@ const User = () => {
 
   const [selected, setSelected] = useState([]);
 
-  const [orderBy, setOrderBy] = useState('company');
+  const [orderBy, setOrderBy] = useState('store_name');
 
   const [filterName, setFilterName] = useState('');
 
@@ -599,19 +592,19 @@ const User = () => {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.company);
+      const newSelecteds = USERLIST.map((n) => n.store_name);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, company) => {
-    const selectedIndex = selected.indexOf(company);
+  const handleClick = (event, store_name) => {
+    const selectedIndex = selected.indexOf(store_name);
 
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, company);
+      newSelected = newSelected.concat(selected, store_name);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -816,14 +809,14 @@ const User = () => {
             hideToolbar: true,
           }}
         />
-        <Managepanel />
+        {/* <Managepanel /> */}
       </GridToolbarContainer>
     );
   }
-  CustomToolbar.propTypes = {
-    manage: PropTypes.oneOf(['모든 데이터 삭제', '모든 데이터 상태 변경']).isRequired,
-    manageapply: PropTypes.func.isRequired,
-  };
+  //   CustomToolbar.propTypes = {
+  //     manage: PropTypes.oneOf(['모든 데이터 삭제', '모든 데이터 상태 변경']).isRequired,
+  //     manageapply: PropTypes.func.isRequired,
+  //   };
   const DataGridComponent = isAntDesign ? StyledDataGrid : DataGridPro;
 
   return (
@@ -863,19 +856,18 @@ const User = () => {
                   Toolbar: CustomToolbar,
                   NoRowsOverlay: CustomNoRowsOverlay,
                 }}
-                //loading={loading}
                 checkboxSelection
                 disableSelectionOnClick
                 rowThreshold={0}
                 initialState={{
                   ...data.initialState,
-                  pinnedColumns: { left: ['__check__', 'company'] },
+                  pinnedColumns: { left: ['__check__', 'store_name'] },
                 }}
                 {...pagination}
               />
               <UserListToolbar
                 numSelected={selected.length}
-                filterName={columns.company}
+                filterName={columns.store_name}
                 onFilterName={handleFilterByName}
               />
               {/* <Scrollbar> */}
@@ -893,31 +885,20 @@ const User = () => {
                   />
                   <TableBody>
                     {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                      const {
-                        company,
-                        id,
-                        name,
-                        repnum,
-                        sector,
-                        rating,
-                        review,
-                        isnew,
-                        //   status,
-                        location,
-                        avatarUrl,
-                      } = row;
-                      const isItemSelected = selected.indexOf(company) !== -1;
+                      const { store_code, store_name, telephone, sub_category, rating, review_count, isnew, address } =
+                        row;
+                      const isItemSelected = selected.indexOf(store_name) !== -1;
                       return (
                         <TableRow
                           hover
-                          key={id}
+                          key={store_code}
                           tabIndex={-1}
                           role="checkbox"
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
                           <TableCell padding="checkbox">
-                            <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, company)} />
+                            <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, store_name)} />
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
@@ -927,15 +908,15 @@ const User = () => {
                               </Typography> */}
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{company}</TableCell>
-                          <TableCell align="left">{repnum}</TableCell>
-                          <TableCell align="left">{sector}</TableCell>
+                          <TableCell align="left">{store_name}</TableCell>
+                          <TableCell align="left">{telephone}</TableCell>
+                          <TableCell align="left">{sub_category}</TableCell>
                           <TableCell align="left">{rating}</TableCell>
-                          <TableCell align="left">{review}</TableCell>
+                          <TableCell align="left">{review_count}</TableCell>
                           <TableCell align="left">
                             {isnew ? <Icon icon="bi:check" width="25" height="25" /> : ''}
                           </TableCell>
-                          <TableCell align="left">{location}</TableCell>
+                          <TableCell align="left">{address}</TableCell>
                           <TableCell align="left"></TableCell>
                           <TableCell align="right">
                             <UserMoreMenu />
