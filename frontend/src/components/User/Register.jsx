@@ -117,8 +117,8 @@ const Register = () => {
     onSubmit: (event) => {
       //event.preventDefault;
       let body = {
-        firstName: setfirstName,
-        lastName: setlastName,
+        first_name: setfirstName,
+        last_name: setlastName,
         email: setEmail,
         password: setPassword,
         phonenumber: setPhonenumber,
@@ -142,7 +142,6 @@ const Register = () => {
       <MetaData title="Register" />
       <RootStyle>
         <HeaderStyle>{/* <Logo /> */}</HeaderStyle>
-
         {mdUp && (
           <SectionStyle>
             <Typography lang="ko" variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>

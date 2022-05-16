@@ -8,7 +8,7 @@ import { useFormik, Form, FormikProvider } from 'formik';
 import { Stack, Checkbox, TextField, IconButton, InputAdornment, FormControlLabel } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
-import { useEffect, useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 // import { useDispatch, useSelector } from 'react-redux';
 import { clearErrors, loginUser } from '../../actions/userAction';
@@ -68,9 +68,8 @@ const ContentStyle = styled('div')(({ theme }) => ({
 const Login = () => {
   const smUp = useResponsive('up', 'sm');
   const mdUp = useResponsive('up', 'md');
-
+  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -186,24 +185,11 @@ const Login = () => {
                     />
                   </Stack>
 
-                  <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-                    {/* <FormControlLabel
-                      lang="ko"
-                      control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}
-                      label="이메일 기억하기"
-
-                    /> */}
-
-                    {/* <Link component={RouterLink} variant="subtitle2" to="#" underline="hover">
-            Forgot password?
-          </Link> */}
-                  </Stack>
+                  <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}></Stack>
 
                   <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
                     로그인
-                    {/* Login */}
                   </LoadingButton>
-                  {/* forget Password  */}
                 </Form>
               </FormikProvider>
               {smUp && (
