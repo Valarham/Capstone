@@ -1,134 +1,47 @@
-import { faker } from '@faker-js/faker';
-import PropTypes from 'prop-types';
-import LinearProgress from '@mui/material/LinearProgress';
-import Menu from '@mui/material/Menu';
-
-// @mui
-import { useTheme } from '@mui/material/styles';
-
+import * as React from 'react';
 import Box from '@mui/material/Box';
-import { filter } from 'lodash';
-import React, { useState, useEffect } from 'react';
-import Modal from 'react-modal';
-import { styled } from '@mui/material/styles';
-import { Icon } from '@iconify/react';
-import moment from 'moment';
-// material
-import {
-  Grid,
-  Card,
-  Table,
-  Stack,
-  Button,
-  Checkbox,
-  TableRow,
-  TableBody,
-  TableCell,
-  Container,
-  Typography,
-  TableContainer,
-  TablePagination,
-} from '@mui/material';
-// components
-import Iconify from '../Home/Dashboard/Iconify';
-// sections
-import {
-  AppTasks,
-  AppNewsUpdate,
-  AppOrderTimeline,
-  AppCurrentVisits,
-  AppWebsiteVisits,
-  AppTrafficBySite,
-  AppWidgetSummary,
-  AppCurrentSubject,
-  AppConversionRates,
-} from '../Home/Dashboard/@Dashboard/app';
+import Modal from '@mui/material/Modal';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import FileOpenIcon from '@mui/icons-material/FileOpen';
+import { GridActionsCellItem } from '@mui/x-data-grid';
 
-// components
-import Scrollbar from '../Home/Dashboard/Scrollbar';
-import MetaData from '../Layouts/MetaData';
-import axios from 'axios';
-
-const DetailStore = ({ match, history }) => {
-  const [board, setBoard] = useState('')({
-    title: '',
-    content: '',
-  });
-  // Modal
-  const values = [true, 'lg-down'];
-  const [fullscreen, setFullscreen] = useState(true);
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  function handleShow(breakpoint) {
-    setFullscreen(breakpoint);
-    setShow(true);
-  }
-  useEffect(() => {
-    console.log(match);
-    getBoard(match.params.id);
-  }, []);
-
-  const getBoard = async (id) => {
-    const res = await axios.get(`/api/dashboard/${id}`);
-    console.log(res.data);
-    setBoard(res.data);
-  };
-
-  const handleDown = async () => {
-    // const res = await axios.get(`/api/dashboard?id=${match.params.id}`);
-    // --> delete으로 바꾸면 삭제 요청
-    setShow(false);
-    history.goBack();
-  };
-
-  return (
-    <>
-      <MetaData title="DetailStore" />
-      {values.map((v, idx) => (
-        <Button key={idx} className="me-2 mb-2" onClick={() => handleShow(v)}>
-          Full screen
-          {typeof v === 'string' && `below ${v.split('-')[0]}`}
-        </Button>
-      ))}
-      <Button variant="info" onClick={() => history.push(`/board-edit/${match.params.id}`)}>
-        수정
-      </Button>
-      <Button variant="danger" onClick={() => handleShow()}>
-        삭제
-      </Button>
-      <div className="d-flex justify-content-between mt-3">
-        <h5>{board?.user?.username}</h5>
-        <h5>{moment(board?.created).format('YYYY-MM-DD')}</h5>
-      </div>
-      <Card className="p-3 my-3">
-        <Card.Title className="pb-2" style={{ borderBottom: '1px solid #dddddd' }}>
-          {board?.title}
-        </Card.Title>
-        <Card.Text>{board?.content}</Card.Text>
-      </Card>
-      {/* <CommentList board_id={match.params.id} history={history}></CommentList> */}
-      <Iconify className="justify-content-center mt-3">
-        <Button variant="primary" onClick={() => history.goBack()}>
-          돌아가기
-        </Button>
-      </Iconify>
-      <Modal show={show} fullscreen={fullscreen} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>상세페이지</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>매장 정보</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Cancel.close
-          </Button>
-          <Button variant="primary" onClick={handleDown}>
-            OK.Down
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      ;
-    </>
-  );
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 1200,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
 };
 
-export default DetailStore;
+export default function DetailStore(props) {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = (props) => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  return (
+    <div>
+      <GridActionsCellItem icon={<FileOpenIcon />} label="Store" onClick={handleOpen} />
+      <Modal
+        keepMounted
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="keep-mounted-modal-title"
+        aria-describedby="keep-mounted-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
+            Text in a modal
+          </Typography>
+          <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          </Typography>
+        </Box>
+      </Modal>
+    </div>
+  );
+}

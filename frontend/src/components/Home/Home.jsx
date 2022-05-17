@@ -24,6 +24,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
+
 // @mui
 import { useTheme } from '@mui/material/styles';
 
@@ -63,6 +64,7 @@ import {
   AppCurrentSubject,
   AppConversionRates,
 } from './Dashboard/@Dashboard/app';
+import { Link, useNavigate } from 'react-router-dom';
 // Recent market search
 // components
 import Scrollbar from './Dashboard/Scrollbar';
@@ -71,6 +73,8 @@ import { UserListHead, DashUserListToolbar, UserMoreMenu } from './Dashboard/use
 // mock
 import USERLIST from '../../_mock/user';
 import MetaData from '../Layouts/MetaData';
+import DetailStore from '../DetailStore/DetailStore';
+import { Navigate } from 'react-router-dom';
 
 const initialRows = [
   {
@@ -442,13 +446,10 @@ SettingsPanel.propTypes = {
 const Home = () => {
   const [rows, setRows] = React.useState(initialRows);
   const [info, setInfo] = useState([]);
-  // Modal 창 -> Detail 창
-  const [selectedDetail, setSelectedDetail] = useState('');
-  //상세페이지로 이동하지말고 그냥 추가 창으로 띄울 예정
-  const [modalOn, setModalOn] = useState(false);
+
   // 고유 값으로 사용될 id 변수
   const nextId = useRef(100);
-
+  const navigate = useNavigate();
   // axios 매장 데이터 로그인 유저가 들어왔을 때 그냥 data get  -> backend에게 api url 뭔지 물어보기
   useEffect(() => {
     axios
@@ -465,15 +466,31 @@ const Home = () => {
     },
     [],
   );
+  const etailCompany = React.useCallback(
+    (id) => () => {
+      setTimeout(() => {
+        setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+      });
+    },
+    [],
+  );
   // 칼럼 데이터
   const columns = React.useMemo(
     () => [
       {
+        field: 'actions_Detail',
+        headerName: '상세',
+        type: 'actions',
+        width: 0,
+        getActions: (params) => [<DetailStore onClick={params} />],
+      },
+      {
         field: 'store_name',
         headerName: '매장이름',
         type: 'string',
-        width: 300,
+        width: 290,
         alignRight: false,
+        pinnable: false,
       },
       {
         field: 'telephone',
@@ -481,6 +498,7 @@ const Home = () => {
         type: 'string',
         width: 110,
         alignRight: false,
+        pinnable: false,
       },
       {
         field: 'sub_category',
@@ -488,6 +506,7 @@ const Home = () => {
         type: 'string',
         width: 150,
         alignRight: false,
+        pinnable: false,
       },
       {
         field: 'rating',
@@ -507,7 +526,7 @@ const Home = () => {
         field: 'isnew',
         headerName: '신규',
         type: 'boolean',
-        width: 100,
+        width: 90,
         alignRight: false,
       },
       {
@@ -516,12 +535,13 @@ const Home = () => {
         type: 'string',
         width: 380,
         alignRight: false,
+        pinnable: false,
       },
       {
         field: 'actions',
         headerName: '수집',
         type: 'actions',
-        width: 80,
+        width: 5,
         getActions: (params) => [
           <GridActionsCellItem icon={<AddToPhotosIcon />} label="Store" onClick={storeCompany(params.id)} />,
         ],
@@ -590,8 +610,9 @@ const Home = () => {
   const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
   // 매장이름으로 검색했는데 찾지 못했을 경우 반환 값
   const isUserNotFound = filteredUsers.length === 0;
-  //-----------------------------------------------------------------------------------
 
+  //-----------------------------------------------------------------------------------
+  // 내가 그린 theme
   const [isAntDesign, setIsAntDesign] = React.useState(true);
   const [type, setType] = React.useState('Market');
   const [size, setSize] = React.useState(100);
@@ -722,6 +743,7 @@ const Home = () => {
     );
   }
   const DataGridComponent = isAntDesign ? StyledDataGrid : DataGridPro;
+
   return (
     <>
       <MetaData title="Dashboard" />
@@ -756,12 +778,16 @@ const Home = () => {
               <SettingsPanel onApply={handleApplyClick} size={size} type={type} theme={getActiveTheme()} />
               <Card>
                 <DataGridComponent
+                  onApply={handleApplyClick}
                   columns={columns}
                   rows={rows}
                   components={{
                     LoadingOverlay: LinearProgress,
                     Toolbar: CustomToolbar,
                     NoRowsOverlay: CustomNoRowsOverlay,
+                  }}
+                  componentsProps={{
+                    toolbar: { showQuickFilter: true },
                   }}
                   checkboxSelection
                   disableSelectionOnClick
