@@ -71,7 +71,18 @@ const Login = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [state, setState] = useState(null || '');
+  const [login, setLogin] = useState({
+    email: '',
+    password: '',
+  });
+  const [userNo, setUserNo] = useState(-1);
+
+  const handleLoginChange = useCallback((e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    if (name === 'email') setLogin((prev) => ({ ...prev, email: value }));
+    else setLogin((prev) => ({ ...prev, password: value }));
+  }, []);
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
@@ -88,42 +99,56 @@ const Login = () => {
       password: '',
     },
     validationSchema: LoginSchema,
-    onSubmit: async (values) => {
-      try {
-        alert(JSON.stringify(values, null, 2));
-        console.log(values);
-        const result = await axios({
-          //body: JSON.stringify(values),
-          url: `http://localhost:3000/api/login`,
-          headers: {
-            //Authorization: `Basic ${TOKEN}`,
-            'content-Type': 'application/json',
-          },
-          method: 'POST',
-          data: JSON.stringify(values),
-        });
-        setState(result.data.message);
-      } catch (error) {
-        setState('error');
-      }
-    },
-    // onSubmit: async (values) => {
-    //   //   values.preventDefault();
-    //   alert(JSON.stringify(values, null, 2));
-    //   console.log(values);
-    //   try {
-    //     const config = {
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //       },
-    //     };
-    //     await axios.post('http://localhost:3000/api/login', { values }, config);
-    //     navigate('/dashboard/home', { replace: true });
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
+    handleLoginChange: useCallback((e) => {
+      const name = e.target.name;
+      const value = e.target.value;
+      if (name === 'email') setLogin((prev) => ({ ...prev, email: value }));
+      else setLogin((prev) => ({ ...prev, password: value }));
+    }, []),
+    onSubmit: useCallback(
+      async (values) => {
+        try {
+          alert(JSON.stringify(values, null, 2));
+          console.log(values);
+          const { data } = await axios.post(`/api/login`, {
+            ...login,
+          });
+          setUserNo(data.user_no);
+          navigate('/dashboard/home', { replace: true });
+        } catch (err) {
+          console.error(err);
+        }
+      },
+      [login],
+    ),
   });
+
+  useEffect(() => {
+    return () => {
+      setLogin({
+        email: '',
+        password: '',
+      });
+      setUserNo(-1);
+    };
+  }, []);
+
+  // onSubmit: async (values) => {
+  //   //   values.preventDefault();
+  //   alert(JSON.stringify(values, null, 2));
+  //   console.log(values);
+  //   try {
+  //     const config = {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     };
+  //     await axios.post('http://localhost:3000/api/login', { values }, config);
+  //     navigate('/dashboard/home', { replace: true });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // },
 
   const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 
@@ -163,22 +188,22 @@ const Login = () => {
                 <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
                   <Stack spacing={3}>
                     <TextField
-                      lang="ko"
                       fullWidth
                       autoComplete="username"
                       type="email"
                       label="이메일"
+                      onChange={handleLoginChange}
                       {...getFieldProps('email')}
                       error={Boolean(touched.email && errors.email)}
                       helperText={touched.email && errors.email}
                     />
 
                     <TextField
-                      lang="ko"
                       fullWidth
                       autoComplete="current-password"
                       type={showPassword ? 'text' : 'password'}
                       label="비밀번호"
+                      onChange={handleLoginChange}
                       {...getFieldProps('password')}
                       InputProps={{
                         endAdornment: (
@@ -201,6 +226,7 @@ const Login = () => {
                   </LoadingButton>
                 </Form>
               </FormikProvider>
+              {userNo !== -1 && <h3>로그인 성공</h3>}
               {smUp && (
                 <Typography lang="ko" variant="body2" sx={{ mt: { md: 5 } }}>
                   계정이 없으신가요?{/* Don’t have an account?  */}
