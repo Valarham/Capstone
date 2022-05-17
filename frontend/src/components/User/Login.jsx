@@ -110,13 +110,14 @@ const Login = () => {
         try {
           alert(JSON.stringify(values, null, 2));
           console.log(values);
-          const { data } = await axios.post(`/api/login`, {
+          const { data } = await axios.post(`http://15.165.215.193/api/login`, {
             ...login,
           });
           setUserNo(data.user_no);
           navigate('/dashboard/home', { replace: true });
         } catch (err) {
           console.error(err);
+          //   enqueueSnackbar(err, { variant: 'error' });
         }
       },
       [login],

@@ -88,6 +88,7 @@ const Register = () => {
     password: '',
     phone: '',
   });
+
   const [checkEmail, setCheckEmail] = useState(false);
 
   const handleSignUpChange = useCallback((e) => {

@@ -17,7 +17,6 @@ import SecurityIcon from '@mui/icons-material/Security';
 import { DataGridPro, GridToolbar } from '@mui/x-data-grid-pro';
 import { useDemoData } from '@mui/x-data-grid-generator';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-
 import FormControl from '@mui/material/FormControl';
 import FormGroup from '@mui/material/FormGroup';
 import Button from '@mui/material/Button';
@@ -30,9 +29,10 @@ import { useTheme } from '@mui/material/styles';
 
 import Box from '@mui/material/Box';
 import { filter } from 'lodash';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import { Icon } from '@iconify/react';
+import axios from 'axios';
 // material
 import {
   Grid,
@@ -70,9 +70,6 @@ import SearchNotFound from './Dashboard/SearchNotFound';
 import { UserListHead, DashUserListToolbar, UserMoreMenu } from './Dashboard/user';
 // mock
 import USERLIST from '../../_mock/user';
-import { useEffect } from 'react';
-
-import { useSnackbar } from 'notistack';
 import MetaData from '../Layouts/MetaData';
 
 const initialRows = [
@@ -358,6 +355,8 @@ const StyledBox = styled(Box)(({ theme }) => ({
     },
   },
 }));
+//최근 매장 검색 pagenation 하는 부분 -> apply 버튼
+// employee/market   // 출력 row 100... // page size 변경//theme변경
 function SettingsPanel(props) {
   const { onApply, type, size, theme } = props;
   const [sizeState, setSize] = React.useState(size);
@@ -439,12 +438,24 @@ SettingsPanel.propTypes = {
   type: PropTypes.oneOf(['Market', 'Employee']).isRequired,
 };
 
+// 메인 대시보드 부분
 const Home = () => {
-  //const dispatch = useDispatch();
-  const { enqueueSnackbar } = useSnackbar();
-
-  //const { error, loading } = useSelector((state) => state.products);
   const [rows, setRows] = React.useState(initialRows);
+  const [info, setInfo] = useState([]);
+  // Modal 창 -> Detail 창
+  const [selectedDetail, setSelectedDetail] = useState('');
+  //상세페이지로 이동하지말고 그냥 추가 창으로 띄울 예정
+  const [modalOn, setModalOn] = useState(false);
+  // 고유 값으로 사용될 id 변수
+  const nextId = useRef(100);
+
+  // axios 매장 데이터 로그인 유저가 들어왔을 때 그냥 data get  -> backend에게 api url 뭔지 물어보기
+  useEffect(() => {
+    axios
+      .get('http://15.165.215.193/api/dashboard/query')
+      .then((res) => setInfo(res.data))
+      .catch((err) => console.log(err));
+  }, []);
   // 원하는 매장 삭제
   const storeCompany = React.useCallback(
     (id) => () => {
@@ -454,6 +465,7 @@ const Home = () => {
     },
     [],
   );
+  // 칼럼 데이터
   const columns = React.useMemo(
     () => [
       {
@@ -1017,17 +1029,6 @@ const Home = () => {
           </Grid>
         </Grid>
       </Container>
-      {/* <Container>
-        <Categories />
-        <main className="flex flex-col gap-3 px-2 mt-16 sm:mt-2">
-        <Banner />
-        <DealSlider title={'Discounts for You'} />
-        {!loading && <ProductSlider title={'Suggested for You'} tagline={'Based on Your Activity'} />}
-        <DealSlider title={'Top Brands, Best Price'} />
-        {!loading && <ProductSlider title={'You May Also Like...'} tagline={'Based on Your Interest'} />}
-        <DealSlider title={'Top Offers On'} />
-        {!loading && <ProductSlider title={"Don't Miss These!"} tagline={'Inspired by your order'} />}
-      </Container> */}
     </>
   );
 };

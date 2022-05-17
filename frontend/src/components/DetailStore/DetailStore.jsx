@@ -1,5 +1,4 @@
 import { faker } from '@faker-js/faker';
-import * as React from 'react';
 import PropTypes from 'prop-types';
 import LinearProgress from '@mui/material/LinearProgress';
 import Menu from '@mui/material/Menu';
@@ -9,15 +8,18 @@ import { useTheme } from '@mui/material/styles';
 
 import Box from '@mui/material/Box';
 import { filter } from 'lodash';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Modal from 'react-modal';
 import { styled } from '@mui/material/styles';
 import { Icon } from '@iconify/react';
+import moment from 'moment';
 // material
 import {
   Grid,
   Card,
   Table,
   Stack,
+  Button,
   Checkbox,
   TableRow,
   TableBody,
@@ -28,7 +30,6 @@ import {
   TablePagination,
 } from '@mui/material';
 // components
-//import Page from './Dashboard/Page'
 import Iconify from '../Home/Dashboard/Iconify';
 // sections
 import {
@@ -42,193 +43,89 @@ import {
   AppCurrentSubject,
   AppConversionRates,
 } from '../Home/Dashboard/@Dashboard/app';
-// Recent market search
+
 // components
 import Scrollbar from '../Home/Dashboard/Scrollbar';
-
-// mock
-import USERLIST from '../../_mock/user';
-
 import MetaData from '../Layouts/MetaData';
+import axios from 'axios';
 
-const DetailStore = () => {
-  const theme = useTheme();
-  const [page, setPage] = useState(0);
-  const StyledBox = styled(Box)(({ theme }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    height: 750,
-    width: '100%',
+const DetailStore = ({ match, history }) => {
+  const [board, setBoard] = useState('')({
+    title: '',
+    content: '',
+  });
+  // Modal
+  const values = [true, 'lg-down'];
+  const [fullscreen, setFullscreen] = useState(true);
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  function handleShow(breakpoint) {
+    setFullscreen(breakpoint);
+    setShow(true);
+  }
+  useEffect(() => {
+    console.log(match);
+    getBoard(match.params.id);
+  }, []);
 
-    '& .MuiFormGroup-options': {
-      alignItems: 'center',
-      paddingBottom: theme.spacing(1),
-      '& > div': {
-        minWidth: 100,
-        margin: theme.spacing(2),
-        marginLeft: 0,
-      },
-    },
-  }));
+  const getBoard = async (id) => {
+    const res = await axios.get(`/api/dashboard/${id}`);
+    console.log(res.data);
+    setBoard(res.data);
+  };
+
+  const handleDown = async () => {
+    // const res = await axios.get(`/api/dashboard?id=${match.params.id}`);
+    // --> delete으로 바꾸면 삭제 요청
+    setShow(false);
+    history.goBack();
+  };
+
   return (
     <>
       <MetaData title="DetailStore" />
-      <Container maxWidth="xl">
-        <Grid item xs={12} md={6} lg={8}>
-          <AppWebsiteVisits
-            title="Website Visits"
-            subheader="(+16%) than last year"
-            chartLabels={[
-              '01/01/2022',
-              '02/01/2022',
-              '03/01/2022',
-              '04/01/2022',
-              '05/01/2022',
-              '06/01/2022',
-              '07/01/2022',
-              '08/01/2022',
-              '09/01/2022',
-              '10/01/2022',
-              '11/01/2022',
-            ]}
-            chartData={[
-              {
-                name: 'Team A',
-                type: 'column',
-                fill: 'solid',
-                data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
-              },
-              {
-                name: 'Team B',
-                type: 'area',
-                fill: 'gradient',
-                data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
-              },
-              {
-                name: 'Team C',
-                type: 'line',
-                fill: 'solid',
-                data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
-              },
-            ]}
-          />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <AppCurrentVisits
-            title="Current Visits"
-            chartData={[
-              { label: 'America', value: 4344 },
-              { label: 'Asia', value: 5435 },
-              { label: 'Europe', value: 1443 },
-              { label: 'Africa', value: 4443 },
-            ]}
-            chartColors={[
-              theme.palette.primary.main,
-              theme.palette.chart.blue[0],
-              theme.palette.chart.violet[0],
-              theme.palette.chart.yellow[0],
-            ]}
-          />
-        </Grid>
-        <Grid item xs={12} md={6} lg={8}>
-          <AppConversionRates
-            title="Conversion Rates"
-            subheader="(+43%) than last year"
-            chartData={[
-              { label: 'Italy', value: 400 },
-              { label: 'Japan', value: 430 },
-              { label: 'China', value: 448 },
-              { label: 'Canada', value: 470 },
-              { label: 'France', value: 540 },
-              { label: 'Germany', value: 580 },
-              { label: 'South Korea', value: 690 },
-              { label: 'Netherlands', value: 1100 },
-              { label: 'United States', value: 1200 },
-              { label: 'United Kingdom', value: 1380 },
-            ]}
-          />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <AppCurrentSubject
-            title="Current Subject"
-            chartLabels={['English', 'History', 'Physics', 'Geography', 'Chinese', 'Math']}
-            chartData={[
-              { name: 'Series 1', data: [80, 50, 30, 40, 100, 20] },
-              { name: 'Series 2', data: [20, 30, 40, 80, 20, 80] },
-              { name: 'Series 3', data: [44, 76, 78, 13, 43, 10] },
-            ]}
-            chartColors={[...Array(6)].map(() => theme.palette.text.secondary)}
-          />
-        </Grid>
-        <Grid item xs={12} md={6} lg={8}>
-          <AppNewsUpdate
-            title="News Update"
-            list={[...Array(5)].map((_, index) => ({
-              store_code: faker.datatype.uuid(),
-              title: faker.name.jobTitle(),
-              description: faker.name.jobTitle(),
-              image: `/static/mock-images/covers/cover_${index + 1}.jpg`,
-              postedAt: faker.date.recent(),
-            }))}
-          />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <AppOrderTimeline
-            title="Order Timeline"
-            list={[...Array(5)].map((_, index) => ({
-              store_code: faker.datatype.uuid(),
-              title: [
-                '1983, orders, $4220',
-                '12 Invoices have been paid',
-                'Order #37745 from September',
-                'New order placed #XF-2356',
-                'New order placed #XF-2346',
-              ][index],
-              type: `order${index + 1}`,
-              time: faker.date.past(),
-            }))}
-          />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <AppTrafficBySite
-            title="Traffic by Site"
-            list={[
-              {
-                name: 'FaceBook',
-                value: 323234,
-                icon: <Iconify icon={'eva:facebook-fill'} color="#1877F2" width={32} height={32} />,
-              },
-              {
-                name: 'Google',
-                value: 341212,
-                icon: <Iconify icon={'eva:google-fill'} color="#DF3E30" width={32} height={32} />,
-              },
-              {
-                name: 'Linkedin',
-                value: 411213,
-                icon: <Iconify icon={'eva:linkedin-fill'} color="#006097" width={32} height={32} />,
-              },
-              {
-                name: 'Twitter',
-                value: 443232,
-                icon: <Iconify icon={'eva:twitter-fill'} color="#1C9CEA" width={32} height={32} />,
-              },
-            ]}
-          />
-        </Grid>
-        <Grid item xs={12} md={6} lg={8}>
-          <AppTasks
-            title="Tasks"
-            list={[
-              { id: '1', label: 'Dashboard만들기' },
-              { id: '2', label: 'login&register만들기' },
-              { id: '3', label: 'navbar&sidebar만들기' },
-              { id: '4', label: 'My Shop만들기' },
-              { id: '5', label: '상세페이지 만들기' },
-            ]}
-          />
-        </Grid>
-      </Container>
+      {values.map((v, idx) => (
+        <Button key={idx} className="me-2 mb-2" onClick={() => handleShow(v)}>
+          Full screen
+          {typeof v === 'string' && `below ${v.split('-')[0]}`}
+        </Button>
+      ))}
+      <Button variant="info" onClick={() => history.push(`/board-edit/${match.params.id}`)}>
+        수정
+      </Button>
+      <Button variant="danger" onClick={() => handleShow()}>
+        삭제
+      </Button>
+      <div className="d-flex justify-content-between mt-3">
+        <h5>{board?.user?.username}</h5>
+        <h5>{moment(board?.created).format('YYYY-MM-DD')}</h5>
+      </div>
+      <Card className="p-3 my-3">
+        <Card.Title className="pb-2" style={{ borderBottom: '1px solid #dddddd' }}>
+          {board?.title}
+        </Card.Title>
+        <Card.Text>{board?.content}</Card.Text>
+      </Card>
+      {/* <CommentList board_id={match.params.id} history={history}></CommentList> */}
+      <Iconify className="justify-content-center mt-3">
+        <Button variant="primary" onClick={() => history.goBack()}>
+          돌아가기
+        </Button>
+      </Iconify>
+      <Modal show={show} fullscreen={fullscreen} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>상세페이지</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>매장 정보</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel.close
+          </Button>
+          <Button variant="primary" onClick={handleDown}>
+            OK.Down
+          </Button>
+        </Modal.Footer>
+      </Modal>
       ;
     </>
   );
