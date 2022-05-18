@@ -2,20 +2,20 @@
 import PropTypes from 'prop-types';
 import { Box, Stack, Link, Card, Button, Divider, Typography, CardHeader } from '@mui/material';
 // utils
-import { fToNow } from '../../../../../utils/formatTime';
+import { fToNow } from '../../../utils/formatTime';
 // components
-import Iconify from '../../Iconify';
+import Iconify from '../../Home/Dashboard/Iconify';
 // 전에 했던 프로젝트 가져옴. 팀원들에게 이런것들도 있다 설명용
 
 // ----------------------------------------------------------------------
 
-AppNewsUpdate.propTypes = {
+DetailMenu.propTypes = {
   title: PropTypes.string,
   subheader: PropTypes.string,
   list: PropTypes.array.isRequired,
 };
 
-export default function AppNewsUpdate({ title, subheader, list, ...other }) {
+export default function DetailMenu({ title, subheader, list, ...other }) {
   return (
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} />
@@ -23,7 +23,7 @@ export default function AppNewsUpdate({ title, subheader, list, ...other }) {
       {/* <Scrollbar> */}
       <Stack spacing={3} sx={{ p: 3, pr: 0 }}>
         {list.map((news) => (
-          <NewsItem key={news.id} news={news} />
+          <MenuItem key={news.id} news={news} />
         ))}
       </Stack>
       {/* </Scrollbar> */}
@@ -32,7 +32,7 @@ export default function AppNewsUpdate({ title, subheader, list, ...other }) {
 
       <Box sx={{ p: 2, textAlign: 'right' }}>
         <Button size="small" color="inherit" endIcon={<Iconify icon={'eva:arrow-ios-forward-fill'} />}>
-          View all
+          카카오맵으로 보기
         </Button>
       </Box>
     </Card>
@@ -41,7 +41,7 @@ export default function AppNewsUpdate({ title, subheader, list, ...other }) {
 
 // ----------------------------------------------------------------------
 
-NewsItem.propTypes = {
+MenuItem.propTypes = {
   news: PropTypes.shape({
     description: PropTypes.string,
     image: PropTypes.string,
@@ -50,7 +50,7 @@ NewsItem.propTypes = {
   }),
 };
 
-function NewsItem({ news }) {
+function MenuItem({ news }) {
   const { image, title, description, postedAt } = news;
 
   return (

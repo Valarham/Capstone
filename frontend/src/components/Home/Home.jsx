@@ -79,13 +79,13 @@ import { Navigate } from 'react-router-dom';
 const initialRows = [
   {
     id: 1,
-    store_name: '스코프 부암점',
-    telephone: '070-736-7629',
+    store_name: '망원동티라미수 익선동점',
+    telephone: '02-745-9446',
     sub_category: '제과,베이커리',
-    rating: '3.8',
-    review_count: '160',
+    rating: '3.9',
+    review_count: '37',
     isnew: true,
-    address: '서울 종로구 필운대로 54',
+    address: '서울 종로구 수표로28길 22',
   },
   {
     id: 2,
@@ -139,13 +139,14 @@ const initialRows = [
   },
   {
     id: 7,
-    store_name: '망원동티라미수 익선동점',
-    telephone: '02-745-9446',
+
+    store_name: '스코프 부암점',
+    telephone: '070-736-7629',
     sub_category: '제과,베이커리',
-    rating: '3.9',
-    review_count: '37',
+    rating: '3.8',
+    review_count: '160',
     isnew: true,
-    address: '서울 종로구 수표로28길 22',
+    address: '서울 종로구 필운대로 54',
   },
   {
     id: 8,
@@ -453,7 +454,7 @@ const Home = () => {
   // axios 매장 데이터 로그인 유저가 들어왔을 때 그냥 data get  -> backend에게 api url 뭔지 물어보기
   useEffect(() => {
     axios
-      .get('http://15.165.215.193/api/dashboard/query')
+      .get(`http://15.165.215.193/api/dashboard/query`)
       .then((res) => setInfo(res.data))
       .catch((err) => console.log(err));
   }, []);
@@ -1055,6 +1056,13 @@ const Home = () => {
           </Grid>
         </Grid>
       </Container>
+      <footer>
+        <div class="text">
+          <span>
+            Created By <a href="#">Juneyong Lee</a> | &#169; 2022 All Rights Reserved
+          </span>
+        </div>
+      </footer>
     </>
   );
 };
