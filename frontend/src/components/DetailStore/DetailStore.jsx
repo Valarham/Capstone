@@ -123,7 +123,7 @@ export default function DetailStore(props) {
               </Grid>
               <Grid item xs={12} md={6} lg={5}>
                 <DetailOrderline
-                  title="Order Timeline"
+                  title="매장 상세정보"
                   list={[...Array(5)].map((_, index) => ({
                     store_code: faker.datatype.uuid(),
                     title: [
