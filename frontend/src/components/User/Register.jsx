@@ -64,87 +64,77 @@ const ContentStyle = styled('div')(({ theme }) => ({
   flexDirection: 'column',
   padding: theme.spacing(12, 0),
 }));
+
 const Register = () => {
   const smUp = useResponsive('up', 'sm');
   const mdUp = useResponsive('up', 'md');
+  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   // 빨간색 글씨로 오류 처리하는 부분
   const RegisterSchema = Yup.object().shape({
-    first_name: Yup.string().min(1, '너무 짧습니다.').max(5, '너무 깁니다.').required('이름은 필수 항목입니다.'),
-    last_name: Yup.string().min(1, '너무 짧습니다.').max(5, '너무 깁니다.').required('성은 필수 항목입니다.'),
+    first_name: Yup.string().min(1, '너무 짧습니다.').max(10, '너무 깁니다.').required('이름은 필수 항목입니다.'),
+    last_name: Yup.string().min(1, '너무 짧습니다.').max(10, '너무 깁니다.').required('성은 필수 항목입니다.'),
     email: Yup.string().email('이메일은 유효한 이메일 형식이어야 합니다.').required('이메일은 필수 항목입니다.'),
     password: Yup.string().min(8, '너무 짧습니다.').max(20, '너무 깁니다.').required('비밀번호는 필수 항목입니다.'),
     phone: Yup.string().required('핸드폰 번호는 필수 항목입니다.'),
   });
-  const [state, setState] = useState(null || '');
+  //const [state, setState] = useState(null || '');
   const [showPassword, setShowPassword] = useState(false);
+  const [checkEmail, setCheckEmail] = useState(false);
+
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
   };
-  const [signUp, setSignUp] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    password: '',
-    phone: '',
-  });
+  const handleCheck = () => {
+    setCheckEmail();
+  };
+  //   const [signUp, setSignUp] = useState({
+  //     first_name: '',
+  //     last_name: '',
+  //     email: '',
+  //     password: '',
+  //     phone: '',
+  //   });
 
-  const [checkEmail, setCheckEmail] = useState(false);
+  //   const handleSignUpChange = useCallback((e) => {
+  //     const name = e.target.name;
+  //     const value = e.target.value;
+  //     switch (name) {
+  //       case 'first_name':
+  //         setSignUp((prev) => ({
+  //           ...prev,
+  //           first_name: value,
+  //         }));
+  //         break;
+  //       case 'last_name':
+  //         setSignUp((prev) => ({
+  //           ...prev,
+  //           last_name: value,
+  //         }));
+  //         break;
+  //       case 'email':
+  //         setSignUp((prev) => ({
+  //           ...prev,
+  //           email: value,
+  //         }));
+  //         setCheckEmail(false);
+  //         break;
+  //       case 'password':
+  //         setSignUp((prev) => ({
+  //           ...prev,
+  //           password: value,
+  //         }));
+  //         break;
+  //       case 'phone':
+  //         setSignUp((prev) => ({
+  //           ...prev,
+  //           phone: value,
+  //         }));
+  //         break;
+  //       default:
+  //     }
+  //   }, []);
 
-  const handleSignUpChange = useCallback((e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    switch (name) {
-      case 'first_name':
-        setSignUp((prev) => ({
-          ...prev,
-          first_name: value,
-        }));
-        break;
-      case 'last_name':
-        setSignUp((prev) => ({
-          ...prev,
-          last_name: value,
-        }));
-        break;
-      case 'email':
-        setSignUp((prev) => ({
-          ...prev,
-          email: value,
-        }));
-        setCheckEmail(false);
-        break;
-      case 'password':
-        setSignUp((prev) => ({
-          ...prev,
-          password: value,
-        }));
-        break;
-      case 'phone':
-        setSignUp((prev) => ({
-          ...prev,
-          phone: value,
-        }));
-        break;
-      default:
-    }
-  }, []);
-  const handleCheckEmailClick = useCallback(async () => {
-    const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-    if (!signUp.email.match(emailRegex)) return alert('이메일을 정확히 입력하세요!');
-    try {
-      await axios.get(`http://localhost:3000/api/check`, {
-        params: { email: signUp.email },
-      });
-      setCheckEmail(true);
-    } catch (err) {
-      if (err?.response?.status === 401) {
-        setCheckEmail(false);
-        return alert('이미 가입된 이메일 입니다.');
-      }
-      console.error(err);
-    }
-  }, [signUp]);
   // register (sign up)
   const formik = useFormik({
     initialValues: {
@@ -155,15 +145,42 @@ const Register = () => {
       phone: '',
     },
     validationSchema: RegisterSchema,
-
+    handleCheckEmailClick: async (values) => {
+      // const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+      // if (!signUp.email.match(emailRegex)) return alert('이메일을 정확히 입력하세요!');
+      try {
+        const res = await axios({
+          url: `http://112.169.87.213:3000/api/register/check`,
+          //   url: `http://localhost:3000/api/register/check`,
+          //   params: { email: signUp.email },
+          headers: {
+            //Authorization: `Basic ${TOKEN}`,
+            'content-Type': 'application/json',
+          },
+          method: 'POST',
+          data: JSON.stringify(values.email),
+        });
+        console.log(res.data.email);
+        setCheckEmail(true);
+        enqueueSnackbar(res.data.message, { variant: 'success' }); // check 메시지 받기
+      } catch (err) {
+        if (err?.res?.status === 401) {
+          setCheckEmail(false);
+          enqueueSnackbar(err.message, { variant: 'error' }); // 이미 가입된 이메일 입니다 받기
+          return alert('이미 가입된 이메일 입니다.');
+        }
+        console.error(err);
+      }
+    },
     // register 확인될 경우 dashboard로 navigate
     onSubmit: async (values) => {
       try {
         alert(JSON.stringify(values, null, 2));
         console.log(values);
-        const result = await axios({
+        const res = await axios({
           //body: JSON.stringify(values),
-          url: `http://localhost:3000/api/login`,
+          url: `http://112.169.87.213:3000/api/register`,
+          //   url: `http://localhost:3000/api/login`,
           headers: {
             //Authorization: `Basic ${TOKEN}`,
             'content-Type': 'application/json',
@@ -171,25 +188,28 @@ const Register = () => {
           method: 'POST',
           data: JSON.stringify(values),
         });
-        setState(result.data.message);
-      } catch (error) {
-        setState('error');
+        console.log(res);
+        enqueueSnackbar(res.data.message, { variant: 'success' });
+        navigate('/login', { replace: true });
+      } catch (err) {
+        console.error(err);
+        enqueueSnackbar(err.message, { variant: 'error' });
       }
     },
   });
 
-  useEffect(() => {
-    setSignUp({
-      first_name: '',
-      last_name: '',
-      email: '',
-      password: '',
-      phone: '',
-    });
-    setCheckEmail(false);
-  }, []);
+  //   useEffect(() => {
+  //     setSignUp({
+  //       first_name: '',
+  //       last_name: '',
+  //       email: '',
+  //       password: '',
+  //       phone: '',
+  //     });
+  //     setCheckEmail(false);
+  //   }, []);
   // error handler 및 유저 선택적 api 변수
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+  const { errors, touched, isSubmitting, handleCheckEmailClick, handleSubmit, getFieldProps } = formik;
 
   return (
     <>
@@ -249,6 +269,15 @@ const Register = () => {
                     type="email"
                     label="이메일"
                     {...getFieldProps('email')}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton onClick={handleCheck} onChange={handleCheckEmailClick} edge="end">
+                            <Iconify icon={checkEmail ? 'ant-design:check-circle-outlined' : 'akar-icons:circle-x'} />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                     error={Boolean(touched.email && errors.email)}
                     helperText={touched.email && errors.email}
                   />

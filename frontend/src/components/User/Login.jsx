@@ -71,18 +71,18 @@ const Login = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [login, setLogin] = useState({
-    email: '',
-    password: '',
-  });
-  const [userNo, setUserNo] = useState(-1);
+  //   const [login, setLogin] = useState({
+  //     email: '',
+  //     password: '',
+  //   });
+  //   const [userNo, setUserNo] = useState(-1);
 
-  const handleLoginChange = useCallback((e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    if (name === 'email') setLogin((prev) => ({ ...prev, email: value }));
-    else setLogin((prev) => ({ ...prev, password: value }));
-  }, []);
+  //   const handleLoginChange = useCallback((e) => {
+  //     const name = e.target.name;
+  //     const value = e.target.value;
+  //     if (name === 'email') setLogin((prev) => ({ ...prev, email: value }));
+  //     else setLogin((prev) => ({ ...prev, password: value }));
+  //   }, []);
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
@@ -92,47 +92,60 @@ const Login = () => {
     email: Yup.string().email('이메일은 유효한 이메일 형식이어야 합니다.').required('이메일은 필수 항목입니다.'),
     password: Yup.string().required('비밀번호가 필요합니다'),
   });
-
+  // remember cookie 처리
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
+      remember: true,
     },
     validationSchema: LoginSchema,
-    handleLoginChange: useCallback((e) => {
-      const name = e.target.name;
-      const value = e.target.value;
-      if (name === 'email') setLogin((prev) => ({ ...prev, email: value }));
-      else setLogin((prev) => ({ ...prev, password: value }));
-    }, []),
-    onSubmit: useCallback(
-      async (values) => {
-        try {
-          alert(JSON.stringify(values, null, 2));
-          console.log(values);
-          const { data } = await axios.post(`http://15.165.215.193/api/login`, {
-            ...login,
-          });
-          setUserNo(data.user_no);
-          navigate('/dashboard/home', { replace: true });
-        } catch (err) {
-          console.error(err);
-          //   enqueueSnackbar(err, { variant: 'error' });
-        }
-      },
-      [login],
-    ),
-  });
+    // handleLoginChange: useCallback((e) => {
+    //   const name = e.target.name;
+    //   const value = e.target.value;
+    //   if (name === 'email') setLogin((prev) => ({ ...prev, email: value }));
+    //   else setLogin((prev) => ({ ...prev, password: value }));
+    // }, []),
+    onSubmit: async (values) => {
+      try {
+        //http://15.165.215.193
+        //   const { data } = await axios.post(`http://112.169.87.213:3000/api/login`, JSON.stringify(values));
+        const res = await axios({
+          //body: JSON.stringify(values),
 
-  useEffect(() => {
-    return () => {
-      setLogin({
-        email: '',
-        password: '',
-      });
-      setUserNo(-1);
-    };
-  }, []);
+          url: `http://112.169.87.213:3000/api/login`,
+          // url: `http://localhost:3000/api/login`,
+          headers: {
+            //Authorization: `Basic ${TOKEN}`,
+            'content-Type': 'application/json',
+          },
+          method: 'POST',
+          data: JSON.stringify(values),
+        });
+        console.log(res);
+        // alert(res.data.message);
+        enqueueSnackbar(res.data.message, { variant: 'success' });
+        //   setUserNo(res.data.user_no);
+        navigate('/dashboard/home', { replace: true });
+      } catch (err) {
+        //alert(err.message);
+        console.error(err);
+        // snackbar variant 값 default | error | success | warning | info
+        enqueueSnackbar(err.message, { variant: 'error' });
+      }
+    },
+  });
+  // email: 'diziyong@naver.com',
+  // password: 'jyjydzdz7822.',
+  //   useEffect(() => {
+  //     return () => {
+  //       setLogin({
+  //         email: '',
+  //         password: '',
+  //       });
+  //          setUserNo(-1);
+  //     };
+  //   }, []);
 
   // onSubmit: async (values) => {
   //   //   values.preventDefault();
@@ -151,7 +164,7 @@ const Login = () => {
   //   }
   // },
 
-  const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   return (
     <>
@@ -193,7 +206,6 @@ const Login = () => {
                       autoComplete="username"
                       type="email"
                       label="이메일"
-                      onChange={handleLoginChange}
                       {...getFieldProps('email')}
                       error={Boolean(touched.email && errors.email)}
                       helperText={touched.email && errors.email}
@@ -204,7 +216,6 @@ const Login = () => {
                       autoComplete="current-password"
                       type={showPassword ? 'text' : 'password'}
                       label="비밀번호"
-                      onChange={handleLoginChange}
                       {...getFieldProps('password')}
                       InputProps={{
                         endAdornment: (
@@ -220,14 +231,21 @@ const Login = () => {
                     />
                   </Stack>
 
-                  <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}></Stack>
+                  <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
+                    <FormControlLabel
+                      lang="ko"
+                      control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}
+                      label="이메일 기억하기"
+                      // label="Remember me"
+                    />
+                  </Stack>
 
                   <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
                     로그인
                   </LoadingButton>
                 </Form>
               </FormikProvider>
-              {userNo !== -1 && <h3>로그인 성공</h3>}
+              {/* {userNo !== -1 && <h3>로그인 성공</h3>} */}
               {smUp && (
                 <Typography lang="ko" variant="body2" sx={{ mt: { md: 5 } }}>
                   계정이 없으신가요?{/* Don’t have an account?  */}

@@ -59,7 +59,7 @@ import Iconify from '../Home/Dashboard/Iconify';
 import SearchNotFound from '../Home/Dashboard/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../Home/Dashboard/user';
 // mock
-import USERLIST from '../../_mock/user';
+import USERLIST from '../../Mock/user';
 import MetaData from '../Layouts/MetaData';
 import { useEffect } from 'react';
 

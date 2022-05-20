@@ -8,7 +8,7 @@ import { styled } from '@mui/material/styles';
 import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
 
 // mock
-import account from '../../../_mock/account';
+import account from '../../../Mock/Account';
 // hooks
 import useResponsive from '../../../utils/useResponsive';
 // components

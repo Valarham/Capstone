@@ -1,20 +1,16 @@
-import { useRef, useState } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
+import { useRef, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 // @mui
-import { alpha } from '@mui/material/styles'
-import {
-  Box,
-  Divider,
-  Typography,
-  Stack,
-  MenuItem,
-  Avatar,
-  IconButton,
-} from '@mui/material'
+import { alpha } from '@mui/material/styles';
+import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton } from '@mui/material';
+import { useFormik, Form, FormikProvider } from 'formik';
+import { useSnackbar } from 'notistack';
+import axios from 'axios';
+
 // components
-import MenuPopover from '../../Home/Dashboard/MenuPopover'
+import MenuPopover from '../../Home/Dashboard/MenuPopover';
 // mocks_
-import account from '../../../_mock/account'
+import account from '../../../Mock/Account';
 // dashboard에서 오른쪽 상단에 표시될 User의 account 클릭 반응 및 출력 관련 함수
 // ----------------------------------------------------------------------
 // 아래의 내용 개발 안할 경우 지우기
@@ -37,46 +33,89 @@ const MENU_OPTIONS = [
     icon: 'eva:settings-2-fill',
     linkTo: '#',
   },
-]
+];
 
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
-  const anchorRef = useRef(null)
+  const anchorRef = useRef(null);
 
-  const [open, setOpen] = useState(null)
+  const [open, setOpen] = useState(null);
 
   const handleOpen = (event) => {
-    setOpen(event.currentTarget)
-  }
+    setOpen(event.currentTarget);
+  };
 
   const handleClose = () => {
-    setOpen(null)
-  }
+    setOpen(null);
+  };
+  const { enqueueSnackbar } = useSnackbar();
+  const formik = useFormik({
+    initialValues: {
+      first_name: '',
+      email: '',
+    },
+
+    onSubmit: async (values) => {
+      try {
+        //http://15.165.215.193
+        //   const { data } = await axios.post(`http://112.169.87.213:3000/api/login`, JSON.stringify(values));
+        const res = await axios({
+          //body: JSON.stringify(values),
+
+          url: `http://112.169.87.213:3000/api/user`,
+          // url: `http://localhost:3000/api/login`,
+          headers: {
+            //Authorization: `Basic ${TOKEN}`,
+            'content-Type': 'application/json',
+          },
+          method: 'GET',
+          data: JSON.stringify(values.email, values.first_name),
+        });
+        console.log(res);
+        // alert(res.data.message);
+        enqueueSnackbar(res.data.message, { variant: 'success' });
+        //   setUserNo(res.data.user_no);
+      } catch (err) {
+        //alert(err.message);
+        console.error(err);
+        // snackbar variant 값 default | error | success | warning | info
+        enqueueSnackbar(err.message, { variant: 'error' });
+      }
+    },
+  });
+
+  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   return (
     <>
-      <IconButton
-        ref={anchorRef}
-        onClick={handleOpen}
-        sx={{
-          p: 0,
-          ...(open && {
-            '&:before': {
-              zIndex: 1,
-              content: "''",
-              width: '100%',
-              height: '100%',
-              borderRadius: '50%',
-              position: 'absolute',
-              bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8),
-            },
-          }),
-        }}
-      >
-        <Avatar src={account.photoURL} alt="photoURL" />
-      </IconButton>
-
+      <FormikProvider value={formik}>
+        <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+          <IconButton
+            ref={anchorRef}
+            onClick={handleOpen}
+            type="submit"
+            variant="contained"
+            loading={isSubmitting}
+            sx={{
+              p: 0,
+              ...(open && {
+                '&:before': {
+                  zIndex: 1,
+                  content: "''",
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '50%',
+                  position: 'absolute',
+                  bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8),
+                },
+              }),
+            }}
+          >
+            <Avatar src={account.photoURL} alt="photoURL" />
+          </IconButton>
+        </Form>
+      </FormikProvider>
       <MenuPopover
         open={Boolean(open)}
         anchorEl={open}
@@ -104,12 +143,7 @@ export default function AccountPopover() {
 
         <Stack sx={{ p: 1 }}>
           {MENU_OPTIONS.map((option) => (
-            <MenuItem
-              key={option.label}
-              to={option.linkTo}
-              component={RouterLink}
-              onClick={handleClose}
-            >
+            <MenuItem key={option.label} to={option.linkTo} component={RouterLink} onClick={handleClose}>
               {option.label}
             </MenuItem>
           ))}
@@ -122,5 +156,5 @@ export default function AccountPopover() {
         </MenuItem>
       </MenuPopover>
     </>
-  )
+  );
 }

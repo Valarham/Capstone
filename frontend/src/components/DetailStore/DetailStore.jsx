@@ -39,7 +39,7 @@ import DetailOrderline from './Detailsection/DetailOrderline';
 import DetailMenu from './Detailsection/DetailMenu';
 const StyledBox = styled(Card)(({ theme }) => ({
   position: 'absolute',
-  top: '40%',
+  top: '45%',
   left: '50%',
   flexDirection: 'colunm',
   justifyContent: 'center',
@@ -91,7 +91,7 @@ export default function DetailStore(props) {
         keepMounted
         open={open}
         onClose={handleClose}
-        closeButton
+        closebutton="true"
         aria-labelledby="keep-mounted-modal-title"
         aria-describedby="keep-mounted-modal-description"
       >
@@ -109,10 +109,10 @@ export default function DetailStore(props) {
               </Typography>
             </Box>
             <Grid container spacing={3}>
-              <Grid item xs={6} md={2} lg={5}>
+              <Grid item xs={12} md={6} lg={5}>
                 <DetailMenu
                   title="매장 사진"
-                  list={[...Array(5)].map((_, index) => ({
+                  list={[...Array(3)].map((_, index) => ({
                     store_code: faker.datatype.uuid(),
                     title: faker.name.jobTitle(),
                     description: faker.name.jobTitle(),
