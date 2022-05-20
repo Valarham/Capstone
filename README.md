@@ -32,7 +32,7 @@ node.modules, yarn.lock지운채로 업로드 예정
 
 ## License
 
-Distributed under the MIT License. [https://github.com/yousirong](https://github.com/yousirong) for more information.
+Distributed under the aws ec2 License. [https://github.com/yousirong](https://github.com/yousirong) for more information.
 
 ## Buy Premium Membership - Contact us
 
