@@ -478,14 +478,6 @@ const Home = () => {
     },
     [],
   );
-  const etailCompany = React.useCallback(
-    (id) => () => {
-      setTimeout(() => {
-        setRows((prevRows) => prevRows.filter((row) => row.id !== id));
-      });
-    },
-    [],
-  );
   // 칼럼 데이터
   const columns = React.useMemo(
     () => [
