@@ -7,19 +7,19 @@
 | [HUFS_CAPSTONE_FOR_FREE] | [HUFS_CAPSTONE_FOR_Premium_member] |
 | ------------------------ | :--------------------------------- |
 | **7** Demo pages         | **42+** premium pages              |
-| -                        | ✓ 검색 기능                        |
-| -                        | ✓ 카테고리 검색 기능               |
-| -                        | ✓ 상세페이지 기능                  |
-| -                        | ✓ 영업 매장 관리 기능              |
+| -                        | ✓ 검색 기능                         |
+| -                        | ✓ 카테고리 검색 기능                |
+| -                        | ✓ 매장 데이터 filter, search,export |
+| -                        | ✓ 상세페이지 기능                   |
+| -                        | ✓ 영업 매장 관리 기능               |
+| -                        | ✓ 영업시 필요한 그래프 데이터        |
 
 ## Page demo
 
 - [Login]
 - [Register]
 - [Dashboard]
-- [Users]
-- [Product]
-- [Blog]
+- [My shop]
 - [Not_Found]
 
 ## Getting started
@@ -38,6 +38,15 @@ Distributed under the MIT License. [https://github.com/yousirong](https://github
 
 If you would like to purchase a premium membership, contact us
 Email: diziyong@hufs.ac.kr
+
+
+201804546@hufs.ac.kr
+
+
+a01066437663@gmail.com
+
+
+channthehuman@gmail.com
 
 
 ##  커밋 메시지 방법 : 날짜_이름_내용  ex) 20220412_react구현
