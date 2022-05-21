@@ -1,10 +1,12 @@
-import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 //
 import DashboardNavbar from './DashboardNavbar';
 import DashboardSidebar from './DashboardSidebar';
+import axios from 'axios';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { Typography } from '@mui/material';
 
 // dashboard 화면 크기 및 route에 보낼 출력 함수
 // ----------------------------------------------------------------------
@@ -32,17 +34,39 @@ const MainStyle = styled('div')(({ theme }) => ({
 }));
 
 // ----------------------------------------------------------------------
-
-export default function DashboardLayout() {
+const DashboardLayout = () => {
   const [open, setOpen] = useState(false);
+  const [ping, setPing] = useState(false);
+
+  const getPing = useCallback(async () => {
+    try {
+      const { data } = await axios.get(`http://112.169.87.213:3000/api/ping`);
+      //   const { data } = await axios.get(`http://15.165.215.193/api/ping`);
+      setPing(data);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+  useEffect(() => {
+    getPing();
+    return () => {
+      setPing(false);
+    };
+  }, []);
 
   return (
-    <RootStyle>
-      <DashboardNavbar onOpenSidebar={() => setOpen(true)} />
-      <DashboardSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
-      <MainStyle>
-        <Outlet />
-      </MainStyle>
-    </RootStyle>
+    <>
+      {ping && (
+        <RootStyle>
+          <DashboardNavbar onOpenSidebar={() => setOpen(true)} />
+          <DashboardSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
+          <MainStyle>
+            <Outlet />
+          </MainStyle>
+        </RootStyle>
+      )}
+      {!ping && <Typography>서버 연결 불가</Typography>}
+    </>
   );
-}
+};
+export default DashboardLayout;

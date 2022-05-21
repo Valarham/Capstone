@@ -9,6 +9,7 @@ import { Stack, Checkbox, TextField, IconButton, InputAdornment, FormControlLabe
 import { LoadingButton } from '@mui/lab';
 
 import { useState, useCallback, useEffect } from 'react';
+
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 // import { useDispatch, useSelector } from 'react-redux';
 import { clearErrors, loginUser } from '../../actions/userAction';
@@ -68,9 +69,12 @@ const ContentStyle = styled('div')(({ theme }) => ({
 const Login = () => {
   const smUp = useResponsive('up', 'sm');
   const mdUp = useResponsive('up', 'md');
+
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const JWT_EXPIRY_TIME = 24 * 3600 * 1000; // 만료 시간 (24시간 밀리 초로 표현)
+
   //   const [login, setLogin] = useState({
   //     email: '',
   //     password: '',
@@ -87,7 +91,7 @@ const Login = () => {
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
   };
-
+  const [userNo, setUserNo] = useState(-1);
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email('이메일은 유효한 이메일 형식이어야 합니다.').required('이메일은 필수 항목입니다.'),
     password: Yup.string().required('비밀번호가 필요합니다'),
@@ -100,32 +104,37 @@ const Login = () => {
       remember: true,
     },
     validationSchema: LoginSchema,
-    // handleLoginChange: useCallback((e) => {
-    //   const name = e.target.name;
-    //   const value = e.target.value;
-    //   if (name === 'email') setLogin((prev) => ({ ...prev, email: value }));
-    //   else setLogin((prev) => ({ ...prev, password: value }));
-    // }, []),
+
     onSubmit: async (values) => {
       try {
         //http://15.165.215.193
         //   const { data } = await axios.post(`http://112.169.87.213:3000/api/login`, JSON.stringify(values));
-        const res = await axios({
-          //body: JSON.stringify(values),
+        const res = await axios(
+          {
+            //body: JSON.stringify(values),
 
-          url: `http://112.169.87.213:3000/api/login`,
-          // url: `http://localhost:3000/api/login`,
-          headers: {
-            //Authorization: `Basic ${TOKEN}`,
-            'content-Type': 'application/json',
+            url: `http://112.169.87.213:3000/api/login`,
+            // url: `http://localhost:3000/api/login`,
+            headers: {
+              Authorization: `Basic ${accessToken}`,
+              'content-Type': 'application/json',
+            },
+            method: 'POST',
+            data: JSON.stringify(values),
           },
-          method: 'POST',
-          data: JSON.stringify(values),
-        });
+          { withCredentials: true },
+        );
         console.log(res);
         // alert(res.data.message);
+        const { accessToken } = res.data;
         enqueueSnackbar(res.data.message, { variant: 'success' });
-        //   setUserNo(res.data.user_no);
+        // console.log('res.data.accessToken : ' + res.data);
+        // axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data;
+
+        // token이 필요한 API 요청 시 header Authorization에 token 담아서 보내기
+        // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
+        axios.defaults.headers.common['Authorization'] = `Basic ${accessToken}`;
+
         navigate('/dashboard/home', { replace: true });
       } catch (err) {
         //alert(err.message);
@@ -135,34 +144,11 @@ const Login = () => {
       }
     },
   });
-  // email: 'diziyong@naver.com',
-  // password: 'jyjydzdz7822.',
-  //   useEffect(() => {
-  //     return () => {
-  //       setLogin({
-  //         email: '',
-  //         password: '',
-  //       });
-  //          setUserNo(-1);
-  //     };
-  //   }, []);
-
-  // onSubmit: async (values) => {
-  //   //   values.preventDefault();
-  //   alert(JSON.stringify(values, null, 2));
-  //   console.log(values);
-  //   try {
-  //     const config = {
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     };
-  //     await axios.post('http://localhost:3000/api/login', { values }, config);
-  //     navigate('/dashboard/home', { replace: true });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // },
+  useEffect(() => {
+    return () => {
+      setUserNo(-1);
+    };
+  }, []);
 
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
 

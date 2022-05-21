@@ -11,6 +11,9 @@ import { SnackbarProvider } from 'notistack';
 import { BaseOptionChartStyle } from './components/Home/Dashboard/chart/BaseOptionChart';
 // theme
 import ThemeProvider from './theme';
+import axios from 'axios';
+axios.defaults.baseURL = 'http://15.165.215.193s';
+axios.defaults.withCredentials = true;
 ReactDOM.render(
   <React.StrictMode>
     {/* <Provider store={store}> */}

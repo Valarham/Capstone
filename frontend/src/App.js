@@ -16,6 +16,7 @@ import DetailStore from './components/DetailStore/DetailStore';
 //layouts
 import DashboardLayout from './components/Layouts/dashboard';
 import LogoOnlyLayout from './components/Layouts/LogoOnlyLayout/LogoOnlyLayout';
+
 function App() {
   //const dispatch = useDispatch();
   const { pathname } = useLocation();
