@@ -40,8 +40,9 @@ const DashboardLayout = () => {
 
   const getPing = useCallback(async () => {
     try {
-      const { data } = await axios.get(`http://112.169.87.213:3000/api/ping`);
+      //const { data } = await axios.get(`http://112.169.87.213:3000/api/ping`);
       //   const { data } = await axios.get(`http://15.165.215.193/api/ping`);
+      const { data } = await axios.get(`http://localhost:3000/api/ping`);
       setPing(data);
     } catch (err) {
       console.error(err);
