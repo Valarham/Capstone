@@ -32,6 +32,19 @@ const controller = {
       next(e);
     }
   },
+  async brief(req, res, next) {
+    try {
+      const [results] = await res.pool.query(`
+          SELECT 
+          FROM myshop
+          WHERE state = 1
+        `
+      );
+      next({ results });
+    } catch (e) {
+      next(e);
+    }
+  },
   async queryList(req, res, next) {
     try {
       const cat_1 = req.body.cat_1;
@@ -42,13 +55,14 @@ const controller = {
       const addr_3 = req.body.addr_3;
 
       const [results] = await res.pool.query(`
-          SELECT * FROM Business_data
-          WHERE cat_1 = ?
-          AND cat_2 = ?
-          AND cat_3 = ?
-          AND addr_1 = ?
-          AND addr_2 = ?
-          AND addr_3 = ?;
+          SELECT *
+          FROM Business_data
+          WHERE cat_1 = IFNULL(?,cat_1)
+          AND cat_2 = IFNULL(?,cat_2)
+          AND cat_3 = IFNULL(?,cat_3)
+          AND addr_1 = IFNULL(?,addr_1)
+          AND addr_2 = IFNULL(?,addr_2)
+          AND addr_3 = IFNULL(?,addr_3)
         `,
         [cat_1, cat_2, cat_3, addr_1, addr_2, addr_3]
       );
@@ -80,6 +94,94 @@ const controller = {
       } finally {
         conn.release();
       }
+    } catch (e) {
+      next(e);
+    }
+  },
+  async cat_1(req, res, next) {
+    try {
+      const [results] = await res.pool.query(`
+          SELECT DISTINCT cat_1
+          FROM Business_data
+        `
+      );
+      next({ results });
+    } catch (e) {
+      next(e);
+    }
+  },
+  async cat_2(req, res, next) {
+    try {
+      const cat_1 = req.body.cat_1;
+
+      const [results] = await res.pool.query(`
+          SELECT DISTINCT cat_2
+          FROM Business_data
+          where cat_1 =?
+        `,
+        [cat_1]
+      );
+      next({ results });
+    } catch (e) {
+      next(e);
+    }
+  },
+  async cat_3(req, res, next) {
+    try {
+      const cat_2 = req.body.cat_2;
+
+      const [results] = await res.pool.query(`
+          SELECT DISTINCT cat_3
+          FROM Business_data
+          where cat_2 =?
+        `,
+        [cat_1]
+      );
+      next({ results });
+    } catch (e) {
+      next(e);
+    }
+  },
+  async addr_1(req, res, next) {
+    try {
+      const [results] = await res.pool.query(`
+          SELECT DISTINCT addr_1
+          FROM Business_data
+        `
+      );
+      next({ results });
+    } catch (e) {
+      next(e);
+    }
+  },
+  async addr_2(req, res, next) {
+    try {
+      const addr_1 = req.body.cat_1;
+
+      const [results] = await res.pool.query(`
+          SELECT DISTINCT addr_2
+          FROM Business_data
+          where addr_1 =?
+        `,
+        [addr_1]
+      );
+      next({ results });
+    } catch (e) {
+      next(e);
+    }
+  },
+  async addr_3(req, res, next) {
+    try {
+      const addr_2 = req.body.cat_2;
+
+      const [results] = await res.pool.query(`
+          SELECT DISTINCT addr_3
+          FROM Business_data
+          where addrt_2 =?
+        `,
+        [addr_2]
+      );
+      next({ results });
     } catch (e) {
       next(e);
     }

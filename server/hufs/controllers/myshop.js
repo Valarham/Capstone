@@ -74,6 +74,31 @@ const controller = {
       next(e);
     }
   },
+  async deleteAll(req, res, next) {
+    try {
+      const user_no = req.session.user_no;
+
+      const conn = await res.pool.getConnection();
+      try {
+        await conn.beginTransaction();
+        await conn.query(`
+            DELETE FROM user_myshop
+            WHERE user_no = ?
+          `,
+          [user_no]
+        )
+        await conn.commit();
+        next({message: `삭제 되었습니다.`});
+        } catch (e) {
+          await conn.rollback();// 롤백
+          next(e);
+        } finally {
+          conn.release();
+        }
+    } catch (e) {
+      next(e);
+    }
+  },
 };
 
 module.exports = controller;

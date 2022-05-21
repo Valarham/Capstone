@@ -19,6 +19,7 @@ const controller = {
   },
   async login(req, res, next) {
     try {
+      if (req.session.is_logined) throw error(`로그인 되었습니다`);
       const email = req.body.email;
       const password = req.body.password;
 
@@ -105,11 +106,36 @@ const controller = {
       const [results] = await res.pool.query(`
           SELECT *
           FROM business_data
-          WHERE store_no=?
+          WHERE store_no=?;
+
+          SELECT COUNT(*) AS 'count'
+          FROM user_myshop
+          WHERE store_no = ?
+          AND status = 1;
+
+          SELECT COUNT(*) AS 'count'
+          FROM user_myshop
+          WHERE store_no = ?
+          AND status = 2;
         `,
-        [store_no]
+        [store_no, store_no, store_no]
       );
       next({ results });
+    } catch (e) {
+      next(e);
+    }
+  },
+  async user(req, res, next) {
+    try {
+      const user_no = req.session.user_no
+      const [results] = await res.pool.query(`
+            SELECT * FROM users
+            WHERE enabled = 1
+            and user_no = ?;
+        `,
+        [user_no]
+        );
+      resul
     } catch (e) {
       next(e);
     }
