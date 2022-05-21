@@ -75,7 +75,7 @@ import USERLIST from '../../Mock/user';
 import MetaData from '../Layouts/MetaData';
 import DetailStore from '../DetailStore/DetailStore';
 import { Navigate } from 'react-router-dom';
-
+import { useSnackbar } from 'notistack';
 const initialRows = [
   {
     id: 1,
@@ -447,28 +447,10 @@ SettingsPanel.propTypes = {
 const Home = () => {
   const [rows, setRows] = React.useState(initialRows);
   const [info, setInfo] = useState([]);
-
   // 고유 값으로 사용될 id 변수
   const nextId = useRef(100);
   const navigate = useNavigate();
-  //   const [ping, setPing] = useState(false);
-
-  //   const getPing = useCallback(async () => {
-  //     try {
-  //       //   const { data } = await axios.get(`http://112.169.87.213:3000/api/ping`);
-  //       const { data } = await axios.get(`http://15.165.215.193/api/ping`);
-  //       setPing(data);
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   }, []);
-  //   useEffect(() => {
-  //     getPing();
-  //     return () => {
-  //       setPing(false);
-  //     };
-  //     // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   }, []);
+  const { enqueueSnackbar } = useSnackbar();
 
   const storeCompany = React.useCallback(
     (id) => () => {
@@ -750,7 +732,6 @@ const Home = () => {
 
   return (
     <>
-      {/* {ping && ( */}
       <MetaData title="Dashboard">
         <Container maxWidth="xl">
           <Typography variant="h4" sx={{ mb: 2 }}>
@@ -1063,7 +1044,6 @@ const Home = () => {
           <Typography> Created By Juneyong Lee | &#169; 2022 All Rights Reserved</Typography>
         </Container>
       </MetaData>
-      {/* )}{!ping && <Typography>서버 연결 불가</Typography>} */}
     </>
   );
 };
