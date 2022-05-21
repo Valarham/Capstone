@@ -750,319 +750,321 @@ const Home = () => {
 
   return (
     <>
-      <MetaData title="Dashboard">
-        <Container maxWidth="xl">
-          <Typography variant="h4" sx={{ mb: 2 }}>
-            안녕하세요, 환영합니다.
-          </Typography>
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={6} md={3}>
-              <AppWidgetSummary title="총 매장 수" total={4867911} icon="mdi:store" />
-              {/* <AppWidgetSummary title="Total Market Num" total={4867911} icon="mdi:store" /> */}
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <AppWidgetSummary title="총 검색된 시장 수" total={456484} color="info" icon="mdi:store-search" />
-              {/* <AppWidgetSummary title="Total Search Market Num" total={456484} color="info" icon="mdi:store-search" /> */}
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <AppWidgetSummary title="저장한 시장 수" total={897895} color="warning" icon="mdi:store-check" />
-              {/* <AppWidgetSummary title="Stored Markets" total={897895} color="warning" icon="mdi:store-check" /> */}
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <AppWidgetSummary title="신규 매장 등록 수" total={315} color="error" icon="mdi:store-plus" />
-              {/* <AppWidgetSummary title="New Store Registration" total={315} color="error" icon="mdi:store-plus" /> */}
-            </Grid>
-            <Container maxWidth="xl">
-              <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}>
-                <Typography variant="h4" sx={{ mb: 2 }} gutterBottom>
-                  최근 매장 검색
-                </Typography>
-              </Stack>
-              <StyledBox>
-                <SettingsPanel onApply={handleApplyClick} size={size} type={type} theme={getActiveTheme()} />
-                <Card>
-                  <DataGridComponent
-                    onApply={handleApplyClick}
-                    columns={columns}
-                    rows={rows}
-                    components={{
-                      LoadingOverlay: LinearProgress,
-                      Toolbar: CustomToolbar,
-                      NoRowsOverlay: CustomNoRowsOverlay,
-                    }}
-                    componentsProps={{
-                      toolbar: { showQuickFilter: true },
-                    }}
-                    checkboxSelection
-                    disableSelectionOnClick
-                    rowThreshold={0}
-                    initialState={{
-                      ...data.initialState,
-                      pinnedColumns: { left: ['__check__', 'store_name'] },
-                    }}
-                    {...pagination}
-                  />
-                  <DashUserListToolbar
-                    numSelected={selected.length}
-                    filterName={filterName}
-                    onFilter
-                    Name={handleFilterByName}
-                  />
-                  <Scrollbar>
-                    <TableContainer sx={{ minWidth: 800 }}>
-                      <Table>
-                        <UserListHead
-                          lang="ko"
-                          order={order}
-                          orderBy={orderBy}
-                          headLabel={TABLE_HEAD}
-                          rowCount={USERLIST.length}
-                          numSelected={selected.length}
-                          onRequestSort={handleRequestSort}
-                          onSelectAllClick={handleSelectAllClick}
-                        />
-                        <TableBody>
-                          {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                            const {
-                              store_code,
-                              store_name,
-                              telephone,
-                              sub_category,
-                              rating,
-                              review_count,
-                              isnew,
-                              address,
-                            } = row;
-                            const isItemSelected = selected.indexOf(store_name) !== -1;
-                            return (
-                              <TableRow
-                                hover
-                                key={store_code}
-                                tabIndex={-1}
-                                role="checkbox"
-                                selected={isItemSelected}
-                                aria-checked={isItemSelected}
-                              >
-                                <TableCell padding="checkbox">
-                                  <Checkbox
-                                    checked={isItemSelected}
-                                    onChange={(event) => handleClick(event, store_name)}
-                                  />
-                                </TableCell>
-                                <TableCell component="th" scope="row" padding="none">
-                                  <Stack direction="row" alignItems="center" spacing={2}>
-                                    {/* <Avatar alt={name} src={avatarUrl} />
+      {ping && (
+        <MetaData title="Dashboard">
+          <Container maxWidth="xl">
+            <Typography variant="h4" sx={{ mb: 2 }}>
+              안녕하세요, 환영합니다.
+            </Typography>
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={6} md={3}>
+                <AppWidgetSummary title="총 매장 수" total={4867911} icon="mdi:store" />
+                {/* <AppWidgetSummary title="Total Market Num" total={4867911} icon="mdi:store" /> */}
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <AppWidgetSummary title="총 검색된 시장 수" total={456484} color="info" icon="mdi:store-search" />
+                {/* <AppWidgetSummary title="Total Search Market Num" total={456484} color="info" icon="mdi:store-search" /> */}
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <AppWidgetSummary title="저장한 시장 수" total={897895} color="warning" icon="mdi:store-check" />
+                {/* <AppWidgetSummary title="Stored Markets" total={897895} color="warning" icon="mdi:store-check" /> */}
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <AppWidgetSummary title="신규 매장 등록 수" total={315} color="error" icon="mdi:store-plus" />
+                {/* <AppWidgetSummary title="New Store Registration" total={315} color="error" icon="mdi:store-plus" /> */}
+              </Grid>
+              <Container maxWidth="xl">
+                <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}>
+                  <Typography variant="h4" sx={{ mb: 2 }} gutterBottom>
+                    최근 매장 검색
+                  </Typography>
+                </Stack>
+                <StyledBox>
+                  <SettingsPanel onApply={handleApplyClick} size={size} type={type} theme={getActiveTheme()} />
+                  <Card>
+                    <DataGridComponent
+                      onApply={handleApplyClick}
+                      columns={columns}
+                      rows={rows}
+                      components={{
+                        LoadingOverlay: LinearProgress,
+                        Toolbar: CustomToolbar,
+                        NoRowsOverlay: CustomNoRowsOverlay,
+                      }}
+                      componentsProps={{
+                        toolbar: { showQuickFilter: true },
+                      }}
+                      checkboxSelection
+                      disableSelectionOnClick
+                      rowThreshold={0}
+                      initialState={{
+                        ...data.initialState,
+                        pinnedColumns: { left: ['__check__', 'store_name'] },
+                      }}
+                      {...pagination}
+                    />
+                    <DashUserListToolbar
+                      numSelected={selected.length}
+                      filterName={filterName}
+                      onFilter
+                      Name={handleFilterByName}
+                    />
+                    <Scrollbar>
+                      <TableContainer sx={{ minWidth: 800 }}>
+                        <Table>
+                          <UserListHead
+                            lang="ko"
+                            order={order}
+                            orderBy={orderBy}
+                            headLabel={TABLE_HEAD}
+                            rowCount={USERLIST.length}
+                            numSelected={selected.length}
+                            onRequestSort={handleRequestSort}
+                            onSelectAllClick={handleSelectAllClick}
+                          />
+                          <TableBody>
+                            {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                              const {
+                                store_code,
+                                store_name,
+                                telephone,
+                                sub_category,
+                                rating,
+                                review_count,
+                                isnew,
+                                address,
+                              } = row;
+                              const isItemSelected = selected.indexOf(store_name) !== -1;
+                              return (
+                                <TableRow
+                                  hover
+                                  key={store_code}
+                                  tabIndex={-1}
+                                  role="checkbox"
+                                  selected={isItemSelected}
+                                  aria-checked={isItemSelected}
+                                >
+                                  <TableCell padding="checkbox">
+                                    <Checkbox
+                                      checked={isItemSelected}
+                                      onChange={(event) => handleClick(event, store_name)}
+                                    />
+                                  </TableCell>
+                                  <TableCell component="th" scope="row" padding="none">
+                                    <Stack direction="row" alignItems="center" spacing={2}>
+                                      {/* <Avatar alt={name} src={avatarUrl} />
                                   <Typography variant="subtitle2" noWrap>
                                     {name}
                                   </Typography> */}
-                                  </Stack>
-                                </TableCell>
-                                <TableCell align="left">{store_name}</TableCell>
-                                <TableCell align="left">{telephone}</TableCell>
-                                <TableCell align="left">{sub_category}</TableCell>
-                                <TableCell align="left">{rating}</TableCell>
-                                <TableCell align="left">{review_count}</TableCell>
-                                <TableCell align="left">
-                                  {isnew ? <Icon icon="bi:check" width="25" height="25" /> : ''}
-                                </TableCell>
-                                <TableCell align="left">{address}</TableCell>
-                                <TableCell align="left"></TableCell>
-                                <TableCell align="right">
-                                  <UserMoreMenu />
+                                    </Stack>
+                                  </TableCell>
+                                  <TableCell align="left">{store_name}</TableCell>
+                                  <TableCell align="left">{telephone}</TableCell>
+                                  <TableCell align="left">{sub_category}</TableCell>
+                                  <TableCell align="left">{rating}</TableCell>
+                                  <TableCell align="left">{review_count}</TableCell>
+                                  <TableCell align="left">
+                                    {isnew ? <Icon icon="bi:check" width="25" height="25" /> : ''}
+                                  </TableCell>
+                                  <TableCell align="left">{address}</TableCell>
+                                  <TableCell align="left"></TableCell>
+                                  <TableCell align="right">
+                                    <UserMoreMenu />
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })}
+                            {emptyRows > 0 && (
+                              <TableRow style={{ height: 53 * emptyRows }}>
+                                <TableCell colSpan={6} />
+                              </TableRow>
+                            )}
+                          </TableBody>
+                          {isUserNotFound && (
+                            <TableBody>
+                              <TableRow>
+                                <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                                  <SearchNotFound searchQuery={filterName} />
                                 </TableCell>
                               </TableRow>
-                            );
-                          })}
-                          {emptyRows > 0 && (
-                            <TableRow style={{ height: 53 * emptyRows }}>
-                              <TableCell colSpan={6} />
-                            </TableRow>
+                            </TableBody>
                           )}
-                        </TableBody>
-                        {isUserNotFound && (
-                          <TableBody>
-                            <TableRow>
-                              <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                                <SearchNotFound searchQuery={filterName} />
-                              </TableCell>
-                            </TableRow>
-                          </TableBody>
-                        )}
-                      </Table>
-                    </TableContainer>
-                  </Scrollbar>
-                  <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={USERLIST.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </Card>
-              </StyledBox>
-            </Container>
-            <Grid item xs={12} md={6} lg={8}>
-              <AppWebsiteVisits
-                title="Website Visits"
-                subheader="(+16%) than last year"
-                chartLabels={[
-                  '01/01/2022',
-                  '02/01/2022',
-                  '03/01/2022',
-                  '04/01/2022',
-                  '05/01/2022',
-                  '06/01/2022',
-                  '07/01/2022',
-                  '08/01/2022',
-                  '09/01/2022',
-                  '10/01/2022',
-                  '11/01/2022',
-                ]}
-                chartData={[
-                  {
-                    name: 'Team A',
-                    type: 'column',
-                    fill: 'solid',
-                    data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
-                  },
-                  {
-                    name: 'Team B',
-                    type: 'area',
-                    fill: 'gradient',
-                    data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
-                  },
-                  {
-                    name: 'Team C',
-                    type: 'line',
-                    fill: 'solid',
-                    data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
-                  },
-                ]}
-              />
+                        </Table>
+                      </TableContainer>
+                    </Scrollbar>
+                    <TablePagination
+                      rowsPerPageOptions={[5, 10, 25]}
+                      component="div"
+                      count={USERLIST.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                  </Card>
+                </StyledBox>
+              </Container>
+              <Grid item xs={12} md={6} lg={8}>
+                <AppWebsiteVisits
+                  title="Website Visits"
+                  subheader="(+16%) than last year"
+                  chartLabels={[
+                    '01/01/2022',
+                    '02/01/2022',
+                    '03/01/2022',
+                    '04/01/2022',
+                    '05/01/2022',
+                    '06/01/2022',
+                    '07/01/2022',
+                    '08/01/2022',
+                    '09/01/2022',
+                    '10/01/2022',
+                    '11/01/2022',
+                  ]}
+                  chartData={[
+                    {
+                      name: 'Team A',
+                      type: 'column',
+                      fill: 'solid',
+                      data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
+                    },
+                    {
+                      name: 'Team B',
+                      type: 'area',
+                      fill: 'gradient',
+                      data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
+                    },
+                    {
+                      name: 'Team C',
+                      type: 'line',
+                      fill: 'solid',
+                      data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
+                    },
+                  ]}
+                />
+              </Grid>
+              <Grid item xs={12} md={6} lg={4}>
+                <AppCurrentVisits
+                  title="Current Visits"
+                  chartData={[
+                    { label: 'America', value: 4344 },
+                    { label: 'Asia', value: 5435 },
+                    { label: 'Europe', value: 1443 },
+                    { label: 'Africa', value: 4443 },
+                  ]}
+                  chartColors={[
+                    theme.palette.primary.main,
+                    theme.palette.chart.blue[0],
+                    theme.palette.chart.violet[0],
+                    theme.palette.chart.yellow[0],
+                  ]}
+                />
+              </Grid>
+              <Grid item xs={12} md={6} lg={8}>
+                <AppConversionRates
+                  title="Conversion Rates"
+                  subheader="(+43%) than last year"
+                  chartData={[
+                    { label: 'Italy', value: 400 },
+                    { label: 'Japan', value: 430 },
+                    { label: 'China', value: 448 },
+                    { label: 'Canada', value: 470 },
+                    { label: 'France', value: 540 },
+                    { label: 'Germany', value: 580 },
+                    { label: 'South Korea', value: 690 },
+                    { label: 'Netherlands', value: 1100 },
+                    { label: 'United States', value: 1200 },
+                    { label: 'United Kingdom', value: 1380 },
+                  ]}
+                />
+              </Grid>
+              <Grid item xs={12} md={6} lg={4}>
+                <AppCurrentSubject
+                  title="Current Subject"
+                  chartLabels={['English', 'History', 'Physics', 'Geography', 'Chinese', 'Math']}
+                  chartData={[
+                    { name: 'Series 1', data: [80, 50, 30, 40, 100, 20] },
+                    { name: 'Series 2', data: [20, 30, 40, 80, 20, 80] },
+                    { name: 'Series 3', data: [44, 76, 78, 13, 43, 10] },
+                  ]}
+                  chartColors={[...Array(6)].map(() => theme.palette.text.secondary)}
+                />
+              </Grid>
+              <Grid item xs={12} md={6} lg={8}>
+                <AppNewsUpdate
+                  title="News Update"
+                  list={[...Array(5)].map((_, index) => ({
+                    store_code: faker.datatype.uuid(),
+                    title: faker.name.jobTitle(),
+                    description: faker.name.jobTitle(),
+                    image: `/static/mock-images/covers/cover_${index + 1}.jpg`,
+                    postedAt: faker.date.recent(),
+                  }))}
+                />
+              </Grid>
+              <Grid item xs={12} md={6} lg={4}>
+                <AppOrderTimeline
+                  title="Order Timeline"
+                  list={[...Array(5)].map((_, index) => ({
+                    store_code: faker.datatype.uuid(),
+                    title: [
+                      '1983, orders, $4220',
+                      '12 Invoices have been paid',
+                      'Order #37745 from September',
+                      'New order placed #XF-2356',
+                      'New order placed #XF-2346',
+                    ][index],
+                    type: `order${index + 1}`,
+                    time: faker.date.past(),
+                  }))}
+                />
+              </Grid>
+              <Grid item xs={12} md={6} lg={4}>
+                <AppTrafficBySite
+                  title="Traffic by Site"
+                  list={[
+                    {
+                      name: 'FaceBook',
+                      value: 323234,
+                      icon: <Iconify icon={'eva:facebook-fill'} color="#1877F2" width={32} height={32} />,
+                    },
+                    {
+                      name: 'Google',
+                      value: 341212,
+                      icon: <Iconify icon={'eva:google-fill'} color="#DF3E30" width={32} height={32} />,
+                    },
+                    {
+                      name: 'Linkedin',
+                      value: 411213,
+                      icon: <Iconify icon={'eva:linkedin-fill'} color="#006097" width={32} height={32} />,
+                    },
+                    {
+                      name: 'Twitter',
+                      value: 443232,
+                      icon: <Iconify icon={'eva:twitter-fill'} color="#1C9CEA" width={32} height={32} />,
+                    },
+                  ]}
+                />
+              </Grid>
+              <Grid item xs={12} md={6} lg={8}>
+                <AppTasks
+                  title="Tasks"
+                  list={[
+                    { id: '1', label: 'Dashboard만들기' },
+                    { id: '2', label: 'login&register만들기' },
+                    { id: '3', label: 'navbar&sidebar만들기' },
+                    { id: '4', label: 'My Shop만들기' },
+                    { id: '5', label: '상세페이지 만들기' },
+                  ]}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <AppCurrentVisits
-                title="Current Visits"
-                chartData={[
-                  { label: 'America', value: 4344 },
-                  { label: 'Asia', value: 5435 },
-                  { label: 'Europe', value: 1443 },
-                  { label: 'Africa', value: 4443 },
-                ]}
-                chartColors={[
-                  theme.palette.primary.main,
-                  theme.palette.chart.blue[0],
-                  theme.palette.chart.violet[0],
-                  theme.palette.chart.yellow[0],
-                ]}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} lg={8}>
-              <AppConversionRates
-                title="Conversion Rates"
-                subheader="(+43%) than last year"
-                chartData={[
-                  { label: 'Italy', value: 400 },
-                  { label: 'Japan', value: 430 },
-                  { label: 'China', value: 448 },
-                  { label: 'Canada', value: 470 },
-                  { label: 'France', value: 540 },
-                  { label: 'Germany', value: 580 },
-                  { label: 'South Korea', value: 690 },
-                  { label: 'Netherlands', value: 1100 },
-                  { label: 'United States', value: 1200 },
-                  { label: 'United Kingdom', value: 1380 },
-                ]}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <AppCurrentSubject
-                title="Current Subject"
-                chartLabels={['English', 'History', 'Physics', 'Geography', 'Chinese', 'Math']}
-                chartData={[
-                  { name: 'Series 1', data: [80, 50, 30, 40, 100, 20] },
-                  { name: 'Series 2', data: [20, 30, 40, 80, 20, 80] },
-                  { name: 'Series 3', data: [44, 76, 78, 13, 43, 10] },
-                ]}
-                chartColors={[...Array(6)].map(() => theme.palette.text.secondary)}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} lg={8}>
-              <AppNewsUpdate
-                title="News Update"
-                list={[...Array(5)].map((_, index) => ({
-                  store_code: faker.datatype.uuid(),
-                  title: faker.name.jobTitle(),
-                  description: faker.name.jobTitle(),
-                  image: `/static/mock-images/covers/cover_${index + 1}.jpg`,
-                  postedAt: faker.date.recent(),
-                }))}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <AppOrderTimeline
-                title="Order Timeline"
-                list={[...Array(5)].map((_, index) => ({
-                  store_code: faker.datatype.uuid(),
-                  title: [
-                    '1983, orders, $4220',
-                    '12 Invoices have been paid',
-                    'Order #37745 from September',
-                    'New order placed #XF-2356',
-                    'New order placed #XF-2346',
-                  ][index],
-                  type: `order${index + 1}`,
-                  time: faker.date.past(),
-                }))}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <AppTrafficBySite
-                title="Traffic by Site"
-                list={[
-                  {
-                    name: 'FaceBook',
-                    value: 323234,
-                    icon: <Iconify icon={'eva:facebook-fill'} color="#1877F2" width={32} height={32} />,
-                  },
-                  {
-                    name: 'Google',
-                    value: 341212,
-                    icon: <Iconify icon={'eva:google-fill'} color="#DF3E30" width={32} height={32} />,
-                  },
-                  {
-                    name: 'Linkedin',
-                    value: 411213,
-                    icon: <Iconify icon={'eva:linkedin-fill'} color="#006097" width={32} height={32} />,
-                  },
-                  {
-                    name: 'Twitter',
-                    value: 443232,
-                    icon: <Iconify icon={'eva:twitter-fill'} color="#1C9CEA" width={32} height={32} />,
-                  },
-                ]}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} lg={8}>
-              <AppTasks
-                title="Tasks"
-                list={[
-                  { id: '1', label: 'Dashboard만들기' },
-                  { id: '2', label: 'login&register만들기' },
-                  { id: '3', label: 'navbar&sidebar만들기' },
-                  { id: '4', label: 'My Shop만들기' },
-                  { id: '5', label: '상세페이지 만들기' },
-                ]}
-              />
-            </Grid>
-          </Grid>
 
-          <Typography> Created By Juneyong Lee | &#169; 2022 All Rights Reserved</Typography>
-          {!ping && <Typography>서버 연결 불가</Typography>}
-        </Container>
-      </MetaData>
+            <Typography> Created By Juneyong Lee | &#169; 2022 All Rights Reserved</Typography>
+          </Container>
+        </MetaData>
+      )}
+      {!ping && <Typography>서버 연결 불가</Typography>}
     </>
   );
 };
