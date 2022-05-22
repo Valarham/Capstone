@@ -39,7 +39,7 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const anchorRef = useRef(null);
-
+  const [users, setUsers] = useState('');
   const [open, setOpen] = useState(null);
 
   const handleOpen = (event) => {
@@ -67,9 +67,10 @@ export default function AccountPopover() {
             'content-Type': 'application/json',
           },
           method: 'GET',
-          data: JSON.stringify(values.email, values.first_name),
+          data: JSON.stringify(values),
         });
         console.log(res);
+        setUsers(res.data);
         // alert(res.data.message);
         enqueueSnackbar(res.data.message, { variant: 'success' });
         //   setUserNo(res.data.user_no);
@@ -112,46 +113,52 @@ export default function AccountPopover() {
             <Avatar src={account.photoURL} alt="photoURL" />
           </IconButton>
         </Form>
+
+        <MenuPopover
+          open={Boolean(open)}
+          anchorEl={open}
+          onClose={handleClose}
+          sx={{
+            p: 0,
+            mt: 1.5,
+            ml: 0.75,
+            '& .MuiMenuItem-root': {
+              typography: 'body2',
+              borderRadius: 0.75,
+            },
+          }}
+        >
+          <Box sx={{ my: 1.5, px: 2.5 }} key={users.user_no}>
+            <Typography variant="subtitle2" noWrap error={Boolean(touched.first_name && errors.first_name)}>
+              {users.first_name}
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{ color: 'text.secondary' }}
+              noWrap
+              error={Boolean(touched.email && errors.email)}
+            >
+              {users.email}
+            </Typography>
+          </Box>
+
+          <Divider sx={{ borderStyle: 'dashed' }} />
+
+          <Stack sx={{ p: 1 }}>
+            {MENU_OPTIONS.map((option) => (
+              <MenuItem key={option.label} to={option.linkTo} component={RouterLink} onClick={handleClose}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Stack>
+
+          <Divider sx={{ borderStyle: 'dashed' }} />
+
+          <MenuItem onClick={handleClose} sx={{ m: 1 }}>
+            로그아웃{/* Logout */}
+          </MenuItem>
+        </MenuPopover>
       </FormikProvider>
-      <MenuPopover
-        open={Boolean(open)}
-        anchorEl={open}
-        onClose={handleClose}
-        sx={{
-          p: 0,
-          mt: 1.5,
-          ml: 0.75,
-          '& .MuiMenuItem-root': {
-            typography: 'body2',
-            borderRadius: 0.75,
-          },
-        }}
-      >
-        <Box sx={{ my: 1.5, px: 2.5 }}>
-          <Typography variant="subtitle2" noWrap>
-            {account.displayName}
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
-          </Typography>
-        </Box>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <Stack sx={{ p: 1 }}>
-          {MENU_OPTIONS.map((option) => (
-            <MenuItem key={option.label} to={option.linkTo} component={RouterLink} onClick={handleClose}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </Stack>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
-          로그아웃{/* Logout */}
-        </MenuItem>
-      </MenuPopover>
     </>
   );
 }

@@ -107,16 +107,10 @@ const Login = () => {
 
     onSubmit: async (values) => {
       try {
-        //http://15.165.215.193
-        //   const { data } = await axios.post(`http://112.169.87.213:3000/api/login`, JSON.stringify(values));
         const res = await axios(
           {
             //body: JSON.stringify(values),
-
-            // url: `http://112.169.87.213:3000/api/login`,
-
             url: `/api/login`,
-
             headers: {
               //   Authorization: `Basic ${accessToken}`,
               'content-Type': 'application/json',
@@ -143,7 +137,6 @@ const Login = () => {
         console.error(err);
         // snackbar variant 값 default | error | success | warning | info
         enqueueSnackbar(err.message, { variant: 'error' });
-        // eslint-disable-next-line
       }
     },
   });
@@ -151,6 +144,7 @@ const Login = () => {
     return () => {
       setUserNo(-1);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;

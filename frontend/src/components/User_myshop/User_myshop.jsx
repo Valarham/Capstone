@@ -67,6 +67,7 @@ import { useEffect } from 'react';
 // import { clearErrors, getSliderProducts } from '../../actions/productAction';
 import { useSnackbar } from 'notistack';
 import { sample } from 'lodash';
+import DetailStore from '../DetailStore/DetailStore';
 // user_myshop page 출력함수
 // my shop 페이지에서 +new shop 버튼은 일단 만들어놓음 -> 추후에 개발 시간 남으면 개발 ㄱ
 // ----------------------------------------------------------------------
@@ -469,6 +470,13 @@ const User = () => {
   const columns = React.useMemo(
     () => [
       {
+        field: 'actions_Detail',
+        headerName: '상세',
+        type: 'actions',
+        width: 0,
+        getActions: (params) => [<DetailStore onClick={params} />],
+      },
+      {
         field: 'store_name',
         headerName: '매장이름',
         type: 'string',
@@ -493,21 +501,21 @@ const User = () => {
         field: 'rating',
         headerName: '평점',
         type: 'number',
-        width: 70,
+        width: 65,
         alignRight: false,
       },
       {
         field: 'review_count',
         headerName: '리뷰',
         type: 'number',
-        width: 80,
+        width: 75,
         alignRight: false,
       },
       {
         field: 'isnew',
         headerName: '신규',
         type: 'boolean',
-        width: 100,
+        width: 90,
         alignRight: false,
       },
       {
@@ -529,7 +537,7 @@ const User = () => {
           }
           return options;
         },
-        width: 90,
+        width: 85,
         alignRight: false,
       },
       {

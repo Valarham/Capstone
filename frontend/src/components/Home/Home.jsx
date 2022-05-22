@@ -474,7 +474,7 @@ const Home = () => {
         field: 'store_name',
         headerName: '매장이름',
         type: 'string',
-        width: 290,
+        width: 300,
         alignRight: false,
         pinnable: false,
       },

@@ -9,7 +9,7 @@ import { GridActionsCellItem } from '@mui/x-data-grid';
 import { useState } from 'react';
 import axios from 'axios';
 import { faker } from '@faker-js/faker';
-import { Grid, Card, Container, Typography } from '@mui/material';
+import { Grid, Card, Container, Typography, Stack } from '@mui/material';
 import DetailOrderline from './Detailsection/DetailOrderline';
 import DetailMenu from './Detailsection/DetailMenu';
 const StyledBox = styled(Card)(({ theme }) => ({
@@ -19,7 +19,7 @@ const StyledBox = styled(Card)(({ theme }) => ({
   flexDirection: 'colunm',
   justifyContent: 'center',
   transform: 'translate(-50%, -50%)',
-  width: '80%',
+  width: '75%',
 
   bgcolor: 'background.paper',
   border: '2px solid #000',
@@ -73,16 +73,25 @@ export default function DetailStore(props) {
         <Container>
           <StyledBox>
             <Box sx={{ my: 3 }}>
-              <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
+              <Stack direction="row" alignItems="center">
+                <Typography lang="ko" variant="h4" gutterBottom>
+                  망원동티라미수 익선동점
+                </Typography>
+
+                <Button variant="outlined" color="primary" onClick={handleClose}>
+                  닫기
+                </Button>
+                {/* <Button variant="outlined">매장 수집</Button> */}
+              </Stack>
+              {/* <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
                 망원동티라미수 익선동점
-              </Typography>
+              </Typography> */}
+
               <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
                 업종 : 제과 베이커리 별점 : 3.9 리뷰수 : 37
-                {/* <br>업종 : 제과 베이커리</br>
-                <br>별점 : 3.9 </br>
-                <br>리뷰수 : 37</br> */}
               </Typography>
             </Box>
+
             <Grid container spacing={3}>
               <Grid item xs={12} md={6} lg={5}>
                 <DetailMenu
