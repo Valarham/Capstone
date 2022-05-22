@@ -58,13 +58,10 @@ export default function AccountPopover() {
 
     onSubmit: async (values) => {
       try {
-        //http://15.165.215.193
-        //   const { data } = await axios.post(`http://112.169.87.213:3000/api/login`, JSON.stringify(values));
         const res = await axios({
           //body: JSON.stringify(values),
 
-          url: `http://15.165.215.193/api/user`,
-          // url: `http://localhost:3000/api/login`,
+          url: `/api/user`,
           headers: {
             //Authorization: `Basic ${TOKEN}`,
             'content-Type': 'application/json',

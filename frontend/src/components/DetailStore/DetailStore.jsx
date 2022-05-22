@@ -6,35 +6,10 @@ import { styled } from '@mui/material/styles';
 
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import { GridActionsCellItem } from '@mui/x-data-grid';
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { faker } from '@faker-js/faker';
-import {
-  Grid,
-  Card,
-  Link,
-  Container,
-  Table,
-  Stack,
-  Checkbox,
-  TableRow,
-  TableBody,
-  TableCell,
-  Typography,
-  TableContainer,
-  TablePagination,
-} from '@mui/material';
-import {
-  AppTasks,
-  AppNewsUpdate,
-  AppOrderTimeline,
-  AppCurrentVisits,
-  AppWebsiteVisits,
-  AppTrafficBySite,
-  AppWidgetSummary,
-  AppCurrentSubject,
-  AppConversionRates,
-} from '../Home/Dashboard/@Dashboard/app';
+import { Grid, Card, Container, Typography } from '@mui/material';
 import DetailOrderline from './Detailsection/DetailOrderline';
 import DetailMenu from './Detailsection/DetailMenu';
 const StyledBox = styled(Card)(({ theme }) => ({

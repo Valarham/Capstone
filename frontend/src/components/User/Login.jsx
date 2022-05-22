@@ -114,7 +114,8 @@ const Login = () => {
             //body: JSON.stringify(values),
 
             // url: `http://112.169.87.213:3000/api/login`,
-            url: `http://15.165.215.193/api/login`,
+
+            url: `/api/login`,
 
             headers: {
               //   Authorization: `Basic ${accessToken}`,
@@ -129,12 +130,12 @@ const Login = () => {
         // alert(res.data.message);
         const { accessToken } = res.data;
         enqueueSnackbar(res.data.message, { variant: 'success' });
-        // console.log('res.data.accessToken : ' + res.data);
+        console.log('res.data.accessToken : ' + res.data);
         // axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data;
 
         // token이 필요한 API 요청 시 header Authorization에 token 담아서 보내기
         // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
-        // axios.defaults.headers.common['Authorization'] = `Basic ${accessToken}`;
+        axios.defaults.headers.common['Authorization'] = `Basic ${accessToken}`;
 
         navigate('/dashboard/home', { replace: true });
       } catch (err) {
@@ -142,6 +143,7 @@ const Login = () => {
         console.error(err);
         // snackbar variant 값 default | error | success | warning | info
         enqueueSnackbar(err.message, { variant: 'error' });
+        // eslint-disable-next-line
       }
     },
   });

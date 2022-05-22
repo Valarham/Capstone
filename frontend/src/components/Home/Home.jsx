@@ -659,7 +659,6 @@ const Home = () => {
         <GridToolbarExport
           csvOptions={{
             fileName: 'customerDataBase',
-            // delimiter: ';',
             utf8WithBom: true,
           }}
           printOptions={{

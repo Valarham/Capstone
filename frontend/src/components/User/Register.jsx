@@ -150,8 +150,7 @@ const Register = () => {
       // if (!signUp.email.match(emailRegex)) return alert('이메일을 정확히 입력하세요!');
       try {
         const res = await axios({
-          url: `http://15.165.215.193/api/register/check`,
-          //   url: `http://localhost:3000/api/register/check`,
+          url: `/api/register/check`,
           //   params: { email: signUp.email },
           headers: {
             //Authorization: `Basic ${TOKEN}`,
@@ -180,7 +179,7 @@ const Register = () => {
         const res = await axios({
           //body: JSON.stringify(values),
           //   url: `http://112.169.87.213:3000/api/register`,
-          url: `http://15.165.215.193/api/register`,
+          url: `/api/register`,
           //   url: `http://localhost:3000/api/login`,
           headers: {
             //Authorization: `Basic ${TOKEN}`,
