@@ -7,8 +7,8 @@ import { Routes, Switch, Route, useLocation, Navigate, useRoutes } from 'react-r
 import { loadUser } from './actions/userAction';
 import { useEffect } from 'react';
 //import { useDispatch } from 'react-redux';
-import PublicRoute from './Routes/PublicRoute';
-import ProtectedRoute from './Routes/ProtectedRoute';
+// import PublicRoute from './Routes/PublicRoute';
+// import ProtectedRoute from './Routes/ProtectedRoute';
 import Home from './components/Home/Home';
 import NotFound from './components/NotFound';
 import DetailStore from './components/DetailStore/DetailStore';

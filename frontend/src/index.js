@@ -12,7 +12,7 @@ import { BaseOptionChartStyle } from './components/Home/Dashboard/chart/BaseOpti
 // theme
 import ThemeProvider from './theme';
 import axios from 'axios';
-axios.defaults.baseURL = 'http://15.165.215.193s';
+axios.defaults.baseURL = 'http://15.165.215.193';
 axios.defaults.withCredentials = true;
 ReactDOM.render(
   <React.StrictMode>
