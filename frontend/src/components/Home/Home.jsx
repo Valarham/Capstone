@@ -331,7 +331,7 @@ const Home = () => {
     try {
       const res = await axios(
         {
-          url: `/api/`,
+          url: `/api/dashboard`,
           headers: {
             'content-Type': 'application/json',
           },
@@ -383,14 +383,14 @@ const Home = () => {
 
   const initialRows = [
     {
-      id: '',
+      id: info.store_code,
       store_name: info.store_name,
       telephone: info.telephone,
-      sub_category: info.sub_category,
+      sub_category: info.cat_3,
       rating: info.rating,
       review_count: info.review_count,
       isnew: info.isnew,
-      address: info.address,
+      address: info.rb_addr,
     },
     {
       id: 1,
@@ -827,7 +827,7 @@ const Home = () => {
               <StyledBox>
                 <SettingsPanel onApply={handleApplyClick} size={size} type={type} theme={getActiveTheme()} />
                 <Card>
-                  getRowId={(row) => row.info.store_code},
+                  getRowId={(row) => row.info.store_no},
                   <DataGridComponent
                     onApply={handleApplyClick}
                     columns={columns}
