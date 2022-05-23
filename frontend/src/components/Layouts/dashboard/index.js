@@ -38,33 +38,32 @@ const DashboardLayout = () => {
   const [open, setOpen] = useState(false);
   const [ping, setPing] = useState(false);
 
-  const getPing = useCallback(async () => {
-    try {
-      const { data } = await axios.get(`/api/ping`);
-      setPing(data);
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
-  useEffect(() => {
-    getPing();
-    return () => {
-      setPing(false);
-    };
-  }, []);
+  //   const getPing = useCallback(async () => {
+  //     try {
+  //       const { data } = await axios.get(`/api/ping`);
+  //       setPing(data);
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   }, []);
+  //   useEffect(() => {
+  //     getPing();
+  //     return () => {
+  //       setPing(false);
+  //     };
+  //   }, []);
 
   return (
     <>
-      {ping && (
-        <RootStyle>
-          <DashboardNavbar onOpenSidebar={() => setOpen(true)} />
-          <DashboardSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
-          <MainStyle>
-            <Outlet />
-          </MainStyle>
-        </RootStyle>
-      )}
-      {!ping && <Typography>서버 연결 불가</Typography>}
+      {/* {ping && ( */}
+      <RootStyle>
+        <DashboardNavbar onOpenSidebar={() => setOpen(true)} />
+        <DashboardSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
+        <MainStyle>
+          <Outlet />
+        </MainStyle>
+      </RootStyle>
+      {/* )}{!ping && <Typography>서버 연결 불가</Typography>} */}
     </>
   );
 };

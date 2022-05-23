@@ -76,129 +76,8 @@ import MetaData from '../Layouts/MetaData';
 import DetailStore from '../DetailStore/DetailStore';
 import { Navigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-const initialRows = [
-  {
-    id: 1,
-    store_name: '망원동티라미수 익선동점',
-    telephone: '02-745-9446',
-    sub_category: '제과,베이커리',
-    rating: '3.9',
-    review_count: '37',
-    isnew: true,
-    address: '서울 종로구 수표로28길 22',
-  },
-  {
-    id: 2,
-    store_name: '하이버',
-    telephone: '02-6015-7988',
-    sub_category: '제과,베이커리',
-    rating: '3.7',
-    review_count: '43',
-    isnew: false,
-    address: '서울 종로구 옥인6길 2',
-  },
-  {
-    id: 3,
-    store_name: '안국153',
-    telephone: '02-733-1530',
-    sub_category: '제과,베이커리',
-    rating: '2.7',
-    review_count: '30',
-    isnew: true,
-    address: '서울 종로구 율곡로 51 1층',
-  },
-  {
-    id: 4,
-    store_name: '솔트24',
-    telephone: '02-744-9273',
-    sub_category: '제과,베이커리',
-    rating: '3.5',
-    review_count: '33',
-    isnew: false,
-    address: '서울 종로구 창경궁로 236 이화빌딩 1층',
-  },
-  {
-    id: 5,
-    store_name: '금상고로케 서촌마을점',
-    telephone: '02-725-3157',
-    sub_category: '제과,베이커리',
-    rating: '4.7',
-    review_count: '57',
-    isnew: true,
-    address: '서울 종로구 자하문로9길 24',
-  },
-  {
-    id: 6,
-    store_name: '김용현 베이커리',
-    telephone: '02-3217-6800',
-    sub_category: '제과,베이커리',
-    rating: '4.2',
-    review_count: '17',
-    isnew: true,
-    address: '서울 종로구 자하문로 21 1층',
-  },
-  {
-    id: 7,
+import { useFormik, Form, FormikProvider } from 'formik';
 
-    store_name: '스코프 부암점',
-    telephone: '070-736-7629',
-    sub_category: '제과,베이커리',
-    rating: '3.8',
-    review_count: '160',
-    isnew: true,
-    address: '서울 종로구 필운대로 54',
-  },
-  {
-    id: 8,
-    store_name: '하이제씨',
-    telephone: '02-745-2468',
-    sub_category: '제과,베이커리',
-    rating: '4.1',
-    review_count: '24',
-    isnew: false,
-    address: '서울 종로구 동숭1길 12 1층',
-  },
-  {
-    id: 9,
-    store_name: '아우어베이커리 광화문디팰리스점',
-    telephone: '02-737-0050',
-    sub_category: '제과,베이커리',
-    rating: '4.1',
-    review_count: '21',
-    isnew: true,
-    address: '서울 종로구 새문안로2길 10 디팰리스 1층 103호',
-  },
-  {
-    id: 10,
-    store_name: '우드앤브릭 타워8점',
-    telephone: '02-6226-8211',
-    sub_category: '제과,베이커리',
-    rating: '2.2',
-    review_count: '21',
-    isnew: true,
-    address: '서울 종로구 종로5길 7 타워8 1층 118~119',
-  },
-  {
-    id: 11,
-    store_name: '아티장크로아상',
-    telephone: '02-741-3050',
-    sub_category: '제과,베이커리',
-    rating: '4.3',
-    review_count: '40',
-    isnew: false,
-    address: '서울 종로구 계동길 51 1층',
-  },
-  {
-    id: 12,
-    store_name: '푸하하크림빵 익선동',
-    telephone: '02-762-6003',
-    sub_category: '제과,베이커리',
-    rating: '3.5',
-    review_count: '15',
-    isnew: false,
-    address: '서울 종로구 돈화문로11길 34-3',
-  },
-];
 const TABLE_HEAD = [
   { id: 'store_name', label: '매장이름', alignRight: false },
   { id: 'telephone', label: '대표번호', alignRight: false },
@@ -445,12 +324,197 @@ SettingsPanel.propTypes = {
 
 // 메인 대시보드 부분
 const Home = () => {
-  const [rows, setRows] = React.useState(initialRows);
   const [info, setInfo] = useState([]);
-  // 고유 값으로 사용될 id 변수
-  const nextId = useRef(100);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+  const get_data = async () => {
+    try {
+      const res = await axios(
+        {
+          url: `/api/`,
+          headers: {
+            'content-Type': 'application/json',
+          },
+          method: 'GET',
+          data: JSON.stringify(),
+        },
+        { withCredentials: true },
+      );
+      console.log(res);
+      setInfo(res.data);
+      enqueueSnackbar(res.data.message, { variant: 'success' });
+    } catch (err) {
+      console.error(err);
+      // snackbar variant 값 default | error | success | warning | info
+      enqueueSnackbar(err.message, { variant: 'error' });
+    }
+  };
+  const formik = useFormik({
+    onSubmit: async (values) => {
+      try {
+        const res = await axios(
+          {
+            url: `/api/query`,
+            headers: {
+              'content-Type': 'application/json',
+            },
+            method: 'GET',
+            data: JSON.stringify(values),
+          },
+          { withCredentials: true },
+        );
+        console.log(res);
+        setRows(res.data);
+        enqueueSnackbar(res.data.message, { variant: 'success' });
+      } catch (err) {
+        console.error(err);
+        // snackbar variant 값 default | error | success | warning | info
+        enqueueSnackbar(err.message, { variant: 'error' });
+      }
+    },
+  });
+  useEffect(() => {
+    get_data();
+    return () => {
+      setRows();
+    };
+  }, []);
+  const [search_rows, setsearch_Rows] = useState([]);
+
+  const initialRows = [
+    {
+      id: '',
+      store_name: info.store_name,
+      telephone: info.telephone,
+      sub_category: info.sub_category,
+      rating: info.rating,
+      review_count: info.review_count,
+      isnew: info.isnew,
+      address: info.address,
+    },
+    {
+      id: 1,
+      store_name: '망원동티라미수 익선동점',
+      telephone: '02-745-9446',
+      sub_category: '제과,베이커리',
+      rating: '3.9',
+      review_count: '37',
+      isnew: true,
+      address: '서울 종로구 수표로28길 22',
+    },
+    {
+      id: 2,
+      store_name: '하이버',
+      telephone: '02-6015-7988',
+      sub_category: '제과,베이커리',
+      rating: '3.7',
+      review_count: '43',
+      isnew: false,
+      address: '서울 종로구 옥인6길 2',
+    },
+    {
+      id: 3,
+      store_name: '안국153',
+      telephone: '02-733-1530',
+      sub_category: '제과,베이커리',
+      rating: '2.7',
+      review_count: '30',
+      isnew: true,
+      address: '서울 종로구 율곡로 51 1층',
+    },
+    {
+      id: 4,
+      store_name: '솔트24',
+      telephone: '02-744-9273',
+      sub_category: '제과,베이커리',
+      rating: '3.5',
+      review_count: '33',
+      isnew: false,
+      address: '서울 종로구 창경궁로 236 이화빌딩 1층',
+    },
+    {
+      id: 5,
+      store_name: '금상고로케 서촌마을점',
+      telephone: '02-725-3157',
+      sub_category: '제과,베이커리',
+      rating: '4.7',
+      review_count: '57',
+      isnew: true,
+      address: '서울 종로구 자하문로9길 24',
+    },
+    {
+      id: 6,
+      store_name: '김용현 베이커리',
+      telephone: '02-3217-6800',
+      sub_category: '제과,베이커리',
+      rating: '4.2',
+      review_count: '17',
+      isnew: true,
+      address: '서울 종로구 자하문로 21 1층',
+    },
+    {
+      id: 7,
+
+      store_name: '스코프 부암점',
+      telephone: '070-736-7629',
+      sub_category: '제과,베이커리',
+      rating: '3.8',
+      review_count: '160',
+      isnew: true,
+      address: '서울 종로구 필운대로 54',
+    },
+    {
+      id: 8,
+      store_name: '하이제씨',
+      telephone: '02-745-2468',
+      sub_category: '제과,베이커리',
+      rating: '4.1',
+      review_count: '24',
+      isnew: false,
+      address: '서울 종로구 동숭1길 12 1층',
+    },
+    {
+      id: 9,
+      store_name: '아우어베이커리 광화문디팰리스점',
+      telephone: '02-737-0050',
+      sub_category: '제과,베이커리',
+      rating: '4.1',
+      review_count: '21',
+      isnew: true,
+      address: '서울 종로구 새문안로2길 10 디팰리스 1층 103호',
+    },
+    {
+      id: 10,
+      store_name: '우드앤브릭 타워8점',
+      telephone: '02-6226-8211',
+      sub_category: '제과,베이커리',
+      rating: '2.2',
+      review_count: '21',
+      isnew: true,
+      address: '서울 종로구 종로5길 7 타워8 1층 118~119',
+    },
+    {
+      id: 11,
+      store_name: '아티장크로아상',
+      telephone: '02-741-3050',
+      sub_category: '제과,베이커리',
+      rating: '4.3',
+      review_count: '40',
+      isnew: false,
+      address: '서울 종로구 계동길 51 1층',
+    },
+    {
+      id: 12,
+      store_name: '푸하하크림빵 익선동',
+      telephone: '02-762-6003',
+      sub_category: '제과,베이커리',
+      rating: '3.5',
+      review_count: '15',
+      isnew: false,
+      address: '서울 종로구 돈화문로11길 34-3',
+    },
+  ];
+  const [rows, setRows] = useState(initialRows);
 
   const storeCompany = React.useCallback(
     (id) => () => {
@@ -728,6 +792,7 @@ const Home = () => {
     );
   }
   const DataGridComponent = isAntDesign ? StyledDataGrid : DataGridPro;
+  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   return (
     <>
@@ -762,10 +827,12 @@ const Home = () => {
               <StyledBox>
                 <SettingsPanel onApply={handleApplyClick} size={size} type={type} theme={getActiveTheme()} />
                 <Card>
+                  getRowId={(row) => row.info.store_code},
                   <DataGridComponent
                     onApply={handleApplyClick}
                     columns={columns}
                     rows={rows}
+                    getRowId={(row) => row.id}
                     components={{
                       LoadingOverlay: LinearProgress,
                       Toolbar: CustomToolbar,
