@@ -1,20 +1,27 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import InputLabel from '@mui/material/InputLabel';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-
+import { useState, useCallback, useEffect, useRef } from 'react';
+// material
+import {
+  Box,
+  Button,
+  FormControl,
+  OutlinedInput,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  InputLabel,
+  MenuItem,
+  Select,
+} from '@mui/material';
+import axios from 'axios';
 export default function DialogSelect() {
+  const [info_addr1, setaddrInfo1] = useState([]);
+  const [info_addr2, setaddrInfo2] = useState([]);
+  const [info_addr3, setaddrInfo3] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [addr, setAddr] = React.useState('');
-
+  const [loading, setLoading] = React.useState(false);
   const handleChange = (event) => {
     setAddr(Number(event.target.value) || '');
   };
@@ -28,10 +35,23 @@ export default function DialogSelect() {
       setOpen(false);
     }
   };
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get('/api/addr_1');
+      setaddrInfo1(res.data.results);
+    } catch (err) {
+      console.error(err);
+    }
+    setLoading(false);
+  };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <div>
-      <Button onClick={handleClickOpen}>Open select dialog</Button>
+      <Button onClick={handleClickOpen}>Open select 업종/지역</Button>
       <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
         <DialogTitle>Fill the form</DialogTitle>
         <DialogContent>
@@ -42,7 +62,7 @@ export default function DialogSelect() {
                 native
                 value={addr}
                 onChange={handleChange}
-                input={<OutlinedInput label="Age" id="demo-dialog-native" />}
+                input={<OutlinedInput label="addr" id="demo-dialog-native" />}
               >
                 <option aria-label="None" value="" />
                 <option value={10}>Ten</option>
@@ -57,7 +77,7 @@ export default function DialogSelect() {
                 id="demo-dialog-select"
                 value={addr}
                 onChange={handleChange}
-                input={<OutlinedInput label="Age" />}
+                input={<OutlinedInput label="addr" />}
               >
                 <MenuItem value="">
                   <em>None</em>

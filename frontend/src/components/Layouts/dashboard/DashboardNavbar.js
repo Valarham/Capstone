@@ -9,7 +9,7 @@ import Searchbar from '../../Layouts/dashboard/Searchbar';
 import AccountPopover from '../../Layouts/dashboard/AccountPopover';
 import LanguagePopover from '../../Layouts/dashboard/LanguagePopover';
 // import NotificationsPopover from './NotificationsPopover';
-
+import DialogSelect from './DialogSelect';
 // dashboard에서 navbar 출력 함수
 // ----------------------------------------------------------------------
 
@@ -45,13 +45,12 @@ export default function DashboardNavbar({ onOpenSidebar }) {
   return (
     <RootStyle>
       <ToolbarStyle>
+        <DialogSelect />
         <IconButton onClick={onOpenSidebar} sx={{ mr: 1, color: 'text.primary', display: { lg: 'none' } }}>
           <Iconify icon="eva:menu-2-fill" />
         </IconButton>
-
         <Searchbar />
         <Box sx={{ flexGrow: 1 }} />
-
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
           <LanguagePopover />
           {/* <NotificationsPopover /> */}

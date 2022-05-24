@@ -11,6 +11,7 @@ import axios from 'axios';
 import MenuPopover from '../../Home/Dashboard/MenuPopover';
 // mocks_
 import account from '../../../Mock/Account';
+
 // dashboard에서 오른쪽 상단에 표시될 User의 account 클릭 반응 및 출력 관련 함수
 // ----------------------------------------------------------------------
 // 아래의 내용 개발 안할 경우 지우기
