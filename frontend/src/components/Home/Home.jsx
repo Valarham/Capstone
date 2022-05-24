@@ -14,30 +14,28 @@ import {
   GridActionsCellItem,
 } from '@mui/x-data-grid';
 
-import SecurityIcon from '@mui/icons-material/Security';
 import { DataGridPro, GridToolbar } from '@mui/x-data-grid-pro';
 import { useDemoData } from '@mui/x-data-grid-generator';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import FormControl from '@mui/material/FormControl';
-import FormGroup from '@mui/material/FormGroup';
-import Button from '@mui/material/Button';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 
 // @mui
-import { useTheme } from '@mui/material/styles';
-
-import Box from '@mui/material/Box';
 import { filter } from 'lodash';
-import { styled } from '@mui/material/styles';
 import { Icon } from '@iconify/react';
 import axios from 'axios';
 // material
 import {
+  Box,
+  FormGroup,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
   Grid,
+  useTheme,
   Card,
+  styled,
   Table,
   Stack,
   Checkbox,
@@ -50,7 +48,6 @@ import {
   TablePagination,
 } from '@mui/material';
 // components
-//import Page from './Dashboard/Page'
 import Iconify from './Dashboard/Iconify';
 // sections
 import {
@@ -64,8 +61,7 @@ import {
   AppCurrentSubject,
   AppConversionRates,
 } from './Dashboard/@Dashboard/app';
-import { Link, useNavigate } from 'react-router-dom';
-// Recent market search
+
 // components
 import Scrollbar from './Dashboard/Scrollbar';
 import SearchNotFound from './Dashboard/SearchNotFound';
@@ -74,7 +70,6 @@ import { UserListHead, DashUserListToolbar, UserMoreMenu } from './Dashboard/use
 import USERLIST from '../../Mock/user';
 import MetaData from '../Layouts/MetaData';
 import DetailStore from '../DetailStore/DetailStore';
-import { Navigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { useFormik, Form, FormikProvider } from 'formik';
 
@@ -325,71 +320,31 @@ SettingsPanel.propTypes = {
 // 메인 대시보드 부분
 const Home = () => {
   const [info, setInfo] = useState([]);
-  const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar();
-  const get_data = async () => {
+  const [loading, setLoading] = React.useState(false);
+  const fetchData = async () => {
+    setLoading(true);
     try {
-      const res = await axios(
-        {
-          url: `/api/dashboard`,
-          headers: {
-            'content-Type': 'application/json',
-          },
-          method: 'GET',
-          data: JSON.stringify(),
-        },
-        { withCredentials: true },
-      );
-      console.log(res);
-      setInfo(res.data);
-      enqueueSnackbar(res.data.message, { variant: 'success' });
+      const res = await axios.get('/api/dashboard');
+      setInfo(res.data.results);
     } catch (err) {
       console.error(err);
-      // snackbar variant 값 default | error | success | warning | info
-      enqueueSnackbar(err.message, { variant: 'error' });
     }
+    setLoading(false);
   };
-  const formik = useFormik({
-    onSubmit: async (values) => {
-      try {
-        const res = await axios(
-          {
-            url: `/api/query`,
-            headers: {
-              'content-Type': 'application/json',
-            },
-            method: 'GET',
-            data: JSON.stringify(values),
-          },
-          { withCredentials: true },
-        );
-        console.log(res);
-        setRows(res.data);
-        enqueueSnackbar(res.data.message, { variant: 'success' });
-      } catch (err) {
-        console.error(err);
-        // snackbar variant 값 default | error | success | warning | info
-        enqueueSnackbar(err.message, { variant: 'error' });
-      }
-    },
-  });
-  useEffect(() => {
-    get_data();
-    return () => {
-      setRows();
-    };
-  }, []);
-  const [search_rows, setsearch_Rows] = useState([]);
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+  console.log(info[0]);
   const initialRows = [
     {
-      id: info.store_code,
+      id: info.store_no,
       store_name: info.store_name,
       telephone: info.telephone,
       sub_category: info.cat_3,
       rating: info.rating,
       review_count: info.review_count,
-      isnew: info.isnew,
+      isnew: true,
       address: info.rb_addr,
     },
     {
@@ -454,7 +409,6 @@ const Home = () => {
     },
     {
       id: 7,
-
       store_name: '스코프 부암점',
       telephone: '070-736-7629',
       sub_category: '제과,베이커리',
@@ -514,7 +468,33 @@ const Home = () => {
       address: '서울 종로구 돈화문로11길 34-3',
     },
   ];
+
+  const { enqueueSnackbar } = useSnackbar();
   const [rows, setRows] = useState(initialRows);
+  const formik = useFormik({
+    onSubmit: async (values) => {
+      try {
+        const res = await axios(
+          {
+            url: `/api/query`,
+            headers: {
+              'content-Type': 'application/json',
+            },
+            method: 'GET',
+            data: JSON.stringify(values),
+          },
+          { withCredentials: true },
+        );
+        console.log(res);
+        setRows(res.data);
+        enqueueSnackbar(res.data.message, { variant: 'success' });
+      } catch (err) {
+        console.error(err);
+        // snackbar variant 값 default | error | success | warning | info
+        enqueueSnackbar(err.message, { variant: 'error' });
+      }
+    },
+  });
 
   const storeCompany = React.useCallback(
     (id) => () => {
@@ -524,6 +504,7 @@ const Home = () => {
     },
     [],
   );
+
   // 칼럼 데이터
   const columns = React.useMemo(
     () => [
@@ -541,6 +522,7 @@ const Home = () => {
         width: 300,
         alignRight: false,
         pinnable: false,
+        value: rows.store_no,
       },
       {
         field: 'telephone',
@@ -549,6 +531,7 @@ const Home = () => {
         width: 110,
         alignRight: false,
         pinnable: false,
+        value: rows.telephone,
       },
       {
         field: 'sub_category',
@@ -557,6 +540,7 @@ const Home = () => {
         width: 150,
         alignRight: false,
         pinnable: false,
+        value: rows.cat_3,
       },
       {
         field: 'rating',
@@ -564,6 +548,7 @@ const Home = () => {
         type: 'number',
         width: 70,
         alignRight: false,
+        value: rows.rating,
       },
       {
         field: 'review_count',
@@ -571,6 +556,7 @@ const Home = () => {
         type: 'number',
         width: 85,
         alignRight: false,
+        value: rows.review_count,
       },
       {
         field: 'isnew',
@@ -578,6 +564,7 @@ const Home = () => {
         type: 'boolean',
         width: 90,
         alignRight: false,
+        value: rows.isnew,
       },
       {
         field: 'address',
@@ -586,6 +573,7 @@ const Home = () => {
         width: 380,
         alignRight: false,
         pinnable: false,
+        value: rows.address,
       },
       {
         field: 'actions',
@@ -599,6 +587,7 @@ const Home = () => {
     ],
     [storeCompany],
   );
+  const [init_rows, setinitRows] = useState(initialRows);
   const theme = useTheme();
   const [page, setPage] = useState(0);
   // 정렬
@@ -824,132 +813,134 @@ const Home = () => {
                   최근 매장 검색
                 </Typography>
               </Stack>
-              <StyledBox>
-                <SettingsPanel onApply={handleApplyClick} size={size} type={type} theme={getActiveTheme()} />
-                <Card>
-                  getRowId={(row) => row.info.store_no},
-                  <DataGridComponent
-                    onApply={handleApplyClick}
-                    columns={columns}
-                    rows={rows}
-                    getRowId={(row) => row.id}
-                    components={{
-                      LoadingOverlay: LinearProgress,
-                      Toolbar: CustomToolbar,
-                      NoRowsOverlay: CustomNoRowsOverlay,
-                    }}
-                    componentsProps={{
-                      toolbar: { showQuickFilter: true },
-                    }}
-                    checkboxSelection
-                    disableSelectionOnClick
-                    rowThreshold={0}
-                    initialState={{
-                      ...data.initialState,
-                      pinnedColumns: { left: ['__check__', 'store_name'] },
-                    }}
-                    {...pagination}
-                  />
-                  <DashUserListToolbar
-                    numSelected={selected.length}
-                    filterName={filterName}
-                    onFilter
-                    Name={handleFilterByName}
-                  />
-                  <Scrollbar>
-                    <TableContainer sx={{ minWidth: 800 }}>
-                      <Table>
-                        <UserListHead
-                          lang="ko"
-                          order={order}
-                          orderBy={orderBy}
-                          headLabel={TABLE_HEAD}
-                          rowCount={USERLIST.length}
-                          numSelected={selected.length}
-                          onRequestSort={handleRequestSort}
-                          onSelectAllClick={handleSelectAllClick}
-                        />
-                        <TableBody>
-                          {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                            const {
-                              store_code,
-                              store_name,
-                              telephone,
-                              sub_category,
-                              rating,
-                              review_count,
-                              isnew,
-                              address,
-                            } = row;
-                            const isItemSelected = selected.indexOf(store_name) !== -1;
-                            return (
-                              <TableRow
-                                hover
-                                key={store_code}
-                                tabIndex={-1}
-                                role="checkbox"
-                                selected={isItemSelected}
-                                aria-checked={isItemSelected}
-                              >
-                                <TableCell padding="checkbox">
-                                  <Checkbox
-                                    checked={isItemSelected}
-                                    onChange={(event) => handleClick(event, store_name)}
-                                  />
-                                </TableCell>
-                                <TableCell component="th" scope="row" padding="none">
-                                  <Stack direction="row" alignItems="center" spacing={2}>
-                                    {/* <Avatar alt={name} src={avatarUrl} />
+              <FormikProvider value={formik}>
+                <StyledBox>
+                  <SettingsPanel onApply={handleApplyClick} size={size} type={type} theme={getActiveTheme()} />
+                  <Card>
+                    <DataGridComponent
+                      //   loading={loading}
+                      onApply={handleApplyClick}
+                      columns={columns}
+                      rows={rows}
+                      getRowId={(row) => row.id}
+                      components={{
+                        LoadingOverlay: LinearProgress,
+                        Toolbar: CustomToolbar,
+                        NoRowsOverlay: CustomNoRowsOverlay,
+                      }}
+                      componentsProps={{
+                        toolbar: { showQuickFilter: true },
+                      }}
+                      checkboxSelection
+                      disableSelectionOnClick
+                      rowThreshold={0}
+                      initialState={{
+                        ...data.initialState,
+                        pinnedColumns: { left: ['__check__', 'store_name'] },
+                      }}
+                      {...pagination}
+                    />
+                    <DashUserListToolbar
+                      numSelected={selected.length}
+                      filterName={filterName}
+                      onFilter
+                      Name={handleFilterByName}
+                    />
+                    <Scrollbar>
+                      <TableContainer sx={{ minWidth: 800 }}>
+                        <Table>
+                          <UserListHead
+                            lang="ko"
+                            order={order}
+                            orderBy={orderBy}
+                            headLabel={TABLE_HEAD}
+                            rowCount={USERLIST.length}
+                            numSelected={selected.length}
+                            onRequestSort={handleRequestSort}
+                            onSelectAllClick={handleSelectAllClick}
+                          />
+                          <TableBody>
+                            {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                              const {
+                                store_code,
+                                store_name,
+                                telephone,
+                                sub_category,
+                                rating,
+                                review_count,
+                                isnew,
+                                address,
+                              } = row;
+                              const isItemSelected = selected.indexOf(store_name) !== -1;
+                              return (
+                                <TableRow
+                                  hover
+                                  key={store_code}
+                                  tabIndex={-1}
+                                  role="checkbox"
+                                  selected={isItemSelected}
+                                  aria-checked={isItemSelected}
+                                >
+                                  <TableCell padding="checkbox">
+                                    <Checkbox
+                                      checked={isItemSelected}
+                                      onChange={(event) => handleClick(event, store_name)}
+                                    />
+                                  </TableCell>
+                                  <TableCell component="th" scope="row" padding="none">
+                                    <Stack direction="row" alignItems="center" spacing={2}>
+                                      {/* <Avatar alt={name} src={avatarUrl} />
                                   <Typography variant="subtitle2" noWrap>
                                     {name}
                                   </Typography> */}
-                                  </Stack>
-                                </TableCell>
-                                <TableCell align="left">{store_name}</TableCell>
-                                <TableCell align="left">{telephone}</TableCell>
-                                <TableCell align="left">{sub_category}</TableCell>
-                                <TableCell align="left">{rating}</TableCell>
-                                <TableCell align="left">{review_count}</TableCell>
-                                <TableCell align="left">
-                                  {isnew ? <Icon icon="bi:check" width="25" height="25" /> : ''}
-                                </TableCell>
-                                <TableCell align="left">{address}</TableCell>
-                                <TableCell align="left"></TableCell>
-                                <TableCell align="right">
-                                  <UserMoreMenu />
+                                    </Stack>
+                                  </TableCell>
+                                  <TableCell align="left">{store_name}</TableCell>
+                                  <TableCell align="left">{telephone}</TableCell>
+                                  <TableCell align="left">{sub_category}</TableCell>
+                                  <TableCell align="left">{rating}</TableCell>
+                                  <TableCell align="left">{review_count}</TableCell>
+                                  <TableCell align="left">
+                                    {isnew ? <Icon icon="bi:check" width="25" height="25" /> : ''}
+                                  </TableCell>
+                                  <TableCell align="left">{address}</TableCell>
+                                  <TableCell align="left"></TableCell>
+                                  <TableCell align="right">
+                                    <UserMoreMenu />
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })}
+                            {emptyRows > 0 && (
+                              <TableRow style={{ height: 53 * emptyRows }}>
+                                <TableCell colSpan={6} />
+                              </TableRow>
+                            )}
+                          </TableBody>
+                          {isUserNotFound && (
+                            <TableBody>
+                              <TableRow>
+                                <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                                  <SearchNotFound searchQuery={filterName} />
                                 </TableCell>
                               </TableRow>
-                            );
-                          })}
-                          {emptyRows > 0 && (
-                            <TableRow style={{ height: 53 * emptyRows }}>
-                              <TableCell colSpan={6} />
-                            </TableRow>
+                            </TableBody>
                           )}
-                        </TableBody>
-                        {isUserNotFound && (
-                          <TableBody>
-                            <TableRow>
-                              <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                                <SearchNotFound searchQuery={filterName} />
-                              </TableCell>
-                            </TableRow>
-                          </TableBody>
-                        )}
-                      </Table>
-                    </TableContainer>
-                  </Scrollbar>
-                  <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={USERLIST.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </Card>
-              </StyledBox>
+                        </Table>
+                      </TableContainer>
+                    </Scrollbar>
+                    <TablePagination
+                      rowsPerPageOptions={[5, 10, 25]}
+                      component="div"
+                      count={USERLIST.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                  </Card>
+                </StyledBox>
+              </FormikProvider>
             </Container>
             <Grid item xs={12} md={6} lg={8}>
               <AppWebsiteVisits

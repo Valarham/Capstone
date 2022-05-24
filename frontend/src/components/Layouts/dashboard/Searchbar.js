@@ -6,7 +6,7 @@ import { Input, Slide, Button, IconButton, InputAdornment, ClickAwayListener } f
 import Iconify from '../../Home/Dashboard/Iconify';
 // dashboard search창 기능-> 아직 기능 없음 -> 카테고리page로 이동시키는 기능 추가하기
 // ----------------------------------------------------------------------
-
+import DialogSelect from './DialogSelect';
 const APPBAR_MOBILE = 64;
 const APPBAR_DESKTOP = 92;
 
@@ -68,6 +68,7 @@ export default function Searchbar() {
               }
               sx={{ mr: 1, fontWeight: 'fontWeightBold' }}
             />
+            <DialogSelect />
             <Button lang="ko" variant="contained" onClick={handleClose}>
               검색
               {/* Search */}
