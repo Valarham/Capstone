@@ -57,7 +57,7 @@ export default function DialogSelect() {
         <DialogContent>
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel htmlFor="demo-dialog-native">Addr</InputLabel>
+              <InputLabel htmlFor="demo-dialog-native">Addr1</InputLabel>
               <Select
                 native
                 value={addr}
@@ -71,7 +71,24 @@ export default function DialogSelect() {
               </Select>
             </FormControl>
             <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel id="demo-dialog-select-label">Addr</InputLabel>
+              <InputLabel id="demo-dialog-select-label">Addr2</InputLabel>
+              <Select
+                labelId="demo-dialog-select-label"
+                id="demo-dialog-select"
+                value={addr}
+                onChange={handleChange}
+                input={<OutlinedInput label="addr" />}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={10}>Ten</MenuItem>
+                <MenuItem value={20}>Twenty</MenuItem>
+                <MenuItem value={30}>Thirty</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel id="demo-dialog-select-label">Addr2</InputLabel>
               <Select
                 labelId="demo-dialog-select-label"
                 id="demo-dialog-select"

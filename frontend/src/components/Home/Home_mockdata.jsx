@@ -1,3 +1,26 @@
+//   const init = info.map((info) => [
+//     {
+//       id: <Typography>{info.store_no}</Typography>,
+//       store_name: <Typography>{info.store_name}</Typography>,
+//       telephone: <Typography>{info.telephone}</Typography>,
+//       sub_category: <Typography>{info.cat_3}</Typography>,
+//       rating: <Typography>{info.rating}</Typography>,
+//       review_count: <Typography>{info.review_count}</Typography>,
+//       isnew: <Typography>{info.isnew}</Typography>,
+//       address: <Typography>{info.rb_addr}</Typography>,
+//     },
+//   ]);
+//   const initialRows = info.map((info) => [
+// {
+//   id: info.map((info) => <Typography>{info.store_no}</Typography>),
+//   store_name: info.map((info) => <Typography>{info.store_name}</Typography>),
+//   telephone: info.map((info) => <Typography>{info.telephone}</Typography>),
+//   sub_category: info.map((info) => <Typography>{info.cat_3}</Typography>),
+//   rating: info.map((info) => <Typography>{info.rating}</Typography>),
+//   review_count: info.map((info) => <Typography>{info.review_count}</Typography>),
+//   isnew: info.map((info) => <Typography>{info.isnew}</Typography>),
+//   address: info.map((info) => <Typography>{info.rb_addr}</Typography>),
+// },
 // {
 //   id: 1,
 //   store_name: '망원동티라미수 익선동점',

@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import * as React from 'react';
 import { useState, useCallback, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { bool } from 'prop-types';
 import LinearProgress from '@mui/material/LinearProgress';
 import Menu from '@mui/material/Menu';
 import {
@@ -20,7 +20,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 
 // @mui
-import { filter } from 'lodash';
+import { filter, isBoolean } from 'lodash';
 import { Icon } from '@iconify/react';
 import axios from 'axios';
 // material
@@ -320,11 +320,12 @@ SettingsPanel.propTypes = {
 // 메인 대시보드 부분
 const Home = () => {
   const [info, setInfo] = useState([]);
+
   const [loading, setLoading] = React.useState(false);
   const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('/api/dashboard');
+      const res = await axios.get(`/api/dashboard`);
       setInfo(res.data.results);
     } catch (err) {
       console.error(err);
@@ -335,20 +336,27 @@ const Home = () => {
   useEffect(() => {
     fetchData();
   }, []);
-  console.log(info[0]);
+  console.log(info);
+
+  let init = info.map((info) => {
+    return (
+      <>
+        <TableCell key={info.store_no}>{info.store_no}</TableCell>
+        <TableCell key={info.store_name}>{info.store_name}</TableCell>
+        <TableCell key={info.telephone}>{info.telephone}</TableCell>
+        <TableCell key={info.cat_3}>{info.cat_3}</TableCell>
+        <TableCell key={info.rating}>{info.rating}</TableCell>
+        <TableCell key={info.review_count}>{info.review_count}</TableCell>
+        <TableCell>{true}</TableCell>
+        <TableCell key={info.rb_addr}>{info.rb_addr}</TableCell>
+      </>
+    );
+  });
+
   const initialRows = [
+    ...init,
     {
-      id: info.store_no,
-      store_name: info.store_name,
-      telephone: info.telephone,
-      sub_category: info.cat_3,
-      rating: info.rating,
-      review_count: info.review_count,
-      isnew: true,
-      address: info.rb_addr,
-    },
-    {
-      id: 1,
+      store_no: 101,
       store_name: '망원동티라미수 익선동점',
       telephone: '02-745-9446',
       sub_category: '제과,베이커리',
@@ -358,7 +366,7 @@ const Home = () => {
       address: '서울 종로구 수표로28길 22',
     },
     {
-      id: 2,
+      store_no: 102,
       store_name: '하이버',
       telephone: '02-6015-7988',
       sub_category: '제과,베이커리',
@@ -368,7 +376,7 @@ const Home = () => {
       address: '서울 종로구 옥인6길 2',
     },
     {
-      id: 3,
+      store_no: 103,
       store_name: '안국153',
       telephone: '02-733-1530',
       sub_category: '제과,베이커리',
@@ -378,7 +386,7 @@ const Home = () => {
       address: '서울 종로구 율곡로 51 1층',
     },
     {
-      id: 4,
+      store_no: 104,
       store_name: '솔트24',
       telephone: '02-744-9273',
       sub_category: '제과,베이커리',
@@ -388,7 +396,7 @@ const Home = () => {
       address: '서울 종로구 창경궁로 236 이화빌딩 1층',
     },
     {
-      id: 5,
+      store_no: 105,
       store_name: '금상고로케 서촌마을점',
       telephone: '02-725-3157',
       sub_category: '제과,베이커리',
@@ -398,7 +406,7 @@ const Home = () => {
       address: '서울 종로구 자하문로9길 24',
     },
     {
-      id: 6,
+      store_no: 106,
       store_name: '김용현 베이커리',
       telephone: '02-3217-6800',
       sub_category: '제과,베이커리',
@@ -408,7 +416,7 @@ const Home = () => {
       address: '서울 종로구 자하문로 21 1층',
     },
     {
-      id: 7,
+      store_no: 107,
       store_name: '스코프 부암점',
       telephone: '070-736-7629',
       sub_category: '제과,베이커리',
@@ -418,7 +426,7 @@ const Home = () => {
       address: '서울 종로구 필운대로 54',
     },
     {
-      id: 8,
+      store_no: 108,
       store_name: '하이제씨',
       telephone: '02-745-2468',
       sub_category: '제과,베이커리',
@@ -428,7 +436,7 @@ const Home = () => {
       address: '서울 종로구 동숭1길 12 1층',
     },
     {
-      id: 9,
+      store_no: 109,
       store_name: '아우어베이커리 광화문디팰리스점',
       telephone: '02-737-0050',
       sub_category: '제과,베이커리',
@@ -438,7 +446,7 @@ const Home = () => {
       address: '서울 종로구 새문안로2길 10 디팰리스 1층 103호',
     },
     {
-      id: 10,
+      store_no: 110,
       store_name: '우드앤브릭 타워8점',
       telephone: '02-6226-8211',
       sub_category: '제과,베이커리',
@@ -448,7 +456,7 @@ const Home = () => {
       address: '서울 종로구 종로5길 7 타워8 1층 118~119',
     },
     {
-      id: 11,
+      store_no: 11,
       store_name: '아티장크로아상',
       telephone: '02-741-3050',
       sub_category: '제과,베이커리',
@@ -458,7 +466,7 @@ const Home = () => {
       address: '서울 종로구 계동길 51 1층',
     },
     {
-      id: 12,
+      store_no: 112,
       store_name: '푸하하크림빵 익선동',
       telephone: '02-762-6003',
       sub_category: '제과,베이커리',
@@ -468,7 +476,7 @@ const Home = () => {
       address: '서울 종로구 돈화문로11길 34-3',
     },
   ];
-
+  console.log(initialRows);
   const { enqueueSnackbar } = useSnackbar();
   const [rows, setRows] = useState(initialRows);
   const formik = useFormik({
@@ -522,7 +530,6 @@ const Home = () => {
         width: 300,
         alignRight: false,
         pinnable: false,
-        value: rows.store_no,
       },
       {
         field: 'telephone',
@@ -531,7 +538,6 @@ const Home = () => {
         width: 110,
         alignRight: false,
         pinnable: false,
-        value: rows.telephone,
       },
       {
         field: 'sub_category',
@@ -540,7 +546,6 @@ const Home = () => {
         width: 150,
         alignRight: false,
         pinnable: false,
-        value: rows.cat_3,
       },
       {
         field: 'rating',
@@ -548,7 +553,6 @@ const Home = () => {
         type: 'number',
         width: 70,
         alignRight: false,
-        value: rows.rating,
       },
       {
         field: 'review_count',
@@ -556,7 +560,6 @@ const Home = () => {
         type: 'number',
         width: 85,
         alignRight: false,
-        value: rows.review_count,
       },
       {
         field: 'isnew',
@@ -564,7 +567,6 @@ const Home = () => {
         type: 'boolean',
         width: 90,
         alignRight: false,
-        value: rows.isnew,
       },
       {
         field: 'address',
@@ -573,7 +575,6 @@ const Home = () => {
         width: 380,
         alignRight: false,
         pinnable: false,
-        value: rows.address,
       },
       {
         field: 'actions',
@@ -587,7 +588,7 @@ const Home = () => {
     ],
     [storeCompany],
   );
-  const [init_rows, setinitRows] = useState(initialRows);
+
   const theme = useTheme();
   const [page, setPage] = useState(0);
   // 정렬
@@ -822,7 +823,7 @@ const Home = () => {
                       onApply={handleApplyClick}
                       columns={columns}
                       rows={rows}
-                      getRowId={(row) => row.id}
+                      getRowId={(row) => row.store_no}
                       components={{
                         LoadingOverlay: LinearProgress,
                         Toolbar: CustomToolbar,
