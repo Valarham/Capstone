@@ -39,7 +39,7 @@ Distributed under the aws ec2 License. [https://github.com/yousirong](https://gi
 If you would like to purchase a premium membership, contact us
 
 
-Email: diziyong@hufs.ac.kr
+diziyong@hufs.ac.kr
 
 
 201804546@hufs.ac.kr
