@@ -1,6 +1,8 @@
 import { faker } from '@faker-js/faker';
 import * as React from 'react';
 import { useState, useCallback, useEffect, useRef } from 'react';
+import axios from 'axios';
+import { useSnackbar } from 'notistack';
 import PropTypes, { bool } from 'prop-types';
 import LinearProgress from '@mui/material/LinearProgress';
 import Menu from '@mui/material/Menu';
@@ -22,7 +24,7 @@ import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 // @mui
 import { filter, isBoolean } from 'lodash';
 import { Icon } from '@iconify/react';
-import axios from 'axios';
+
 // material
 import {
   Box,
@@ -70,7 +72,6 @@ import { UserListHead, DashUserListToolbar, UserMoreMenu } from './Dashboard/use
 import USERLIST from '../../Mock/user';
 import MetaData from '../Layouts/MetaData';
 import DetailStore from '../DetailStore/DetailStore';
-import { useSnackbar } from 'notistack';
 import { useFormik, Form, FormikProvider } from 'formik';
 
 const TABLE_HEAD = [
@@ -320,40 +321,40 @@ SettingsPanel.propTypes = {
 // 메인 대시보드 부분
 const Home = () => {
   const [info, setInfo] = useState([]);
-
-  const [loading, setLoading] = React.useState(false);
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(`/api/dashboard`);
-      setInfo(res.data.results);
-    } catch (err) {
-      console.error(err);
-    }
-    setLoading(false);
-  };
-
+  const [loading, setLoading] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+  const aaa = 2;
   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get(`/api/dashboard`);
+        setInfo(res.data.results);
+        enqueueSnackbar('매장 데이터 전송 성공', { variant: 'success' });
+      } catch (err) {
+        console.error(err);
+        enqueueSnackbar(err.message, { variant: 'error' });
+      }
+      setLoading(false);
+    };
     fetchData();
-  }, []);
-  console.log(info);
+    console.log('로딩 처음');
+  }, [aaa]);
 
-  let init = info.map((info) => {
-    return (
-      <>
-        <TableCell key={info.store_no}>{info.store_no}</TableCell>
-        <TableCell key={info.store_name}>{info.store_name}</TableCell>
-        <TableCell key={info.telephone}>{info.telephone}</TableCell>
-        <TableCell key={info.cat_3}>{info.cat_3}</TableCell>
-        <TableCell key={info.rating}>{info.rating}</TableCell>
-        <TableCell key={info.review_count}>{info.review_count}</TableCell>
-        <TableCell>{true}</TableCell>
-        <TableCell key={info.rb_addr}>{info.rb_addr}</TableCell>
-      </>
-    );
+  let init = info.map((row) => {
+    return {
+      store_no: row.store_no,
+      store_name: row.store_name,
+      telephone: row.telephone,
+      sub_category: row.cat_3,
+      rating: row.rating,
+      review_count: row.review_count,
+      isnew: true,
+      address: row.rb_addr,
+    };
   });
-
-  const initialRows = [
+  let initialRows = [
+    // ...info,
     ...init,
     {
       store_no: 101,
@@ -361,7 +362,7 @@ const Home = () => {
       telephone: '02-745-9446',
       sub_category: '제과,베이커리',
       rating: '3.9',
-      review_count: '37',
+      review_count: 37,
       isnew: true,
       address: '서울 종로구 수표로28길 22',
     },
@@ -371,7 +372,7 @@ const Home = () => {
       telephone: '02-6015-7988',
       sub_category: '제과,베이커리',
       rating: '3.7',
-      review_count: '43',
+      review_count: 43,
       isnew: false,
       address: '서울 종로구 옥인6길 2',
     },
@@ -381,7 +382,7 @@ const Home = () => {
       telephone: '02-733-1530',
       sub_category: '제과,베이커리',
       rating: '2.7',
-      review_count: '30',
+      review_count: 30,
       isnew: true,
       address: '서울 종로구 율곡로 51 1층',
     },
@@ -391,7 +392,7 @@ const Home = () => {
       telephone: '02-744-9273',
       sub_category: '제과,베이커리',
       rating: '3.5',
-      review_count: '33',
+      review_count: 33,
       isnew: false,
       address: '서울 종로구 창경궁로 236 이화빌딩 1층',
     },
@@ -401,7 +402,7 @@ const Home = () => {
       telephone: '02-725-3157',
       sub_category: '제과,베이커리',
       rating: '4.7',
-      review_count: '57',
+      review_count: 57,
       isnew: true,
       address: '서울 종로구 자하문로9길 24',
     },
@@ -411,7 +412,7 @@ const Home = () => {
       telephone: '02-3217-6800',
       sub_category: '제과,베이커리',
       rating: '4.2',
-      review_count: '17',
+      review_count: 17,
       isnew: true,
       address: '서울 종로구 자하문로 21 1층',
     },
@@ -421,7 +422,7 @@ const Home = () => {
       telephone: '070-736-7629',
       sub_category: '제과,베이커리',
       rating: '3.8',
-      review_count: '160',
+      review_count: 160,
       isnew: true,
       address: '서울 종로구 필운대로 54',
     },
@@ -431,7 +432,7 @@ const Home = () => {
       telephone: '02-745-2468',
       sub_category: '제과,베이커리',
       rating: '4.1',
-      review_count: '24',
+      review_count: 24,
       isnew: false,
       address: '서울 종로구 동숭1길 12 1층',
     },
@@ -441,7 +442,7 @@ const Home = () => {
       telephone: '02-737-0050',
       sub_category: '제과,베이커리',
       rating: '4.1',
-      review_count: '21',
+      review_count: 21,
       isnew: true,
       address: '서울 종로구 새문안로2길 10 디팰리스 1층 103호',
     },
@@ -451,17 +452,17 @@ const Home = () => {
       telephone: '02-6226-8211',
       sub_category: '제과,베이커리',
       rating: '2.2',
-      review_count: '21',
+      review_count: 21,
       isnew: true,
       address: '서울 종로구 종로5길 7 타워8 1층 118~119',
     },
     {
-      store_no: 11,
+      store_no: 111,
       store_name: '아티장크로아상',
       telephone: '02-741-3050',
       sub_category: '제과,베이커리',
       rating: '4.3',
-      review_count: '40',
+      review_count: 40,
       isnew: false,
       address: '서울 종로구 계동길 51 1층',
     },
@@ -471,14 +472,19 @@ const Home = () => {
       telephone: '02-762-6003',
       sub_category: '제과,베이커리',
       rating: '3.5',
-      review_count: '15',
+      review_count: 15,
       isnew: false,
       address: '서울 종로구 돈화문로11길 34-3',
     },
   ];
-  console.log(initialRows);
-  const { enqueueSnackbar } = useSnackbar();
+
   const [rows, setRows] = useState(initialRows);
+
+  useEffect(() => {
+    setRows(initialRows);
+    console.log(initialRows);
+  }, []);
+
   const formik = useFormik({
     onSubmit: async (values) => {
       try {
@@ -550,7 +556,7 @@ const Home = () => {
       {
         field: 'rating',
         headerName: '평점',
-        type: 'number',
+        type: 'string',
         width: 70,
         alignRight: false,
       },
@@ -819,7 +825,7 @@ const Home = () => {
                   <SettingsPanel onApply={handleApplyClick} size={size} type={type} theme={getActiveTheme()} />
                   <Card>
                     <DataGridComponent
-                      //   loading={loading}
+                      loading={loading}
                       onApply={handleApplyClick}
                       columns={columns}
                       rows={rows}
