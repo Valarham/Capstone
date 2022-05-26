@@ -12,12 +12,12 @@ import { BaseOptionChartStyle } from './components/Home/Dashboard/chart/BaseOpti
 // theme
 import ThemeProvider from './theme';
 import axios from 'axios';
-axios.defaults.baseURL = 'http://112.169.87.213:3000';
-// axios.defaults.baseURL = 'http://15.165.215.193';
+//axios.defaults.baseURL = 'http://112.169.87.213:3000';
+axios.defaults.baseURL = 'http://15.165.215.193';
 // 리소스 접근 허용
-axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
+//axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
 // 서로 다른 도메인간 쿠키 전달 허용
-// axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = true;
 ReactDOM.render(
   <React.StrictMode>
     {/* <Provider store={store}> */}

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { alpha } from '@mui/material/styles';
@@ -70,20 +70,20 @@ export default function AccountPopover() {
           method: 'GET',
           data: JSON.stringify(values),
         });
-        console.log(res);
+        console.log(res.data);
         setUsers(res.data);
-        // alert(res.data.message);
         enqueueSnackbar(res.data.message, { variant: 'success' });
         //   setUserNo(res.data.user_no);
       } catch (err) {
-        //alert(err.message);
         console.error(err);
         // snackbar variant 값 default | error | success | warning | info
         enqueueSnackbar(err.message, { variant: 'error' });
       }
     },
   });
-
+  useEffect(() => {
+    console.log(users);
+  }, []);
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   return (
