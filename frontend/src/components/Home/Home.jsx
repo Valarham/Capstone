@@ -236,7 +236,6 @@ const StyledBox = styled(Box)(({ theme }) => ({
   },
 }));
 //최근 매장 검색 pagenation 하는 부분 -> apply 버튼
-// employee/market   // 출력 row 100... // page size 변경//theme변경
 function SettingsPanel(props) {
   const { onApply, type, size, theme } = props;
   const [sizeState, setSize] = React.useState(size);
@@ -323,7 +322,7 @@ const Home = () => {
   const [info, setInfo] = useState([]);
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  const aaa = 2;
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -339,7 +338,8 @@ const Home = () => {
     };
     fetchData();
     console.log('로딩 처음');
-  }, [aaa]);
+    // setLoading(false);
+  }, []);
 
   let init = info.map((row) => {
     return {

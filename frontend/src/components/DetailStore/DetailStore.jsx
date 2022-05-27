@@ -23,7 +23,7 @@ const StyledBox = styled(Card)(({ theme }) => ({
 
   bgcolor: 'background.paper',
   border: '2px solid #000',
-  margin: theme.spacing(2, 0, 2, 2),
+  //margin: theme.spacing(2, 0, 2, 2),
   boxShadow: 24,
   p: 4,
 }));

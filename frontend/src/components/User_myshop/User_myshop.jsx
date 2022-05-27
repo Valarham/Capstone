@@ -334,6 +334,7 @@ const User = () => {
 
   useEffect(() => {
     fetchData();
+    // setLoading(false);
   }, []);
 
   let init = info.map((row) => {
@@ -350,7 +351,29 @@ const User = () => {
     };
   });
 
-  let initialRows = [...init];
+  let initialRows = [
+    ...init,
+    {
+      store_no: 101,
+      store_name: '망원동티라미수 익선동점',
+      telephone: '02-745-9446',
+      sub_category: '제과,베이커리',
+      rating: '3.9',
+      review_count: 37,
+      isnew: true,
+      address: '서울 종로구 수표로28길 22',
+    },
+    {
+      store_no: 102,
+      store_name: '하이버',
+      telephone: '02-6015-7988',
+      sub_category: '제과,베이커리',
+      rating: '3.7',
+      review_count: 43,
+      isnew: false,
+      address: '서울 종로구 옥인6길 2',
+    },
+  ];
   const [rows, setRows] = useState(initialRows);
   useEffect(() => {
     setRows(initialRows);
