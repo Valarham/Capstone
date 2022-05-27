@@ -968,19 +968,19 @@ const Home = () => {
                 ]}
                 chartData={[
                   {
-                    name: 'Team A',
+                    name: '영업자',
                     type: 'column',
                     fill: 'solid',
                     data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
                   },
                   {
-                    name: 'Team B',
+                    name: '소상공인',
                     type: 'area',
                     fill: 'gradient',
                     data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
                   },
                   {
-                    name: 'Team C',
+                    name: '동접속자수',
                     type: 'line',
                     fill: 'solid',
                     data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
@@ -992,10 +992,10 @@ const Home = () => {
               <AppCurrentVisits
                 title="Current Visits"
                 chartData={[
-                  { label: 'America', value: 4344 },
-                  { label: 'Asia', value: 5435 },
-                  { label: 'Europe', value: 1443 },
-                  { label: 'Africa', value: 4443 },
+                  { label: '부산', value: 4344 },
+                  { label: '서울', value: 5435 },
+                  { label: '대전', value: 1443 },
+                  { label: '경기', value: 4443 },
                 ]}
                 chartColors={[
                   theme.palette.primary.main,
@@ -1007,7 +1007,7 @@ const Home = () => {
             </Grid>
             <Grid item xs={12} md={6} lg={8}>
               <AppConversionRates
-                title="Conversion Rates"
+                title="영업진행인기순"
                 subheader="(+43%) than last year"
                 chartData={[
                   { label: 'Italy', value: 400 },
@@ -1019,7 +1019,7 @@ const Home = () => {
                   { label: 'South Korea', value: 690 },
                   { label: 'Netherlands', value: 1100 },
                   { label: 'United States', value: 1200 },
-                  { label: 'United Kingdom', value: 1380 },
+                  { label: '', value: 1380 },
                 ]}
               />
             </Grid>

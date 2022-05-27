@@ -135,7 +135,7 @@ export default function DialogSelect() {
       setOpen(false);
     }
   };
-  const { errors, touched, dirty, handleReset, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, dirty, handleReset, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   return (
     <div>

@@ -84,7 +84,7 @@ export default function AccountPopover() {
   useEffect(() => {
     console.log(users);
   }, []);
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   return (
     <>
