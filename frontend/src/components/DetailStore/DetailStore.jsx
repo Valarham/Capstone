@@ -8,10 +8,13 @@ import FileOpenIcon from '@mui/icons-material/FileOpen';
 import { GridActionsCellItem } from '@mui/x-data-grid';
 import { useState } from 'react';
 import axios from 'axios';
+import { useSnackbar } from 'notistack';
 import { faker } from '@faker-js/faker';
 import { Grid, Card, Container, Typography, Stack } from '@mui/material';
 import DetailOrderline from './Detailsection/DetailOrderline';
 import DetailMenu from './Detailsection/DetailMenu';
+import { useFormik, Form, FormikProvider } from 'formik';
+
 const StyledBox = styled(Card)(({ theme }) => ({
   position: 'absolute',
   top: '45%',
@@ -29,36 +32,34 @@ const StyledBox = styled(Card)(({ theme }) => ({
 }));
 
 export default function DetailStore(props) {
-  const [board, setBoard] = useState({
-    store_name: '',
-    telephone: '',
-    sub_category: '',
-    rating: '',
-    review_count: '',
-    isnew: '',
-    address: '',
-  });
-
   const [open, setOpen] = React.useState(false);
   const handleOpen = (props) => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  //   useEffect(() => {
-  //     console.log(props);
-  //     getBoard(props.params.id);
-  //   }, []);
-
-  //   const getBoard = async (id) => {
-  //     const res = await axios.get(`/api/dashboard/${id}`);
-  //     console.log(res.data);
-  //     setBoard(res.data);
-  //   };
-
-  //   const handleInput = async () => {
-  //     const res = await axios.post(`/api/dashgboard?id=${props.params.id}`);
-  //     console.log(res.data);
-  //     setOpen(false);
-  //};
+  const [info, setInfo] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+  const params = props.store_no;
+  const formik = useFormik({
+    onSubmit: async (values) => {
+      try {
+        const res = await axios({
+          url: `/api/common/detail`,
+          headers: {
+            'content-Type': 'application/json',
+          },
+          method: 'GET',
+          body: JSON.stringify(params),
+        });
+        console.log(res);
+        setInfo(res.data);
+        enqueueSnackbar(res.data.message, { variant: 'success' });
+      } catch (err) {
+        console.error(err);
+        // snackbar variant 값 default | error | success | warning | info
+        enqueueSnackbar(err.message, { variant: 'error' });
+      }
+    },
+  });
   return (
     <div>
       <GridActionsCellItem icon={<FileOpenIcon />} label="Store" onClick={handleOpen} />
