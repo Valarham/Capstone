@@ -319,6 +319,7 @@ SettingsPanel.propTypes = {
 // 메인 대시보드 부분
 const Home = () => {
   const [info, setInfo] = useState([]);
+  const [infoStats, setinfoStats] = useState([]);
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -327,7 +328,9 @@ const Home = () => {
       setLoading(true);
       try {
         const res = await axios.get(`/api/dashboard`);
+        const res_stats = await axios.get(`/api/dashboard/brief`);
         setInfo(res.data.results);
+        setinfoStats(res.data.results);
         enqueueSnackbar('매장 데이터 전송 성공', { variant: 'success' });
       } catch (err) {
         console.error(err);
@@ -714,19 +717,19 @@ const Home = () => {
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary title="총 매장 수" total={4867911} icon="mdi:store" />
-              {/* <AppWidgetSummary title="Total Market Num" total={4867911} icon="mdi:store" /> */}
+              {/* total={infoStats.총매장수 data */}
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <AppWidgetSummary title="총 검색된 시장 수" total={456484} color="info" icon="mdi:store-search" />
-              {/* <AppWidgetSummary title="Total Search Market Num" total={456484} color="info" icon="mdi:store-search" /> */}
+              <AppWidgetSummary title="총 검색된 매장 수" total={456484} color="info" icon="mdi:store-search" />
+              {/* total={infoStats.총 검색된 시장 수 data */}
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <AppWidgetSummary title="저장한 시장 수" total={897895} color="warning" icon="mdi:store-check" />
-              {/* <AppWidgetSummary title="Stored Markets" total={897895} color="warning" icon="mdi:store-check" /> */}
+              <AppWidgetSummary title="저장한 매장 수" total={897895} color="warning" icon="mdi:store-check" />
+              {/* total={infoStats.저장된 매장 수 data */}
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <AppWidgetSummary title="신규 매장 등록 수" total={315} color="error" icon="mdi:store-plus" />
-              {/* <AppWidgetSummary title="New Store Registration" total={315} color="error" icon="mdi:store-plus" /> */}
+              {/* total={infoStats.신규 매장등록 수data */}
             </Grid>
             <Container maxWidth="xl">
               <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}>

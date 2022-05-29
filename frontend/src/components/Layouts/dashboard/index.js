@@ -55,15 +55,16 @@ const DashboardLayout = () => {
 
   return (
     <>
-      {/* {ping && ( */}
-      <RootStyle>
-        <DashboardNavbar onOpenSidebar={() => setOpen(true)} />
-        <DashboardSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
-        <MainStyle>
-          <Outlet />
-        </MainStyle>
-      </RootStyle>
-      {/* )}{!ping && <Typography>서버 연결 불가</Typography>} */}
+      {ping && (
+        <RootStyle>
+          <DashboardNavbar onOpenSidebar={() => setOpen(true)} />
+          <DashboardSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
+          <MainStyle>
+            <Outlet />
+          </MainStyle>
+        </RootStyle>
+      )}
+      {!ping && <Typography>서버 연결 불가</Typography>}
     </>
   );
 };
