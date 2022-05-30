@@ -10,17 +10,18 @@ const { name, version } = require("./package");
 const httpServer = require("http").createServer(app);
 const { json } = require('./middlewares/result')
 const session = require("express-session");
-const FileStore = require('session-file-store')(session);
+const FleStore = require('session-file-store')(session);
 
 
 
 if (config.middleware.cors) app.use(cors());
 app.use(session({
   secret: 'capstone',
+  //http
   resave: false,
   saveUninitialized: true,
   store: new FileStore({ logFn: function () {} }),
-  cookie: { maxAge: 600000 }
+  cookie: { maxAge: 60000 }
 }))
 dayjs.locale("ko");
 logger.token("date", () => dayjs().format("YYYY-MM-DD HH:mm:ss"));

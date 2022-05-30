@@ -29,7 +29,7 @@ const controller = {
             FROM users
             WHERE enabled = 1
             AND email = ?
-            AND password = ?
+            AND password = PASSWORD(?);
         `,
         [email, password]
       );
@@ -63,8 +63,8 @@ const controller = {
       const email = req.body.email;
       const password = req.body.password;
       const phone = req.body.phone;
-      const last_name = req.body.first_name;
-      const first_name = req.body.last_name;
+      const last_name = req.body.last_name;
+      const first_name = req.body.first_name;
       const [result] = await res.pool.query(
         `
           SELECT
@@ -82,7 +82,7 @@ const controller = {
           await conn.beginTransaction();
           await conn.query(`
               INSERT INTO users(email, password, phone, first_name, last_name)
-              VALUES (?,?,?,?,?);
+              VALUES (?,PASSWORD(?),?,?,?);
             `,
             [email, password, phone, first_name, last_name]
           );
@@ -104,7 +104,7 @@ const controller = {
       const store_no = req.body.store_no;
 
       const [results] = await res.pool.query(`
-          SELECT *
+          SELECT store_name, cat_1, cat_2, cat_3, telephone, addr_1, addr_2, addr_3, rb_addr, rating, business_hour, homepage, review_count, img_url1, img_url2, img_url3
           FROM business_data
           WHERE store_no=?;
 
@@ -128,14 +128,24 @@ const controller = {
   async user(req, res, next) {
     try {
       const user_no = req.session.user_no
+      if(user_no) {
       const [results] = await res.pool.query(`
-            SELECT * FROM users
+            SELECT email, phone, first_name, last_name, roll
+            FROM users
             WHERE enabled = 1
             and user_no = ?;
         `,
         [user_no]
         );
-      resul
+      const email = results[0].email;
+      const phone = results[0].phone;
+      const first_name = results[0].first_name;
+      const last_name = results[0].last_name;
+      const roll = results[0].roll;
+      next({ email, phone, first_name, last_name, roll });
+      } else {
+        throw error(`먼저 로그인 해주세요.`)
+      }
     } catch (e) {
       next(e);
     }

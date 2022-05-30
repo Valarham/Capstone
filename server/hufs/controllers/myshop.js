@@ -1,5 +1,3 @@
-const { env } = require("../config");
-const { name, version } = require("../package");
 const { error } = require('../utils/index.js');
 
 const controller = {
@@ -8,7 +6,7 @@ const controller = {
       const user_no = req.session.user_no;
 
       const [results] = await res.pool.query(`
-        SELECT *
+        SELECT store_no, store_name, cat_1, cat_2, cat_3, telephone, addr_1, addr_2, addr_3, rb_addr, rating, business_hour, homepage
         FROM business_data b
         join ( SELECT store_no FROM user_myshop WHERE user_no=?) u
         ON u.store_no=b.store_no
@@ -90,7 +88,7 @@ const controller = {
         await conn.commit();
         next({message: `삭제 되었습니다.`});
         } catch (e) {
-          await conn.rollback();// 롤백
+          await conn.rollback();
           next(e);
         } finally {
           conn.release();
