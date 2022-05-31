@@ -29,28 +29,28 @@ const navConfig = [
     // icon: getIcon('eva:people-fill'),
     icon: <GroupIcon />,
   },
-  {
-    title: 'Detail Store',
-    path: '/dashboard/detailsotre',
-    // icon: getIcon('eva:people-fill'),
-    icon: <StoreIcon />,
-  },
-  {
-    title: 'login',
-    path: '/login',
-    // icon: getIcon('eva:lock-fill'),
-    icon: <LogoutIcon />,
-  },
-  {
-    title: 'register',
-    path: '/register',
-    icon: getIcon('eva:person-add-fill'),
-  },
-  {
-    title: 'Not found',
-    path: '/404',
-    icon: getIcon('eva:alert-triangle-fill'),
-  },
+  //   {
+  //     title: 'Detail Store',
+  //     path: '/dashboard/detailsotre',
+  //     // icon: getIcon('eva:people-fill'),
+  //     icon: <StoreIcon />,
+  //   },
+  //   {
+  //     title: 'login',
+  //     path: '/login',
+  //     // icon: getIcon('eva:lock-fill'),
+  //     icon: <LogoutIcon />,
+  //   },
+  //   {
+  //     title: 'register',
+  //     path: '/register',
+  //     icon: getIcon('eva:person-add-fill'),
+  //   },
+  //   {
+  //     title: 'Not found',
+  //     path: '/404',
+  //     icon: getIcon('eva:alert-triangle-fill'),
+  //   },
 ];
 
 export default navConfig;

@@ -100,7 +100,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
 
       <Box sx={{ flexGrow: 1 }} />
 
-      <Box sx={{ px: 2.5, pb: 3, mt: 30 }}>
+      <Box sx={{ px: 2.5, pb: 3, mt: 50 }}>
         <Stack alignItems="center" spacing={3} sx={{ pt: 5, borderRadius: 2, position: 'relative' }}>
           <Button href="https://www.google.co.kr/" target="_blank" variant="contained">
             로그아웃

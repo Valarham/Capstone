@@ -2,9 +2,9 @@ import WebFont from 'webfontloader';
 import Login from './components/User/Login';
 import Register from './components/User/Register';
 import User from './components/User_myshop/User_myshop';
-import { Routes, Switch, Route, useLocation, Navigate, useRoutes } from 'react-router-dom';
+import { useLocation, Navigate, useRoutes } from 'react-router-dom';
 
-import { loadUser } from './actions/userAction';
+// import { loadUser } from './actions/userAction';
 import { useEffect } from 'react';
 //import { useDispatch } from 'react-redux';
 // import PublicRoute from './Routes/PublicRoute';

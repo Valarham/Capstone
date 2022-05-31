@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { alpha } from '@mui/material/styles';
@@ -11,6 +11,7 @@ import axios from 'axios';
 import MenuPopover from '../../Home/Dashboard/MenuPopover';
 // mocks_
 import account from '../../../Mock/Account';
+
 // dashboard에서 오른쪽 상단에 표시될 User의 account 클릭 반응 및 출력 관련 함수
 // ----------------------------------------------------------------------
 // 아래의 내용 개발 안할 경우 지우기
@@ -69,21 +70,21 @@ export default function AccountPopover() {
           method: 'GET',
           data: JSON.stringify(values),
         });
-        console.log(res);
+        console.log(res.data);
         setUsers(res.data);
-        // alert(res.data.message);
         enqueueSnackbar(res.data.message, { variant: 'success' });
         //   setUserNo(res.data.user_no);
       } catch (err) {
-        //alert(err.message);
         console.error(err);
         // snackbar variant 값 default | error | success | warning | info
         enqueueSnackbar(err.message, { variant: 'error' });
       }
     },
   });
-
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+  useEffect(() => {
+    console.log(users);
+  }, []);
+  const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   return (
     <>

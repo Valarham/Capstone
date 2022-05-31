@@ -24,7 +24,7 @@ import {
   TablePagination,
   OutlinedInput,
 } from '@mui/material';
-import { useDemoData, randomCreatedDate, randomUpdatedDate } from '@mui/x-data-grid-generator';
+import { useDemoData } from '@mui/x-data-grid-generator';
 import { DataGridPro, GridToolbar } from '@mui/x-data-grid-pro';
 
 import {
@@ -54,7 +54,6 @@ import { styled } from '@mui/material/styles';
 import { Icon } from '@iconify/react';
 
 // components
-
 import Iconify from '../Home/Dashboard/Iconify';
 import SearchNotFound from '../Home/Dashboard/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../Home/Dashboard/user';
@@ -62,9 +61,8 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../Home/Dashboard/u
 import USERLIST from '../../Mock/user';
 import MetaData from '../Layouts/MetaData';
 import { useEffect } from 'react';
+import axios from 'axios';
 
-// import { useDispatch, useSelector } from 'react-redux';
-// import { clearErrors, getSliderProducts } from '../../actions/productAction';
 import { useSnackbar } from 'notistack';
 import { sample } from 'lodash';
 import DetailStore from '../DetailStore/DetailStore';
@@ -74,128 +72,6 @@ import DetailStore from '../DetailStore/DetailStore';
 // 순서대로 myshop 열 데이터
 // 매장이름-> 대표자이름 -> 대표번호 -> 업종 -> 평점 -> 리뷰  ->신규 -> 진행상황
 
-const initialRows = [
-  {
-    id: 1,
-    store_name: '스코프 부암점',
-    telephone: '070-736-7629',
-    sub_category: '제과,베이커리',
-    rating: '3.8',
-    review_count: '160',
-    isnew: true,
-    address: '서울 종로구 필운대로 54',
-  },
-  {
-    id: 2,
-    store_name: '하이버',
-    telephone: '02-6015-7988',
-    sub_category: '제과,베이커리',
-    rating: '3.7',
-    review_count: '43',
-    isnew: false,
-    address: '서울 종로구 옥인6길 2',
-  },
-  {
-    id: 3,
-    store_name: '안국153',
-    telephone: '02-733-1530',
-    sub_category: '제과,베이커리',
-    rating: '2.7',
-    review_count: '30',
-    isnew: true,
-    address: '서울 종로구 율곡로 51 1층',
-  },
-  {
-    id: 4,
-    store_name: '솔트24',
-    telephone: '02-744-9273',
-    sub_category: '제과,베이커리',
-    rating: '3.5',
-    review_count: '33',
-    isnew: false,
-    address: '서울 종로구 창경궁로 236 이화빌딩 1층',
-  },
-  {
-    id: 5,
-    store_name: '금상고로케 서촌마을점',
-    telephone: '02-725-3157',
-    sub_category: '제과,베이커리',
-    rating: '4.7',
-    review_count: '57',
-    isnew: true,
-    address: '서울 종로구 자하문로9길 24',
-  },
-  {
-    id: 6,
-    store_name: '김용현 베이커리',
-    telephone: '02-3217-6800',
-    sub_category: '제과,베이커리',
-    rating: '4.2',
-    review_count: '17',
-    isnew: true,
-    address: '서울 종로구 자하문로 21 1층',
-  },
-  {
-    id: 7,
-    store_name: '망원동티라미수 익선동점',
-    telephone: '02-745-9446',
-    sub_category: '제과,베이커리',
-    rating: '3.9',
-    review_count: '37',
-    isnew: true,
-    address: '서울 종로구 수표로28길 22',
-  },
-  {
-    id: 8,
-    store_name: '하이제씨',
-    telephone: '02-745-2468',
-    sub_category: '제과,베이커리',
-    rating: '4.1',
-    review_count: '24',
-    isnew: false,
-    address: '서울 종로구 동숭1길 12 1층',
-  },
-  {
-    id: 9,
-    store_name: '아우어베이커리 광화문디팰리스점',
-    telephone: '02-737-0050',
-    sub_category: '제과,베이커리',
-    rating: '4.1',
-    review_count: '21',
-    isnew: true,
-    address: '서울 종로구 새문안로2길 10 디팰리스 1층 103호',
-  },
-  {
-    id: 10,
-    store_name: '우드앤브릭 타워8점',
-    telephone: '02-6226-8211',
-    sub_category: '제과,베이커리',
-    rating: '2.2',
-    review_count: '21',
-    isnew: true,
-    address: '서울 종로구 종로5길 7 타워8 1층 118~119',
-  },
-  {
-    id: 11,
-    store_name: '아티장크로아상',
-    telephone: '02-741-3050',
-    sub_category: '제과,베이커리',
-    rating: '4.3',
-    review_count: '40',
-    isnew: false,
-    address: '서울 종로구 계동길 51 1층',
-  },
-  {
-    id: 12,
-    store_name: '푸하하크림빵 익선동',
-    telephone: '02-762-6003',
-    sub_category: '제과,베이커리',
-    rating: '3.5',
-    review_count: '15',
-    isnew: false,
-    address: '서울 종로구 돈화문로11길 34-3',
-  },
-];
 const TABLE_HEAD = [
   { id: 'store_name', label: '매장이름', alignRight: false },
   { id: 'telephone', label: '대표번호', alignRight: false },
@@ -440,13 +316,74 @@ SettingsPanel.propTypes = {
 };
 
 const User = () => {
+  const [info, setInfo] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  const [rows, setRows] = React.useState(initialRows);
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(`/api/myshop`);
+      setInfo(res.data.results);
+      enqueueSnackbar('매장 데이터 전송 선공', { variant: 'success' });
+    } catch (err) {
+      console.error(err);
+      enqueueSnackbar(err.message, { variant: 'error' });
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchData();
+    // setLoading(false);
+  }, []);
+
+  //   let init = info.map((row) => {
+  //     return {
+  //       store_no: row.store_no,
+  //       store_name: row.store_name,
+  //       telephone: row.telephone,
+  //       sub_category: row.cat_3,
+  //       rating: row.rating,
+  //       review_count: row.review_count,
+  //       isnew: true,
+  //       status: row.status,
+  //       address: row.rb_addr,
+  //     };
+  //   });
+
+  //   let initialRows = [
+  //     ...init,
+  //     {
+  //       store_no: 101,
+  //       store_name: '망원동티라미수 익선동점',
+  //       telephone: '02-745-9446',
+  //       sub_category: '제과,베이커리',
+  //       rating: '3.9',
+  //       review_count: 37,
+  //       isnew: true,
+  //       address: '서울 종로구 수표로28길 22',
+  //     },
+  //     {
+  //       store_no: 102,
+  //       store_name: '하이버',
+  //       telephone: '02-6015-7988',
+  //       sub_category: '제과,베이커리',
+  //       rating: '3.7',
+  //       review_count: 43,
+  //       isnew: false,
+  //       address: '서울 종로구 옥인6길 2',
+  //     },
+  //   ];
+  //   const [rows, setRows] = useState(initialRows);
+  //   useEffect(() => {
+  //     setRows(initialRows);
+  //   }, []);
+  //   console.log(rows);
   // 원하는 매장 삭제
   const deleteCompany = React.useCallback(
     (id) => () => {
       setTimeout(() => {
-        setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+        setInfo((prevRows) => prevRows.filter((row) => row.id !== id));
       });
     },
     [],
@@ -455,7 +392,7 @@ const User = () => {
   const deleteallCompany = React.useCallback(
     (id) => () => {
       setTimeout(() => {
-        setRows((prevRows) => prevRows.filter((row) => row.id == id && row.id !== id));
+        setInfo((prevRows) => prevRows.filter((row) => row.id === id && row.id !== id));
       });
     },
     [],
@@ -463,7 +400,7 @@ const User = () => {
   // 모든 진행상황 변경
   const editallStatus = React.useCallback(
     (id) => () => {
-      setRows((prevRows) => prevRows.map((row) => (row.id ? { ...row, status: '미정' } : row)));
+      setInfo((prevRows) => prevRows.map((row) => (row.id ? { ...row, status: '미정' } : row)));
     },
     [],
   );
@@ -491,7 +428,7 @@ const User = () => {
         alignRight: false,
       },
       {
-        field: 'sub_category',
+        field: 'cat_3',
         headerName: '업종',
         type: 'string',
         width: 150,
@@ -541,7 +478,7 @@ const User = () => {
         alignRight: false,
       },
       {
-        field: 'address',
+        field: 'rb_addr',
         headerName: '위치',
         type: 'string',
         width: 350,
@@ -763,7 +700,7 @@ const User = () => {
     const deleteallCompany = React.useCallback(
       (id) => () => {
         setTimeout(() => {
-          setRows((prevRows) => prevRows.filter((row) => row.id));
+          setInfo((prevRows) => prevRows.filter((row) => row.id));
         });
       },
       [],
@@ -771,7 +708,7 @@ const User = () => {
     // 모든 진행상황 변경
     const editallStatus = React.useCallback(
       (id) => () => {
-        setRows((prevRows) => prevRows.map((row) => (row.id ? { ...row, status: '미정' } : row)));
+        setInfo((prevRows) => prevRows.map((row) => (row.id ? { ...row, status: '미정' } : row)));
       },
       [],
     );
@@ -857,8 +794,11 @@ const User = () => {
 
             <Card>
               <DataGridComponent
+                loading={loading}
+                onApply={handleApplyClick}
                 columns={columns}
-                rows={rows}
+                getRowId={(row) => row.store_no}
+                rows={info}
                 components={{
                   LoadingOverlay: LinearProgress,
                   Toolbar: CustomToolbar,
