@@ -10,7 +10,7 @@ const { name, version } = require("./package");
 const httpServer = require("http").createServer(app);
 const { json } = require('./middlewares/result')
 const session = require("express-session");
-const FleStore = require('session-file-store')(session);
+const FileStore = require('session-file-store')(session);
 
 
 
