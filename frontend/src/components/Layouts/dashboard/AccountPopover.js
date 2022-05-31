@@ -40,7 +40,7 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const anchorRef = useRef(null);
-  const [users, setUsers] = useState('');
+  const [users, setUsers] = useState([]);
   const [open, setOpen] = useState(null);
 
   const handleOpen = (event) => {
@@ -56,7 +56,6 @@ export default function AccountPopover() {
       first_name: '',
       email: '',
     },
-
     onSubmit: async (values) => {
       try {
         const res = await axios({
@@ -68,11 +67,11 @@ export default function AccountPopover() {
             'content-Type': 'application/json',
           },
           method: 'GET',
-          data: JSON.stringify(values),
+          //data: JSON.stringify(values),
         });
         console.log(res.data);
         setUsers(res.data);
-        enqueueSnackbar(res.data.message, { variant: 'success' });
+        //enqueueSnackbar(res.data.message, { variant: 'success' });
         //   setUserNo(res.data.user_no);
       } catch (err) {
         console.error(err);

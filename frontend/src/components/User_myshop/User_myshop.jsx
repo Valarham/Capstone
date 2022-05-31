@@ -7,25 +7,20 @@ import { Link as RouterLink } from 'react-router-dom';
 // material
 import {
   Card,
-  Tooltip,
   Table,
   Stack,
-  Avatar,
   Button,
   Checkbox,
   TableRow,
   TableBody,
   TableCell,
-  Toolbar,
-  IconButton,
   Container,
   Typography,
   TableContainer,
   TablePagination,
-  OutlinedInput,
 } from '@mui/material';
 import { useDemoData } from '@mui/x-data-grid-generator';
-import { DataGridPro, GridToolbar } from '@mui/x-data-grid-pro';
+import { DataGridPro } from '@mui/x-data-grid-pro';
 
 import {
   DataGrid,
@@ -43,7 +38,6 @@ import FormControl from '@mui/material/FormControl';
 import FormGroup from '@mui/material/FormGroup';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SecurityIcon from '@mui/icons-material/Security';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
@@ -64,7 +58,6 @@ import { useEffect } from 'react';
 import axios from 'axios';
 
 import { useSnackbar } from 'notistack';
-import { sample } from 'lodash';
 import DetailStore from '../DetailStore/DetailStore';
 // user_myshop page 출력함수
 // my shop 페이지에서 +new shop 버튼은 일단 만들어놓음 -> 추후에 개발 시간 남으면 개발 ㄱ
@@ -323,6 +316,7 @@ const User = () => {
     setLoading(true);
     try {
       const res = await axios.get(`/api/myshop`);
+
       setInfo(res.data.results);
       enqueueSnackbar('매장 데이터 전송 선공', { variant: 'success' });
     } catch (err) {
@@ -337,48 +331,6 @@ const User = () => {
     // setLoading(false);
   }, []);
 
-  //   let init = info.map((row) => {
-  //     return {
-  //       store_no: row.store_no,
-  //       store_name: row.store_name,
-  //       telephone: row.telephone,
-  //       sub_category: row.cat_3,
-  //       rating: row.rating,
-  //       review_count: row.review_count,
-  //       isnew: true,
-  //       status: row.status,
-  //       address: row.rb_addr,
-  //     };
-  //   });
-
-  //   let initialRows = [
-  //     ...init,
-  //     {
-  //       store_no: 101,
-  //       store_name: '망원동티라미수 익선동점',
-  //       telephone: '02-745-9446',
-  //       sub_category: '제과,베이커리',
-  //       rating: '3.9',
-  //       review_count: 37,
-  //       isnew: true,
-  //       address: '서울 종로구 수표로28길 22',
-  //     },
-  //     {
-  //       store_no: 102,
-  //       store_name: '하이버',
-  //       telephone: '02-6015-7988',
-  //       sub_category: '제과,베이커리',
-  //       rating: '3.7',
-  //       review_count: 43,
-  //       isnew: false,
-  //       address: '서울 종로구 옥인6길 2',
-  //     },
-  //   ];
-  //   const [rows, setRows] = useState(initialRows);
-  //   useEffect(() => {
-  //     setRows(initialRows);
-  //   }, []);
-  //   console.log(rows);
   // 원하는 매장 삭제
   const deleteCompany = React.useCallback(
     (id) => () => {

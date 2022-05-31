@@ -1,11 +1,10 @@
 import { faker } from '@faker-js/faker';
 import * as React from 'react';
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
-import PropTypes, { bool } from 'prop-types';
+import PropTypes from 'prop-types';
 import LinearProgress from '@mui/material/LinearProgress';
-import Menu from '@mui/material/Menu';
 import {
   DataGrid,
   GridToolbarContainer,
@@ -16,13 +15,13 @@ import {
   GridActionsCellItem,
 } from '@mui/x-data-grid';
 
-import { DataGridPro, GridToolbar } from '@mui/x-data-grid-pro';
+import { DataGridPro } from '@mui/x-data-grid-pro';
 import { useDemoData } from '@mui/x-data-grid-generator';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 
 // @mui
-import { filter, isBoolean } from 'lodash';
+import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 
 // material
@@ -72,7 +71,7 @@ import { UserListHead, DashUserListToolbar, UserMoreMenu } from './Dashboard/use
 import USERLIST from '../../Mock/user';
 import MetaData from '../Layouts/MetaData';
 import DetailStore from '../DetailStore/DetailStore';
-import { useFormik, Form, FormikProvider } from 'formik';
+import { useFormik, FormikProvider } from 'formik';
 
 const TABLE_HEAD = [
   { id: 'store_name', label: '매장이름', alignRight: false },
@@ -330,7 +329,7 @@ const Home = () => {
         const res = await axios.get(`/api/dashboard`);
         const res_stats = await axios.get(`/api/dashboard/brief`);
         setInfo(res.data.results);
-        setinfoStats(res.data.results);
+        setinfoStats(res_stats.data.results);
         enqueueSnackbar('매장 데이터 전송 성공', { variant: 'success' });
       } catch (err) {
         console.error(err);
@@ -361,7 +360,7 @@ const Home = () => {
       try {
         const res = await axios(
           {
-            url: `/api/query`,
+            url: `/api/dashboard/query`,
             headers: {
               'content-Type': 'application/json',
             },
@@ -385,7 +384,7 @@ const Home = () => {
     (store_no) => () => {
       setTimeout(() => {
         setInfo((prevRows) => prevRows.filter((row) => row.store_no !== store_no));
-        const fetchData = async () => {
+        async function collectMarket() {
           setLoading(true);
           try {
             const res = await axios({
@@ -396,14 +395,14 @@ const Home = () => {
               method: 'POST',
               data: JSON.stringify(store_no),
             });
-
             enqueueSnackbar('매장 데이터 전송 성공', { variant: 'success' });
           } catch (err) {
             console.error(err);
             enqueueSnackbar(err.message, { variant: 'error' });
           }
           setLoading(false);
-        };
+        }
+        collectMarket();
       });
     },
     [],
@@ -413,24 +412,25 @@ const Home = () => {
     (store_no) => () => {
       setTimeout(() => {
         setInfo((prevRows) => prevRows.filter((row) => row.store_no === store_no));
-        const fetchData = async () => {
-          setLoading(true);
-          try {
-            const res = await axios({
-              url: `/api/common/detail`,
-              headers: {
-                'content-Type': 'application/json',
-              },
-              method: 'POST',
-              data: JSON.stringify(store_no),
-            });
-            enqueueSnackbar('매장 데이터 전송 성공', { variant: 'success' });
-          } catch (err) {
-            console.error(err);
-            enqueueSnackbar(err.message, { variant: 'error' });
-          }
-          setLoading(false);
-        };
+        // async function reqDetail() {
+        //   setLoading(true);
+        //   try {
+        //     const res = await axios({
+        //       url: `/api/common/detail`,
+        //       headers: {
+        //         'content-Type': 'application/json',
+        //       },
+        //       method: 'POST',
+        //       data: JSON.stringify(store_no),
+        //     });
+        //     enqueueSnackbar('매장 데이터 전송 성공', { variant: 'success' });
+        //   } catch (err) {
+        //     console.error(err);
+        //     enqueueSnackbar(err.message, { variant: 'error' });
+        //   }
+        //   setLoading(false);
+        // }
+        // reqDetail();
       });
     },
     [],
@@ -508,7 +508,7 @@ const Home = () => {
         ],
       },
     ],
-    [storeCompany],
+    [storeCompany, detailCompany],
   );
 
   const theme = useTheme();
@@ -705,7 +705,7 @@ const Home = () => {
     );
   }
   const DataGridComponent = isAntDesign ? StyledDataGrid : DataGridPro;
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   return (
     <>
@@ -716,19 +716,20 @@ const Home = () => {
           </Typography>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6} md={3}>
-              <AppWidgetSummary title="총 매장 수" total={4867911} icon="mdi:store" />
+              {/* [0,1,2,3] */}
+              <AppWidgetSummary title="총 매장" total={4867911} icon="mdi:store" />
               {/* total={infoStats.총매장수 data */}
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <AppWidgetSummary title="총 검색된 매장 수" total={456484} color="info" icon="mdi:store-search" />
+              <AppWidgetSummary title="총 회원" total={456484} color="info" icon="mdi:store-search" />
               {/* total={infoStats.총 검색된 시장 수 data */}
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <AppWidgetSummary title="저장한 매장 수" total={897895} color="warning" icon="mdi:store-check" />
+              <AppWidgetSummary title="영업 진행 매장" total={897895} color="warning" icon="mdi:store-plus" />
               {/* total={infoStats.저장된 매장 수 data */}
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <AppWidgetSummary title="신규 매장 등록 수" total={315} color="error" icon="mdi:store-plus" />
+              <AppWidgetSummary title="영업 완료 매장" total={315} color="error" icon="mdi:store-check" />
               {/* total={infoStats.신규 매장등록 수data */}
             </Grid>
             <Container maxWidth="xl">
@@ -943,11 +944,11 @@ const Home = () => {
             <Grid item xs={12} md={6} lg={4}>
               <AppCurrentSubject
                 title="Current Subject"
-                chartLabels={['English', 'History', 'Physics', 'Geography', 'Chinese', 'Math']}
+                chartLabels={['한식', '중식', '일식', '양식', '주류', '별미']}
                 chartData={[
-                  { name: 'Series 1', data: [80, 50, 30, 40, 100, 20] },
-                  { name: 'Series 2', data: [20, 30, 40, 80, 20, 80] },
-                  { name: 'Series 3', data: [44, 76, 78, 13, 43, 10] },
+                  { name: '영업자', data: [80, 50, 30, 40, 100, 20] },
+                  { name: '소상공인', data: [20, 30, 40, 80, 20, 80] },
+                  { name: '모든접속자', data: [44, 76, 78, 13, 43, 10] },
                 ]}
                 chartColors={[...Array(6)].map(() => theme.palette.text.secondary)}
               />

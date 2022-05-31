@@ -48,19 +48,19 @@ export default function DialogSelect() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const res1 = await axios.get('/api/dashboard/cat_1');
+      const res1 = await axios.get(`/api/dashboard/cat_1`);
       setCategory(res1.data.results);
       enqueueSnackbar('카테고리 전송 성공', { variant: 'success' });
-      const res2 = await axios.get('/api/dashboard/cat_2');
+      const res2 = await axios.post(`/api/dashboard/cat_2`);
       setSector(res2.data.results);
       enqueueSnackbar('업종 전송 성공', { variant: 'success' });
-      const res3 = await axios.get('/api/dashboard/addr_1');
+      const res3 = await axios.get(`/api/dashboard/addr_1`);
       setaddrInfo1(res3.data.results);
       enqueueSnackbar('시/도 전송 성공', { variant: 'success' });
-      const res4 = await axios.get('/api/dashboard/addr_2');
+      const res4 = await axios.post(`/api/dashboard/addr_2`);
       setaddrInfo2(res4.data.results);
       enqueueSnackbar('시군구 전송 성공', { variant: 'success' });
-      const res5 = await axios.get('/api/dashboard/addr_3');
+      const res5 = await axios.post(`/api/dashboard/addr_3`);
       setaddrInfo3(res5.data.results);
       enqueueSnackbar('읍면동 전송 성공', { variant: 'success' });
     } catch (err) {

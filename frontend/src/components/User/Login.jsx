@@ -103,7 +103,6 @@ const Login = () => {
       remember: true,
     },
     validationSchema: LoginSchema,
-
     onSubmit: async (values) => {
       try {
         const res = await axios(
@@ -120,21 +119,17 @@ const Login = () => {
           { withCredentials: true },
         );
         console.log(res);
-        // alert(res.data.message);
-        // const { accessToken } = res.data.token;
         enqueueSnackbar(res.data.message, { variant: 'success' });
         // axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data;
-
         // token이 필요한 API 요청 시 header Authorization에 token 담아서 보내기
         // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
         // axios.defaults.headers.common['Authorization'] = `Basic ${accessToken}`;
-
         navigate('/dashboard/home', { replace: true });
+        //alert(res.data.message);
       } catch (err) {
-        //alert(err.message);
-        console.error(err);
+        console.error(err.error.message);
         // snackbar variant 값 default | error | success | warning | info
-        enqueueSnackbar(err.message, { variant: 'error' });
+        enqueueSnackbar('로그인에 실패했습니다', { variant: 'error' });
       }
     },
   });
