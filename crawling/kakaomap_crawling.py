@@ -113,8 +113,6 @@ while(1):
                     img_li.append(img_link3)
                 elif len(img_links) == 1:
                     img_link1 = img_links[0].value_of_css_property("background-image").split('"')[1]
-                    if len(img_link1) > 800:
-                        img_link1 = 'NULL'
                     img_li.append(img_link1)
                     img_link2 = 'NULL'
                     img_li.append(img_link2)
@@ -122,27 +120,17 @@ while(1):
                     img_li.append(img_link3)
                 elif len(img_links) == 2:
                     img_link1 = img_links[0].value_of_css_property("background-image").split('"')[1]
-                    if len(img_link1) > 800:
-                        img_link1 = 'NULL'
                     img_li.append(img_link1)
                     img_link2 = img_links[1].value_of_css_property("background-image").split('"')[1]
-                    if len(img_link2) > 800:
-                        img_link2 = 'NULL'
                     img_li.append(img_link2)
                     img_link3 = 'NULL'
                     img_li.append(img_link3)
                 else:
                     img_link1 = img_links[0].value_of_css_property("background-image").split('"')[1]
-                    if len(img_link1) > 800:
-                        img_link1 = 'NULL'
                     img_li.append(img_link1)
                     img_link2 = img_links[1].value_of_css_property("background-image").split('"')[1]
-                    if len(img_link2) > 800:
-                        img_link2 = 'NULL'
                     img_li.append(img_link2)
                     img_link3 = img_links[2].value_of_css_property("background-image").split('"')[1]
-                    if len(img_link3) > 800:
-                        img_link3 = 'NULL'
                     img_li.append(img_link3)
 
                 data_li.extend(img_li)
@@ -157,15 +145,12 @@ while(1):
                 # 메뉴의 3가지 타입
                 menuonlyType = soup.select('.cont_menu > .list_menu > .menuonly_type')
                 for menu in menuonlyType:
-                        kakao_menu.append(_getMenuInfo(menu, data_li))
                         menuInfos.append(_getMenuInfo(menu, data_li))
                 nophotoType = soup.select('.cont_menu > .list_menu > .nophoto_type')
                 for menu in nophotoType:
-                        kakao_menu.append(_getMenuInfo(menu, data_li))
                         menuInfos.append(_getMenuInfo(menu, data_li))
                 photoType = soup.select('.cont_menu > .list_menu > .photo_type')
                 for menu in photoType:
-                        kakao_menu.append(_getMenuInfo(menu, data_li))
                         menuInfos.append(_getMenuInfo(menu, data_li))
 
                 for menu_li in menuInfos:
@@ -247,7 +232,6 @@ while(1):
                     telephone = 'NULL'
                 data_li = [store_name, sub_category.text, int(store_code), rating, review_count, address, otheraddress, opening_hours, telephone, homepage, search_word] 
                 get_img(data_li)   
-                kakao_data.append(data_li)
                 get_menu(data_li)
 
 
@@ -266,9 +250,6 @@ while(1):
             store_count = driver.find_element_by_css_selector("#info\.search\.place\.cnt")
             print('총 검색 수:', store_count.text)
 
-            # 전역 리스트
-            kakao_data = []
-            kakao_menu = []
 
             # 장소 더보기 있을때
             try:
