@@ -279,10 +279,10 @@ var area = {
   },
 };
 
-export default function DialogSelect(props, { callinfo }) {
+export default function DialogSelect(props) {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
-  const [info, setInfo] = useState(callinfo);
+  const [info, setInfo] = useState(Home.info);
   const { onApply, cat1, cat2, addr1, addr2, addr3 } = props;
   const [cat1State, setCat1] = useState(cat1);
   const [cat2State, setCat2] = useState(cat2);
@@ -450,6 +450,7 @@ export default function DialogSelect(props, { callinfo }) {
         );
         console.log(res.data);
         setInfo(res.data.results);
+        console.log(info);
         enqueueSnackbar(res.data.message, { variant: 'success' });
       } catch (err) {
         console.error(err);
@@ -458,7 +459,7 @@ export default function DialogSelect(props, { callinfo }) {
       }
     }
     query();
-    return <Home info={info}></Home>;
+    // return <Home info={info}></Home>;
   }, [cat1State, cat2State, addr1State, addr2State, addr3State, onApply]);
 
   DialogSelect.propTypes = {

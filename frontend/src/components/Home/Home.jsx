@@ -653,7 +653,7 @@ const Home = () => {
             hideToolbar: true,
           }}
         />
-        <DialogSelect onChange={DialogSelect.handleApplyChanges} callinfo={info} />
+        <DialogSelect onChange={DialogSelect.handleApplyChanges} info={info} />
       </GridToolbarContainer>
     );
   }

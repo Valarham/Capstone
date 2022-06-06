@@ -331,20 +331,60 @@ const User = () => {
     // setLoading(false);
   }, []);
 
-  // 원하는 매장 삭제
+  // 원하는 매장 한 개 삭제
   const deleteCompany = React.useCallback(
-    (id) => () => {
+    (store_no) => () => {
       setTimeout(() => {
-        setInfo((prevRows) => prevRows.filter((row) => row.id !== id));
+        setInfo((prevRows) => prevRows.filter((row) => row.store_no !== store_no));
+        async function deleteMarket() {
+          setLoading(true);
+          console.log(JSON.stringify({ store_no: store_no }));
+          try {
+            const res = await axios({
+              url: `/api/myshop/delete`,
+              headers: {
+                'content-Type': 'application/json',
+              },
+              method: 'POST',
+              data: JSON.stringify({ store_no: store_no }),
+            });
+            enqueueSnackbar('수집한 매장 삭제 성공', { variant: 'success' });
+          } catch (err) {
+            console.error(err);
+            enqueueSnackbar(err.message, { variant: 'error' });
+          }
+          setLoading(false);
+        }
+        deleteMarket();
       });
     },
     [],
   );
   // 모든 매장 삭제
   const deleteallCompany = React.useCallback(
-    (id) => () => {
+    (store_no) => () => {
       setTimeout(() => {
-        setInfo((prevRows) => prevRows.filter((row) => row.id === id && row.id !== id));
+        setInfo((prevRows) => prevRows.filter((row) => row.store_no === store_no && row.store_no !== store_no));
+        async function deleteMarket() {
+          setLoading(true);
+          console.log(JSON.stringify({ store_no: store_no }));
+          try {
+            const res = await axios({
+              url: `/api/myshop/delete/all`,
+              headers: {
+                'content-Type': 'application/json',
+              },
+              method: 'POST',
+              //   data: JSON.stringify({ store_no: store_no }),
+            });
+            enqueueSnackbar('수집한 매장 모두 삭제 성공', { variant: 'success' });
+          } catch (err) {
+            console.error(err);
+            enqueueSnackbar(err.message, { variant: 'error' });
+          }
+          setLoading(false);
+        }
+        deleteMarket();
       });
     },
     [],
@@ -356,6 +396,30 @@ const User = () => {
     },
     [],
   );
+  const editStatus = React.useCallback((id) => () => {
+    setTimeout(() => {
+      async function deleteMarket() {
+        setLoading(true);
+        console.log(JSON.stringify({ status: id.target.value }));
+        try {
+          const res = await axios({
+            url: `/api/myshop/prog`,
+            headers: {
+              'content-Type': 'application/json',
+            },
+            method: 'POST',
+            data: JSON.stringify({ status: id.target.value }),
+          });
+          enqueueSnackbar('수집한 매장 모두 삭제 성공', { variant: 'success' });
+        } catch (err) {
+          console.error(err);
+          enqueueSnackbar(err.message, { variant: 'error' });
+        }
+        setLoading(false);
+      }
+      deleteMarket();
+    });
+  });
   const columns = React.useMemo(
     () => [
       {
@@ -414,6 +478,7 @@ const User = () => {
         value: string,
         label: string,
         editable: true,
+        onchange: { editStatus },
         valueOptions: ({ row }) => {
           if (row === undefined) {
             return ['미정', '진행중', '완료', '실패'];
