@@ -44,7 +44,9 @@ export default function DetailMenu({ title, subheader, list, ...other }) {
 MenuItem.propTypes = {
   news: PropTypes.shape({
     description: PropTypes.string,
-    image: PropTypes.string,
+    image0: PropTypes.string,
+    image1: PropTypes.string,
+    image2: PropTypes.string,
     postedAt: PropTypes.instanceOf(Date),
     title: PropTypes.string,
   }),
@@ -55,6 +57,8 @@ function MenuItem({ news }) {
 
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
+      <Box component="img" alt={title} src={image} sx={{ width: 48, height: 48, borderRadius: 1.5, flexShrink: 0 }} />
+      <Box component="img" alt={title} src={image} sx={{ width: 48, height: 48, borderRadius: 1.5, flexShrink: 0 }} />
       <Box component="img" alt={title} src={image} sx={{ width: 48, height: 48, borderRadius: 1.5, flexShrink: 0 }} />
 
       <Box sx={{ minWidth: 150, flexGrow: 1 }}>

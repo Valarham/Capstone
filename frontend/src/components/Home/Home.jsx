@@ -1,5 +1,7 @@
 import { faker } from '@faker-js/faker';
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
@@ -62,7 +64,7 @@ import {
   AppCurrentSubject,
   AppConversionRates,
 } from './Dashboard/@Dashboard/app';
-
+import FileOpenIcon from '@mui/icons-material/FileOpen';
 // components
 import Scrollbar from './Dashboard/Scrollbar';
 import SearchNotFound from './Dashboard/SearchNotFound';
@@ -71,6 +73,7 @@ import { UserListHead, DashUserListToolbar, UserMoreMenu } from './Dashboard/use
 import USERLIST from '../../Mock/user';
 import MetaData from '../Layouts/MetaData';
 import DetailStore from '../DetailStore/DetailStore';
+import DialogSelect from '../Layouts/dashboard/DialogSelect';
 import { useFormik, FormikProvider } from 'formik';
 
 const TABLE_HEAD = [
@@ -319,41 +322,41 @@ SettingsPanel.propTypes = {
 const Home = () => {
   const [info, setInfo] = useState([]);
   const [infoStats, setinfoStats] = useState([]);
+  const [infoDetail, setinfoDetail] = useState([]);
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const res = await axios.get(`/api/dashboard`);
-        const res_stats = await axios.get(`/api/dashboard/brief`);
         setInfo(res.data.results);
-        setinfoStats(res_stats.data.results);
-        enqueueSnackbar('매장 데이터 전송 성공', { variant: 'success' });
+        console.log(res.data.results);
+        enqueueSnackbar('매장 추천 데이터 전송 성공', { variant: 'success' });
       } catch (err) {
         console.error(err);
+        enqueueSnackbar(err.message ? null : '매장 추천 데이터 전송 실패', { variant: 'error' });
+      }
+      setLoading(false);
+    };
+    const breifData = async () => {
+      setLoading(true);
+      try {
+        const res_stats = await axios.get(`/api/dashboard/brief`);
+        setinfoStats(res_stats.data.results);
+        console.log(res_stats.data);
+        enqueueSnackbar('매장 통계 데이터 전송 성공', { variant: 'success' });
+      } catch (err) {
+        //console.error(err);
         enqueueSnackbar(err.message, { variant: 'error' });
       }
       setLoading(false);
     };
     fetchData();
-    console.log('로딩 처음');
-    // setLoading(false);
+    breifData();
+    console.log('first loading');
   }, []);
 
-  //   let init = info.map((row) => {
-  //     return {
-  //       store_no: row.store_no,
-  //       store_name: row.store_name,
-  //       telephone: row.telephone,
-  //       sub_category: row.cat_3,
-  //       rating: row.rating,
-  //       review_count: row.review_count,
-  //       isnew: true,
-  //       address: row.rb_addr,
-  //     };
-  //   });
   // 카테고리 검색 formik
   const formik = useFormik({
     onSubmit: async (values) => {
@@ -386,6 +389,7 @@ const Home = () => {
         setInfo((prevRows) => prevRows.filter((row) => row.store_no !== store_no));
         async function collectMarket() {
           setLoading(true);
+          console.log(JSON.stringify({ store_no: store_no }));
           try {
             const res = await axios({
               url: `/api/dashboard/collect`,
@@ -393,7 +397,7 @@ const Home = () => {
                 'content-Type': 'application/json',
               },
               method: 'POST',
-              data: JSON.stringify(store_no),
+              data: JSON.stringify({ store_no: store_no }),
             });
             enqueueSnackbar('매장 데이터 전송 성공', { variant: 'success' });
           } catch (err) {
@@ -411,26 +415,29 @@ const Home = () => {
   const detailCompany = React.useCallback(
     (store_no) => () => {
       setTimeout(() => {
-        setInfo((prevRows) => prevRows.filter((row) => row.store_no === store_no));
-        // async function reqDetail() {
-        //   setLoading(true);
-        //   try {
-        //     const res = await axios({
-        //       url: `/api/common/detail`,
-        //       headers: {
-        //         'content-Type': 'application/json',
-        //       },
-        //       method: 'POST',
-        //       data: JSON.stringify(store_no),
-        //     });
-        //     enqueueSnackbar('매장 데이터 전송 성공', { variant: 'success' });
-        //   } catch (err) {
-        //     console.error(err);
-        //     enqueueSnackbar(err.message, { variant: 'error' });
-        //   }
-        //   setLoading(false);
-        // }
-        // reqDetail();
+        setinfoDetail((prevRows) => prevRows.filter((row) => row.store_no === store_no));
+        async function detailData() {
+          setLoading(true);
+          console.log(infoDetail);
+          try {
+            const res = await axios({
+              url: `/api/detail`,
+              headers: {
+                'content-Type': 'application/json',
+              },
+              method: 'POST',
+              data: JSON.stringify({ store_no: store_no }),
+            });
+            console.log(res.data.results);
+            setinfoDetail(res.data.results);
+            enqueueSnackbar('매장 데이터 전송 성공', { variant: 'success' });
+          } catch (err) {
+            console.error(err);
+            enqueueSnackbar(err.message, { variant: 'error' });
+          }
+          setLoading(false);
+        }
+        detailData();
       });
     },
     [],
@@ -443,7 +450,10 @@ const Home = () => {
         headerName: '상세',
         type: 'actions',
         width: 0,
-        getActions: (params) => [<DetailStore onClick={detailCompany(params.id)} />],
+        getActions: (params) => [
+          //   <GridActionsCellItem icon={<FileOpenIcon />} label="Detail" onClick={detailCompany(params.id)} />,
+          <DetailStore icon={<FileOpenIcon />} label="Detail" detailData={params} onClick={detailCompany(params.id)} />,
+        ],
       },
       {
         field: 'store_name',
@@ -643,6 +653,7 @@ const Home = () => {
             hideToolbar: true,
           }}
         />
+        <DialogSelect onChange={DialogSelect.handleApplyChanges} callinfo={info} />
       </GridToolbarContainer>
     );
   }
@@ -717,19 +728,33 @@ const Home = () => {
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6} md={3}>
               {/* [0,1,2,3] */}
-              <AppWidgetSummary title="총 매장" total={4867911} icon="mdi:store" />
-              {/* total={infoStats.총매장수 data */}
+              <AppWidgetSummary title="총 매장" total={infoStats[0] ? infoStats[0] : 4867911} icon="mdi:store" />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <AppWidgetSummary title="총 회원" total={456484} color="info" icon="mdi:store-search" />
+              <AppWidgetSummary
+                title="총 회원"
+                total={infoStats[1] ? infoStats[1] : 456484}
+                color="info"
+                icon="mdi:store-search"
+              />
               {/* total={infoStats.총 검색된 시장 수 data */}
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <AppWidgetSummary title="영업 진행 매장" total={897895} color="warning" icon="mdi:store-plus" />
+              <AppWidgetSummary
+                title="영업 진행 매장"
+                total={infoStats[2] ? infoStats[2] : 897895}
+                color="warning"
+                icon="mdi:store-plus"
+              />
               {/* total={infoStats.저장된 매장 수 data */}
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <AppWidgetSummary title="영업 완료 매장" total={315} color="error" icon="mdi:store-check" />
+              <AppWidgetSummary
+                title="영업 완료 매장"
+                total={infoStats[3] ? infoStats[3] : 315}
+                color="error"
+                icon="mdi:store-check"
+              />
               {/* total={infoStats.신규 매장등록 수data */}
             </Grid>
             <Container maxWidth="xl">
@@ -743,8 +768,9 @@ const Home = () => {
                   <SettingsPanel onApply={handleApplyClick} size={size} type={type} theme={getActiveTheme()} />
                   <Card>
                     <DataGridComponent
-                      loading={loading}
+                      //loading={loading}
                       onApply={handleApplyClick}
+                      onChange={DialogSelect.handleApplyChanges}
                       columns={columns}
                       rows={info}
                       getRowId={(row) => row.store_no}
@@ -967,18 +993,18 @@ const Home = () => {
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <AppOrderTimeline
-                title="Order Timeline"
+                title="프로그램 Timeline"
                 list={[...Array(5)].map((_, index) => ({
                   store_code: faker.datatype.uuid(),
                   title: [
-                    '1983, orders, $4220',
-                    '12 Invoices have been paid',
-                    'Order #37745 from September',
-                    'New order placed #XF-2356',
-                    'New order placed #XF-2346',
+                    'Crawling',
+                    'Labeling',
+                    'Storing data in the Backend System',
+                    'Get data through HTTP communication using API',
+                    'Show data in Front System',
                   ][index],
                   type: `order${index + 1}`,
-                  time: faker.date.past(),
+                  time: faker.date.recent(),
                 }))}
               />
             </Grid>
@@ -1013,11 +1039,11 @@ const Home = () => {
               <AppTasks
                 title="Tasks"
                 list={[
-                  { id: '1', label: 'Dashboard만들기' },
-                  { id: '2', label: 'login&register만들기' },
-                  { id: '3', label: 'navbar&sidebar만들기' },
-                  { id: '4', label: 'My Shop만들기' },
-                  { id: '5', label: '상세페이지 만들기' },
+                  { id: '1', label: 'Dashboard에서 매장 찾기' },
+                  { id: '2', label: 'Dashboard에서 매장 수집하기' },
+                  { id: '3', label: 'Myshop에서 수집된 매장 확인하기' },
+                  { id: '4', label: '영업 매장 진행상황 확인 및 저장하기' },
+                  { id: '5', label: '상세페이지에서 영업할 매장 확인하기' },
                 ]}
               />
             </Grid>

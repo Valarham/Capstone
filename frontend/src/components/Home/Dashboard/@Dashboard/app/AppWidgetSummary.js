@@ -1,11 +1,11 @@
 // @mui
-import PropTypes from 'prop-types'
-import { alpha, styled } from '@mui/material/styles'
-import { Card, Typography } from '@mui/material'
+import PropTypes from 'prop-types';
+import { alpha, styled } from '@mui/material/styles';
+import { Card, Typography } from '@mui/material';
 // utils
-import { fShortenNumber } from '../../../../../utils/formatNumber'
+import { fShortenNumber } from '../../../../../utils/formatNumber';
 // components
-import Iconify from '../../Iconify'
+import Iconify from '../../Iconify';
 // 데이터 통걔 부분 dashboard에서 Hi, Welcome 밑에 4개 칸
 // ----------------------------------------------------------------------
 
@@ -18,7 +18,7 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
   height: theme.spacing(8),
   justifyContent: 'center',
   marginBottom: theme.spacing(3),
-}))
+}));
 
 // ----------------------------------------------------------------------
 
@@ -28,16 +28,9 @@ AppWidgetSummary.propTypes = {
   title: PropTypes.string.isRequired,
   total: PropTypes.number.isRequired,
   sx: PropTypes.object,
-}
+};
 
-export default function AppWidgetSummary({
-  title,
-  total,
-  icon,
-  color = 'primary',
-  sx,
-  ...other
-}) {
+export default function AppWidgetSummary({ title, total, icon, color = 'primary', sx, ...other }) {
   return (
     <Card
       sx={{
@@ -54,10 +47,10 @@ export default function AppWidgetSummary({
         sx={{
           color: (theme) => theme.palette[color].dark,
           backgroundImage: (theme) =>
-            `linear-gradient(135deg, ${alpha(
+            `linear-gradient(135deg, ${alpha(theme.palette[color].dark, 0)} 0%, ${alpha(
               theme.palette[color].dark,
-              0
-            )} 0%, ${alpha(theme.palette[color].dark, 0.24)} 100%)`,
+              0.24,
+            )} 100%)`,
         }}
       >
         <Iconify icon={icon} width={24} height={24} />
@@ -69,5 +62,5 @@ export default function AppWidgetSummary({
         {title}
       </Typography>
     </Card>
-  )
+  );
 }

@@ -312,21 +312,21 @@ const User = () => {
   const [info, setInfo] = useState([]);
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(`/api/myshop`);
-
-      setInfo(res.data.results);
-      enqueueSnackbar('매장 데이터 전송 선공', { variant: 'success' });
-    } catch (err) {
-      console.error(err);
-      enqueueSnackbar(err.message, { variant: 'error' });
-    }
-    setLoading(false);
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get(`/api/myshop`);
+        setInfo(res.data.results);
+        console.log(res.data.results);
+        enqueueSnackbar('수집된 매장 데이터 전송 선공', { variant: 'success' });
+      } catch (err) {
+        console.error(err);
+        enqueueSnackbar(err.message == null ? '수집된 매장 데이터 전송 실패' : err.message, { variant: 'error' });
+      }
+      setLoading(false);
+    };
+
     fetchData();
     // setLoading(false);
   }, []);
@@ -460,14 +460,6 @@ const User = () => {
     ],
     [deleteCompany],
   );
-
-  //   useEffect(() => {
-  //     if (error) {
-  //       enqueueSnackbar(error, { variant: 'error' });
-  //       dispatch(clearErrors());
-  //     }
-  //     dispatch(getSliderProducts());
-  //   }, [dispatch, error, enqueueSnackbar]);
   const theme = useTheme();
   const [page, setPage] = useState(0);
 
